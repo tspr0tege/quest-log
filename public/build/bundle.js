@@ -10,13 +10,43 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./client/Quest.js":
+/*!*************************!*\
+  !*** ./client/Quest.js ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Quest)\n/* harmony export */ });\nfunction Quest(title) {\n  const quest = Object.create(questMethods);\n  quest.subQuests = [];\n  quest.title = title;\n  return quest;\n}\nconst questMethods = {\n  delete: function () {},\n  addSubQuest: function () {},\n  complete: function () {\n    this.delete();\n  }\n};\n\n//# sourceURL=webpack://quest-log/./client/Quest.js?");
+
+/***/ }),
+
+/***/ "./client/components/AddQuest.jsx":
+/*!****************************************!*\
+  !*** ./client/components/AddQuest.jsx ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n // const [] = useState();\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (({\n  handleClick\n}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"form\", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"input\", {\n  type: \"text\",\n  name: \"text\",\n  placeholder: \"Enter a new task\"\n}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"button\", {\n  onClick: handleClick\n}, \"Click\")));\n\n//# sourceURL=webpack://quest-log/./client/components/AddQuest.jsx?");
+
+/***/ }),
+
 /***/ "./client/components/App.jsx":
 /*!***********************************!*\
   !*** ./client/components/App.jsx ***!
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\n\nclass App extends react__WEBPACK_IMPORTED_MODULE_0__.Component {\n  constructor(props) {\n    super(props);\n    this.state = {};\n  }\n\n  render() {\n    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"p\", null, \"App.jsx has been loaded\"));\n  }\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);\n\n//# sourceURL=webpack://quest-log/./client/components/App.jsx?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var _Quest_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Quest.js */ \"./client/Quest.js\");\n/* harmony import */ var _AddQuest_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddQuest.jsx */ \"./client/components/AddQuest.jsx\");\n/* harmony import */ var _QuestList_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./QuestList.jsx */ \"./client/components/QuestList.jsx\");\n\n\n\n\n\nclass App extends react__WEBPACK_IMPORTED_MODULE_0__.Component {\n  constructor(props) {\n    super(props);\n    this.state = {\n      questList: []\n    };\n    this.sumbitNewQuest = this.sumbitNewQuest.bind(this);\n  }\n\n  sumbitNewQuest(e) {\n    e.preventDefault();\n    let {\n      form\n    } = e.target;\n    console.log(form.text.value);\n    this.setState({\n      questList: [...this.state.questList, form.text.value]\n    });\n  }\n\n  render() {\n    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"p\", null, \"App.jsx has been loaded\"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_AddQuest_jsx__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n      handleClick: this.sumbitNewQuest\n    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_QuestList_jsx__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n      quests: this.state.questList\n    }));\n  }\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);\n\n//# sourceURL=webpack://quest-log/./client/components/App.jsx?");
+
+/***/ }),
+
+/***/ "./client/components/QuestList.jsx":
+/*!*****************************************!*\
+  !*** ./client/components/QuestList.jsx ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (({\n  quests\n}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"ul\", null, quests.map((quest, i) => {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"li\", {\n    key: i\n  }, quest);\n})));\n\n//# sourceURL=webpack://quest-log/./client/components/QuestList.jsx?");
 
 /***/ }),
 
