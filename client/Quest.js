@@ -1,8 +1,12 @@
 export default function Quest(title) {
   const quest = Object.create(questMethods);
 
-  quest.subQuests = [];
   quest.title = title;
+  quest.description = '';
+  quest.progress = 0;
+  quest.subQuests = [];
+  quest.parentQuest = null;
+  quest.parentContribution = 0;
 
   return quest;
 }
@@ -10,8 +14,8 @@ export default function Quest(title) {
 const questMethods = {
   delete: function() {},
   addSubQuest: function() {},
-  complete: function() {
-    
+  complete: function() {    
     this.delete();
-  }
+  },
+  mapAll: function() {}
 };
