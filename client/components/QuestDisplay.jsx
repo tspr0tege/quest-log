@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
-// import Quest from '../Quest.js';
 
 import QuestEdit from './QuestEdit.jsx';
-import { SendToModal } from './App.jsx';
+import { Context } from './App.jsx';
 
 
 export default ({ quest }) => {
-  const edit = useContext(SendToModal);
+  const { sendToModal } = useContext(Context);
 
   const handleClick = () => {
-    edit(<QuestEdit quest={quest}/>);
+    sendToModal(<QuestEdit quest={quest}/>);
   }
 
   return (
