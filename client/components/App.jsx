@@ -18,6 +18,7 @@ const modalStyle = {
 };
 
 Modal.setAppElement('#app');
+const SendToModal = React.createContext();
 
 class App extends React.Component {
   constructor(props) {
@@ -57,8 +58,9 @@ class App extends React.Component {
   }
 
   render() {
+
     return(
-      <>
+      <SendToModal.Provider value={this.showInModal}>
         <Modal 
           style={modalStyle}
           isOpen={this.state.showModal}
@@ -69,10 +71,11 @@ class App extends React.Component {
         </Modal>
         <p>App.jsx has been loaded</p>
         <QuestCreate handleClick={this.sumbitNewQuest} />
-        <QuestList quests={this.state.questList} edit={this.showInModal} />
-      </>
+        <QuestList quests={this.state.questList} />
+      </SendToModal.Provider>
     );
   }
 }
 
 export default App;
+export {SendToModal};
