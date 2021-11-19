@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import QuestDisplay from './QuestDisplay.jsx';
-// import { Context } from './App.jsx';
 
 export default ({ quests }) => {
-  // let { questList } = useContext(Context);
   
   return (
     <ul>
       {quests.map((quest, i) => {
-        return (
-          <li key={i}>
-            <QuestDisplay quest={quest} />
-          </li>
-        );
+        return quest.mapAll((q, k) => {
+          return (
+            <li key={k}>
+              <QuestDisplay quest={q} />
+            </li>
+          );
+        });
       })}
     </ul>
   );

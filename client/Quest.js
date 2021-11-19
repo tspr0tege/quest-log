@@ -12,10 +12,14 @@ export default function Quest(title) {
 }
 
 const questMethods = {
-  delete: function() {},
-  addSubQuest: function() {},
-  complete: function() {    
-    this.delete();
-  },
-  mapAll: function() {}
+  mapAll: function(cb, depth) {
+    depth = depth || [0];
+    let returnArray = [cb(this, depth.join('-'))]
+    if(this.subQuests.length > 0) {
+      returnArray = returnArray.concat(this.subQuests.map((quest, index) => {
+        return quest.mapAll(cb, [...depth, index])      
+      }));
+    }
+    return returnArray;
+  }
 };

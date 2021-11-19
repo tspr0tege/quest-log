@@ -30,16 +30,24 @@ export default ({ quest }) => {
 const dropList = (parent, chosenQuest) => {
 
   const { questList } = useContext(Context);
+  // debugger;
+  const fullList = questList.map((quest, index) => {
+    return quest.mapAll((q, key) => {
+      let { title } = q;        
+        if(q !== chosenQuest) {
+          return <option value={key} key={key}>{title}</option>
+        }
+    }, [index]);
+  });
 
   function updateParent (e) {
-    console.log(`changing quest to: ${questList[e.target.value]}`)
+    // console.log(`changing quest to: ${questList[e.target.value]}`)
     chosenQuest.parentQuest = questList[e.target.value];
     chosenQuest.parentQuest.subQuests.push(chosenQuest);
-    let removeIndex = questList.indexOf(chosenQuest)
-    questList.splice(removeIndex, 1)
+    questList.splice(questList.indexOf(chosenQuest), 1)
   }
 
-  console.log("Running list generation");
+  // console.log("Running list generation");
 
   return (
     <select 
@@ -48,15 +56,7 @@ const dropList = (parent, chosenQuest) => {
     onChange={updateParent}
     defaultValue={(parent) ? questList.indexOf(parent) : parent}>
       <option value={null}>None</option>
-      {questList.map( (quest, index) => {
-        let { title } = quest;
-        switch (title) {
-          case chosenQuest.title:
-            return <option value={index} key={title} disabled>{title}</option>
-          default:
-            return <option value={index} key={title}>{title}</option>
-        }
-      })}
+      {fullList}
     </select>
   );
 }
