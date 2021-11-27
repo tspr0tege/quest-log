@@ -29,22 +29,30 @@ export default ({ quest }) => {
 
 const dropList = (parent, chosenQuest) => {
 
-  const { questList } = useContext(Context);
-  // debugger;
+  const { questList, editQuest } = useContext(Context);
+
+  let skipList = chosenQuest.linearMapAll((quest) => {
+    return quest;
+  });
+  // console.log(skipList);
   const fullList = questList.map((quest, index) => {
-    return quest.mapAll((q, key) => {
-      let { title } = q;        
-        if(q !== chosenQuest) {
+    return quest.linearMapAll((q, depth) => {
+      let { title } = q;
+      let key = depth.join('-');
+        if(!skipList.includes(q)) {
           return <option value={key} key={key}>{title}</option>
         }
     }, [index]);
   });
 
   function updateParent (e) {
-    // console.log(`changing quest to: ${questList[e.target.value]}`)
-    chosenQuest.parentQuest = questList[e.target.value];
-    chosenQuest.parentQuest.subQuests.push(chosenQuest);
-    questList.splice(questList.indexOf(chosenQuest), 1)
+    // console.log(`changing parent quest to: ${questList[e.target.value]}`)
+    let depth = e.target.value.split('-');
+    let parent = questList[depth[0]];
+    for (let i = 1; i < depth.length; i++) {
+      parent = parent.subQuests[depth[i]];
+    }
+    editQuest(chosenQuest, { parent });
   }
 
   // console.log("Running list generation");
