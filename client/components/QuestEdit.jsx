@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import QuestList from './QuestList.jsx';
 import { Context } from './App.jsx';
 
-export default ({ quest }) => {
 
+export default ({ quest }) => {
+  
   let { 
     title, 
     description, 
@@ -13,11 +14,13 @@ export default ({ quest }) => {
     parentQuest, 
     parentContribution } = quest;
 
+  const [editDes, toggleEditDes] = useState(false);
+  const [editTitle, toggleEditTitle] = useState(false);
+
   return (
     <>    
-      <h3>Quest: {title}</h3>
-      <h3>Description:</h3>
-      <p>{description}</p>
+      <QuestTitle quest={quest} title={title} edit ={editTitle} toggle={toggleEditTitle}/>
+      <DescriptionElement quest={quest} description={description} edit={editDes} toggle={toggleEditDes}/>
       <p>Progress: {progress}%</p>
       <h3>Sub-quests:</h3>
       <QuestList  quests={subQuests} />
@@ -27,14 +30,74 @@ export default ({ quest }) => {
   );
 }
 
-const dropList = (parent, chosenQuest) => {
+const QuestTitle = ({ quest, title, edit, toggle }) => {
+  const { editQuest } = useContext(Context);
+  const [titleValue, changeTitle] = useState(title);
 
+  function handleClick(e) {    
+    if (edit) {
+      e.preventDefault();      
+      editQuest(quest, {title: titleValue});
+    }
+    toggle(!edit);
+  }
+
+  function handleChange(e) {
+    changeTitle(e.target.value);
+  }
+
+  if (edit) {
+    return (      
+      <form>
+        <input type='text' value={titleValue} onChange={handleChange}></input>
+        <button onClick={handleClick}>Apply</button>
+      </form>
+    )
+  } else {
+    return ( <h3 onClick={handleClick}>Title: {titleValue}</h3> );
+  }
+}
+
+const DescriptionElement = ({ quest, description, edit, toggle }) => {  
+  const { editQuest } = useContext(Context);
+  const [desValue, changeDes] = useState(description);
+
+  function handleClick(e) {    
+    if (edit) {
+      e.preventDefault();      
+      editQuest(quest, {description: desValue});
+    }
+    toggle(!edit);
+  }
+
+  function handleChange(e) {
+    changeDes(e.target.value);
+  }
+
+  if (edit) {
+    return (
+      <form>
+        <textarea value={desValue} onChange={handleChange}></textarea>
+        <button onClick={handleClick}>Apply</button>
+      </form>
+    )
+  } else {
+    return(
+      <>
+        <h3>Description:</h3>
+        <p onClick={handleClick}>{description}</p>
+      </>
+    )
+  }
+}
+
+const dropList = (parent, chosenQuest) => {
   const { questList, editQuest } = useContext(Context);
 
   let skipList = chosenQuest.linearMapAll((quest) => {
     return quest;
   });
-  // console.log(skipList);
+
   const fullList = questList.map((quest, index) => {
     return quest.linearMapAll((q, depth) => {
       let { title } = q;
@@ -46,7 +109,6 @@ const dropList = (parent, chosenQuest) => {
   });
 
   function updateParent (e) {
-    // console.log(`changing parent quest to: ${questList[e.target.value]}`)
     let depth = e.target.value.split('-');
     let parent = questList[depth[0]];
     for (let i = 1; i < depth.length; i++) {
@@ -54,8 +116,6 @@ const dropList = (parent, chosenQuest) => {
     }
     editQuest(chosenQuest, { parent });
   }
-
-  // console.log("Running list generation");
 
   return (
     <select 

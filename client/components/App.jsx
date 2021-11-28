@@ -49,7 +49,7 @@ class App extends React.Component {
   sumbitNewQuest (e) {
     e.preventDefault();
     let { form } = e.target;
-    console.log(form.text.value);
+    // console.log(form.text.value);
 
     let newQuest = Quest(form.text.value);
     this.setState({
@@ -59,9 +59,19 @@ class App extends React.Component {
 
   editQuest (quest, options) {
     let { questList } = this.state;
-    
+
     Object.keys(options).forEach((key) => {
       switch (key) {
+        case 'title':
+          quest.title = options.title;
+          this.forceUpdate();
+          break;
+
+        case 'description':
+          quest.description = options.description;
+          this.forceUpdate();
+          break;
+
         case 'parent':
           if (questList.includes(quest)) {
             questList.splice(questList.indexOf(quest), 1);

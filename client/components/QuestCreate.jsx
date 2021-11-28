@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-
-// const [] = useState();
+import React from 'react';
 
 export default ({ handleClick }) => (
   <form>

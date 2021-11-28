@@ -7,4 +7,6 @@ ul {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  border: black solid 2px;
+  margin: 2px;
 }
