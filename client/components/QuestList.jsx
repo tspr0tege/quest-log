@@ -2,31 +2,25 @@ import React from 'react';
 
 import QuestDisplay from './QuestDisplay.jsx';
 
-function nestedQuestList(questArray, depth) {
-  depth = depth || [];
-  return questArray.map((quest, index) => {    
-      return (
-        <li key={([...depth, index]).join('-')}>
-          <QuestDisplay quest={quest} />
-          <InnerUl questList={quest.subQuests} depth={[...depth, index]} />
-        </li>
-      );    
+function nestedQuestList(questArray, depth = []) {
+  return questArray.map((quest, index) => {
+    let { subQuests } = quest;
+    let newDepth = [...depth, index];
+
+    return (
+      <li key={newDepth.join('-')}>
+        <QuestDisplay quest={quest} />
+        {subQuests.length > 0 && <ul>{nestedQuestList(subQuests, newDepth)}</ul>}
+      </li>
+    );
+
   });
 }
 
-const InnerUl = ({ questList, depth }) => {
-  if (questList.length > 0) {
-    return <ul>{nestedQuestList(questList, depth)}</ul>
-  }
-  return null;
-}
-
-export default ({ quests }) => {  
-
-  let width = '50%';
+export default ({ quests }) => {
 
   return (
-    <ul style={{ width }}>
+    <ul style={{ flexGrow: 1 }}>
       {nestedQuestList(quests)}
     </ul>
   );

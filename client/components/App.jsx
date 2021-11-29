@@ -5,12 +5,16 @@ import Quest from '../Quest.js';
 
 import QuestCreate from './QuestCreate.jsx';
 import QuestList from './QuestList.jsx';
+import QuestFocus from './QuestFocus.jsx';
 
 const modalStyle = {
   content: {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.75)'
   }
 };
 
@@ -24,12 +28,14 @@ class App extends React.Component {
       questList: [],
       showModal: false,
       modalContent: "Nothing to see here!",
+      focusOn: {},
       profile: {}
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.showInModal = this.showInModal.bind(this);
     this.sumbitNewQuest = this.sumbitNewQuest.bind(this);
+    this.sendToFocus = this.sendToFocus.bind(this);
     this.editQuest = this.editQuest.bind(this);
     this.completeQuest = this.completeQuest.bind(this);
   }
@@ -49,59 +55,66 @@ class App extends React.Component {
   sumbitNewQuest (e) {
     e.preventDefault();
     let { form } = e.target;
-    // console.log(form.text.value);
 
     let newQuest = Quest(form.text.value);
     this.setState({
       questList: [...this.state.questList, newQuest]
     });
+    form.text.value = '';
+  }
+
+  sendToFocus (quest) {
+    this.setState({focusOn: quest});
   }
 
   editQuest (quest, options) {
-    let { questList } = this.state;
+    // debugger;
+    const { questList } = this.state;
+    const change = Object.keys(options).filter((key) => {
+      return quest[key] !== options[key]
+    });
+    let stateChanges = {showModal: false};
 
-    Object.keys(options).forEach((key) => {
-      switch (key) {
+    change.forEach((option) => {
+      switch (option) {
         case 'title':
           quest.title = options.title;
-          this.forceUpdate();
           break;
 
         case 'description':
           quest.description = options.description;
-          this.forceUpdate();
           break;
 
         case 'parent':
+          // remove from current parent
           if (questList.includes(quest)) {
-            questList.splice(questList.indexOf(quest), 1);
+            stateChanges.questList = questList.filter(q => {return q !== quest});
           }
-
           quest.changeParent(options.parent);
-
-          if (!options.parent) {
-            this.setState({
-              questList: [...this.state.questList, quest]
-            });
-          } else {
-            this.forceUpdate();
-          }
+          // add to new
+          if (options.parent === null) {
+            stateChanges.questList = [...questList, quest]
+          } 
           break;
 
         default:
           console.error('Invalid key received in App.editQuest: ' + key);
       }
     });
+
+    this.setState(stateChanges);
   }
 
   completeQuest (quest) {
-    let { questList } = this.state;
-    
-    quest.complete();
-    if (quest.parentQuest === null) { 
-      questList.splice(questList.indexOf(quest), 1);
+    let stateChanges = {};
+    if (this.state.focusOn === quest) {
+      stateChanges.focusOn = {};
     }
-    this.forceUpdate();
+    if (quest.parentQuest === null) { 
+      stateChanges.questList = this.state.questList.filter((q) => {return q !== quest});
+    } 
+    quest.complete();
+    this.setState(stateChanges);
   }  
 
   render() {
@@ -111,6 +124,7 @@ class App extends React.Component {
         sendToModal: this.showInModal,
         completeQuest: this.completeQuest,
         editQuest: this.editQuest,
+        sendToFocus: this.sendToFocus,
         questList: this.state.questList
       }}>
         <Modal 
@@ -122,9 +136,13 @@ class App extends React.Component {
           {this.state.modalContent}
 
         </Modal>
-        <p>App.jsx has been loaded</p>
-        <QuestCreate handleClick={this.sumbitNewQuest} />
-        <QuestList quests={this.state.questList} />
+        <main>
+          <div>
+            <QuestCreate handleClick={this.sumbitNewQuest} />
+            <QuestList quests={this.state.questList} />
+          </div>
+          <QuestFocus quest={this.state.focusOn}/>
+        </main>
       </Context.Provider>
     );
   }

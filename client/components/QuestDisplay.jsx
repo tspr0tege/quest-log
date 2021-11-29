@@ -8,21 +8,28 @@ import { Context } from './App.jsx';
 
 
 export default ({ quest }) => {
-  const { sendToModal, completeQuest } = useContext(Context);
-
-  const edit = () => {
-    sendToModal(<QuestEdit quest={quest}/>);
-  }
-
-  const complete = () => {
-    completeQuest(quest);
-  }
+  const { sendToModal, completeQuest, sendToFocus } = useContext(Context);
 
   return (
     <div className='quest-list-item'>
-      <p> {quest.title} </p>
-      <span onClick={complete}><FontAwesomeIcon icon={faCheck} /></span>
-      <span onClick={edit}><FontAwesomeIcon icon={faEdit} /></span>
+      <div 
+      onClick={() => {sendToFocus(quest)}} 
+      style={{flexGrow: 1, maxWidth: 'calc(100% - 61px)'}}>
+        <h3>Quest: {quest.title} </h3>
+        <div className="progress-bar">
+          <div style={{width: quest.progress + '%'}}></div>
+        </div>        
+      </div>
+
+      <div className='quest-controls'>
+        <FontAwesomeIcon
+        icon={faCheck}
+        onClick={() => {completeQuest(quest)}} />
+
+        <FontAwesomeIcon
+        icon={faEdit}
+        onClick={() => {sendToModal(<QuestEdit quest={quest}/>)}} />        
+      </div>
     </div>
   );
 }

@@ -1,12 +1,15 @@
+import { v4 as uuid } from 'uuid';
+
 export default function Quest(title) {
   const quest = Object.create(questMethods);
 
+  quest.id = uuid();
   quest.title = title;
   quest.description = 'Enter a description...';
   quest.progress = 0;
   quest.subQuests = [];
   quest.parentQuest = null;
-  quest.parentContribution = 0;
+  quest.contribution = 0;
 
   return quest;
 }
@@ -25,24 +28,21 @@ const questMethods = {
   },
 
   complete: function() {
-    // complete all children
     this.subQuests.forEach(q => {
       q.complete();
     });
-
-    // if it has a parent
     if (this.parentQuest) {
-      // send completion value to parent
-
-      // remove from parent subQuest list
+      this.parentQuest.progress += this.contribution;
       this.parentQuest.removeChild(this);
     }
     // send XP value to profile
   },
 
   delete: function() {
-    // delete this, and all child quests
-    // perhaps a warning if there are child quests
+    // if children 
+      // recalibrate contribution of all children to 0
+      // change parent of all children to this parent
+    // remove this from its parent
   },
 
   removeChild: function(child) {
