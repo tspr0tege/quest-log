@@ -7,6 +7,16 @@ ul {
   list-style: none;
 }
 
+p, h3 {
+  margin: 0;
+}
+
+textarea {
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
 main {
   width: 80%;
   height: 80%;
@@ -38,11 +48,11 @@ main > * {
   margin: 10px;
 }
 
-h3 {
+.quest-list-item h3 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin: 0;
+  max-width: 100%;
   margin-bottom: 5px;
 }
 
@@ -91,6 +101,14 @@ li {
   border: black solid 2px;
 }
 
-p {
-  margin: 0;
+.quest-focus-container {
+
+}
+
+.quest-focus-container > * {
+  margin-bottom: 20px;
+}
+
+#quest-edit-form > * {
+  margin-bottom: 10px;
 }

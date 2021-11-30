@@ -12,6 +12,9 @@ const modalStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    height: 'fit-content',
+    maxHeight: '85vh',
+    overflowY: 'auto'
   },
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)'
@@ -79,26 +82,30 @@ class App extends React.Component {
       switch (option) {
         case 'title':
           quest.title = options.title;
-          break;
+        break;
 
         case 'description':
           quest.description = options.description;
-          break;
+        break;
 
-        case 'parent':
+        case 'parentQuest':
           // remove from current parent
           if (questList.includes(quest)) {
             stateChanges.questList = questList.filter(q => {return q !== quest});
           }
-          quest.changeParent(options.parent);
+          quest.changeParent(options.parentQuest);
           // add to new
-          if (options.parent === null) {
+          if (options.parentQuest === null) {
             stateChanges.questList = [...questList, quest]
           } 
-          break;
+        break;
+
+        case 'contribution':
+          quest.contribution = options.contribution;
+        break;
 
         default:
-          console.error('Invalid key received in App.editQuest: ' + key);
+          console.error('Invalid key received in App.editQuest: ' + option);
       }
     });
 

@@ -5,7 +5,7 @@ export default function Quest(title) {
 
   quest.id = uuid();
   quest.title = title;
-  quest.description = 'Enter a description...';
+  quest.description = '';
   quest.progress = 0;
   quest.subQuests = [];
   quest.parentQuest = null;

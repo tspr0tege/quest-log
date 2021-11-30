@@ -7,16 +7,19 @@ export default ({ quest }) => {
   const { editQuest, questList } = useContext(Context);
   let [title, setTitle] = useState(quest.title);
   let [description, setDescription] = useState(quest.description);
-  let [parent, setParent] = useState(quest.parent);
+  let [parentQuest, setParent] = useState(quest.parentQuest);
+  let [contribution, setContribution] = useState(quest.contribution);
+  // event.persist(), state = {title, description, parent}
 
   const submit = (e) => {
     e.preventDefault();
     // let { title, description, parentQuest } = e.target.form;
-    editQuest(quest, { title, description, parent });
+    editQuest(quest, { title, description, parentQuest, contribution });
   }
 
   const updateParent = (e) => {
-    if (e.target.value === null) {
+    console.log(e.target.value);
+    if (e.target.value === 'None') {
       setParent(null);
     } else {
       let depth = e.target.options[e.target.selectedIndex].dataset.depth.split('-');
@@ -29,27 +32,41 @@ export default ({ quest }) => {
   }
 
   return (
-    <form>
-      <h3>Title:</h3>
-      <input type='text' name='title' value={title} onChange={e => {setTitle(e.target.value)}}></input>
-      <h3>Description:</h3>
-      <textarea name='description' value={description} onChange={e => {setDescription(e.target.value)}}></textarea>
-      <h3>Progress:</h3>
-      <p>{quest.progress}%</p>
-      <h3>Sub-quests:</h3>
-      <QuestList  quests={quest.subQuests} />
-      <h3>Parent Quest Line:</h3>
-      <select
-      name="parentQuest" 
-      id="parent-quest-dropdown" 
-      onChange={updateParent}
-      defaultValue={(parent) ? parent.id : null}>
-        <option value={null}>None</option>
-        {dropList(quest)}
-      </select>
-      <h3>Contribution to Quest Line:</h3>
-      <p>{quest.contribution}%</p>
-      <button onClick={submit}>Submit Changes</button>
+    <form id='quest-edit-form'>
+      <div>
+        <h3>Title:</h3>
+        <input type='text' value={title} onChange={e => {setTitle(e.target.value)}}></input>
+      </div>
+      <div>
+        <h3>Description:</h3>
+        <textarea value={description} onChange={e => {setDescription(e.target.value)}} placeholder='Enter a description...' rows='5' style={{width: '95%'}}></textarea>
+      </div>
+      <div>
+        <h3>Progress:</h3>
+        <p>{quest.progress}%</p>
+      </div>
+      <div>
+        <h3>Sub-quests:</h3>
+        <QuestList  quests={quest.subQuests} />
+      </div>
+      <div>
+        <h3>Parent Quest Line:</h3>
+        <select
+        id="parent-quest-dropdown" 
+        onChange={updateParent}
+        defaultValue={(parentQuest) ? parentQuest.id : null}>
+          <option value={null}>None</option>
+          {dropList(quest)}
+        </select>
+      </div>
+      {parentQuest && <div>
+        <h3>Contribution to Quest Line:</h3>
+        <div style={{display: 'flex'}}>
+          <input type='range' min={0} max={100} step='any' value={contribution} onChange={e => {setContribution(Math.floor(e.target.value))}}/>
+          <input type='number' min={0} max={100} value={contribution} onChange={e => {setContribution(e.target.value)}}/>
+        </div>
+      </div>}
+      <button onClick={submit} style={{marginTop: '20px'}}>Submit Changes</button>
     </form>
   );
 }
