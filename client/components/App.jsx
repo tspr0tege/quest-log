@@ -55,15 +55,25 @@ class App extends React.Component {
     );
   }
 
-  sumbitNewQuest (e) {
-    e.preventDefault();
-    let { form } = e.target;
-
-    let newQuest = Quest(form.text.value);
-    this.setState({
-      questList: [...this.state.questList, newQuest]
+  setStateAwait (state) {
+    return new Promise((resolve, reject) => {
+      this.setState(state, () => {resolve(this.state.questList)});
     });
-    form.text.value = '';
+  }
+
+  sumbitNewQuest (e) {
+    return new Promise((resolve, reject) => {
+      e.preventDefault();
+      let { form } = e.target;  
+      let newQuest = Quest(form.text.value);
+      this.setStateAwait({
+        questList: [...this.state.questList, newQuest]
+      })
+      .then((newQuestlist) => {
+        form.text.value = '';
+        resolve(newQuestlist)
+      });
+    });
   }
 
   sendToFocus (quest) {
@@ -145,7 +155,11 @@ class App extends React.Component {
         </Modal>
         <main>
           <div>
-            <QuestCreate handleClick={this.sumbitNewQuest} />
+            <QuestCreate 
+            handleClick={this.sumbitNewQuest} 
+            sendToModal={this.showInModal} 
+            questList={this.state.questList} />
+
             <QuestList quests={this.state.questList} />
           </div>
           <QuestFocus quest={this.state.focusOn}/>

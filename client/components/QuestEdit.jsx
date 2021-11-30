@@ -62,8 +62,8 @@ export default ({ quest }) => {
       {parentQuest && <div>
         <h3>Contribution to Quest Line:</h3>
         <div style={{display: 'flex'}}>
-          <input type='range' min={0} max={100} step='any' value={contribution} onChange={e => {setContribution(Math.floor(e.target.value))}}/>
-          <input type='number' min={0} max={100} value={contribution} onChange={e => {setContribution(e.target.value)}}/>
+          <input type='range' min='0' max='100' step='1' value={contribution} onChange={e => {setContribution(parseInt(e.target.value))}}/>
+          <input type='number' min='0' max='100' value={contribution} onChange={e => {setContribution(parseInt(e.target.value))}}/>
         </div>
       </div>}
       <button onClick={submit} style={{marginTop: '20px'}}>Submit Changes</button>
