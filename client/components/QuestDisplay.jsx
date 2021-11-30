@@ -4,6 +4,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 
 import QuestEdit from './QuestEdit.jsx';
+import ProgressBar from './ProgressBar.jsx';
 import { Context } from './App.jsx';
 
 
@@ -15,12 +16,9 @@ export default ({ quest }) => {
       <div 
       onClick={() => {sendToFocus(quest)}} 
       style={{flexGrow: 1, maxWidth: 'calc(100% - 61px)'}}>
-        <h3>Quest: {quest.title} </h3>
-        <div className="progress-bar">
-          <div style={{width: quest.progress + '%'}}></div>
-        </div>        
+        <h3>Quest: {quest.title} </h3>       
+        <ProgressBar progress={quest.progress} />
       </div>
-
       <div className='quest-controls'>
         <FontAwesomeIcon
         icon={faCheck}

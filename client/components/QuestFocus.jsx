@@ -1,11 +1,13 @@
 import React from 'react';
 
 import QuestList from './QuestList.jsx';
+import ProgressBar from './ProgressBar.jsx';
 
 export default ({ quest }) => {
   let active = Object.keys(quest).length > 0;
   if(active) {
     let { title, description, progress, subQuests, parentQuest, contribution } = quest;
+
     return(
       <div className='quest-focus-container'>
         <h3>Title: {title}</h3>
@@ -15,7 +17,7 @@ export default ({ quest }) => {
         </div>
         <div>
           <h3>Progress: </h3>
-          <p>{progress}%</p>
+          <ProgressBar progress={progress} customStyles={{height: '20px'}}/>
         </div>
         <div style={{maxHeight: '50%', overflowY: 'auto'}}>
           <h3>Sub-quests:</h3>
