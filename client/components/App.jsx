@@ -124,14 +124,33 @@ class App extends React.Component {
 
   completeQuest (quest) {
     let stateChanges = {};
+    // Clear focus if completed quest is in it
     if (this.state.focusOn === quest) {
       stateChanges.focusOn = {};
     }
+    // remove quest from parent, if it's state
     if (quest.parentQuest === null) { 
       stateChanges.questList = this.state.questList.filter((q) => {return q !== quest});
-    } 
+    }
     quest.complete();
+
+    
+
+    // distribute contribution and check for parent completion
+    let completeParent = false;
+    if (quest.parentQuest){
+      let parent = quest.parentQuest;
+      if (quest.contribution + parent.progress < 100) {
+        parent.progress += quest.contribution;
+      } else {
+        parent.progress = 99;
+        if (window.confirm(`Completing this quest will raise the progress of the quest: ${parent.title} to 100%. Click "OK" to continue, or "Cancel" to set ${parent.title}'s progress to 99%`)) {
+          completeParent = true;
+        }
+      }
+    }
     this.setState(stateChanges);
+    if (completeParent) {this.completeQuest(quest.parentQuest)}
   }  
 
   render() {

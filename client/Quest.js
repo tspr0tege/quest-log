@@ -32,7 +32,6 @@ const questMethods = {
       q.complete();
     });
     if (this.parentQuest) {
-      this.parentQuest.progress += this.contribution;
       this.parentQuest.removeChild(this);
     }
     // send XP value to profile
