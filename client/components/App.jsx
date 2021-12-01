@@ -2,10 +2,12 @@ import React from 'react';
 import Modal from 'react-modal';
 
 import Quest from '../Quest.js';
+import Data from '../Data.js';
 
 import QuestCreate from './QuestCreate.jsx';
 import QuestList from './QuestList.jsx';
 import QuestFocus from './QuestFocus.jsx';
+import ProfileCreate from './ProfileCreate.jsx';
 
 const modalStyle = {
   content: {
@@ -41,6 +43,7 @@ class App extends React.Component {
     this.sendToFocus = this.sendToFocus.bind(this);
     this.editQuest = this.editQuest.bind(this);
     this.completeQuest = this.completeQuest.bind(this);
+    this.saveProfile = this.saveProfile.bind(this);
   }
 
   toggleModal () {
@@ -57,7 +60,7 @@ class App extends React.Component {
 
   setStateAwait (state) {
     return new Promise((resolve, reject) => {
-      this.setState(state, () => {resolve(this.state.questList)});
+      this.setState(state, () => {resolve(this.state.questList);});
     });
   }
 
@@ -71,6 +74,7 @@ class App extends React.Component {
       })
       .then((newQuestlist) => {
         form.text.value = '';
+        this.saveQuestList();
         resolve(newQuestlist)
       });
     });
@@ -119,7 +123,7 @@ class App extends React.Component {
       }
     });
 
-    this.setState(stateChanges);
+    this.setState(stateChanges, this.saveQuestList);
   }
 
   completeQuest (quest) {
@@ -132,9 +136,7 @@ class App extends React.Component {
     if (quest.parentQuest === null) { 
       stateChanges.questList = this.state.questList.filter((q) => {return q !== quest});
     }
-    quest.complete();
-
-    
+    quest.complete();    
 
     // distribute contribution and check for parent completion
     let completeParent = false;
@@ -149,9 +151,18 @@ class App extends React.Component {
         }
       }
     }
-    this.setState(stateChanges);
+    this.setState(stateChanges, this.saveQuestList);
     if (completeParent) {this.completeQuest(quest.parentQuest)}
-  }  
+  }
+
+  saveProfile (profile) {
+    Data.save({ profile });
+    this.setState({ profile });
+  }
+
+  saveQuestList () {
+    Data.save({questList: this.state.questList});
+  }
 
   render() {
 
@@ -168,9 +179,7 @@ class App extends React.Component {
         isOpen={this.state.showModal}
         onRequestClose={this.toggleModal}
         shouldCloseOnOverlayClick={true}>
-
           {this.state.modalContent}
-
         </Modal>
         <main>
           <div>
@@ -185,6 +194,27 @@ class App extends React.Component {
         </main>
       </Context.Provider>
     );
+  }
+
+  componentDidMount () {
+    Data.load('profile')
+    // load profile
+    .then((profile) => {
+      this.setState({ profile })
+      // next: load quest list
+      Data.load('questList')
+      .then((questList) => {
+        this.setState({ questList });
+      })
+      .catch(() => {});
+    })
+    // create profile if there isn't one
+    // Note: there shouldn't be a questList if there is no profile
+    .catch(() => {
+      this.showInModal(<ProfileCreate save={this.saveProfile} />)
+    });
+
+
   }
 }
 
