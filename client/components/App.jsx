@@ -161,7 +161,24 @@ class App extends React.Component {
   }
 
   saveQuestList () {
-    Data.save({questList: this.state.questList});
+    let questList = {};
+    let qArray = this.state.questList.flatMap((q) => {
+      return q.linearMapAll((quest) => {return quest});
+    });
+    console.log(qArray);
+    qArray.forEach((qObj) => {
+      questList[qObj.id] = qObj;
+      if (qObj.parentQuest !== null) {
+        questList[qObj.id].parentQuest = qObj.parentQuest.id;
+      }
+      if (qObj.subQuests.length > 0) {
+        questList[qObj.id].subQuests = qObj.subQuests.map((subQ) => {
+          return subQ.id;
+        });
+      }
+    });
+    console.log('Quest List being saved as:', questList);
+    Data.save({ questList });
   }
 
   render() {
@@ -196,26 +213,26 @@ class App extends React.Component {
     );
   }
 
-  componentDidMount () {
-    Data.load('profile')
-    // load profile
-    .then((profile) => {
-      this.setState({ profile })
-      // next: load quest list
-      Data.load('questList')
-      .then((questList) => {
-        this.setState({ questList });
-      })
-      .catch(() => {});
-    })
-    // create profile if there isn't one
-    // Note: there shouldn't be a questList if there is no profile
-    .catch(() => {
-      this.showInModal(<ProfileCreate save={this.saveProfile} />)
-    });
+  // componentDidMount () {
+  //   Data.load('profile')
+  //   // load profile
+  //   .then((profile) => {
+  //     this.setState({ profile })
+  //     // next: load quest list
+  //     Data.load('questList')
+  //     .then((questList) => {
+  //       this.setState({ questList });
+  //     })
+  //     .catch(() => {});
+  //   })
+  //   // create profile if there isn't one
+  //   // Note: there shouldn't be a questList if there is no profile
+  //   .catch(() => {
+  //     this.showInModal(<ProfileCreate save={this.saveProfile} />)
+  //   });
 
 
-  }
+  // }
 }
 
 export default App;
