@@ -68,7 +68,7 @@ class App extends React.Component {
     return new Promise((resolve, reject) => {
       e.preventDefault();
       let { form } = e.target;  
-      let newQuest = Quest(form.text.value);
+      let newQuest = Quest({title: form.text.value});
       this.setStateAwait({
         questList: [...this.state.questList, newQuest]
       })
@@ -165,7 +165,7 @@ class App extends React.Component {
     let qArray = this.state.questList.flatMap((q) => {
       return q.linearMapAll((quest) => {return quest});
     });
-    console.log(qArray);
+    // console.log(qArray);
     qArray.forEach((qObj) => {
       questList[qObj.id] = qObj;
       if (qObj.parentQuest !== null) {
@@ -177,7 +177,7 @@ class App extends React.Component {
         });
       }
     });
-    console.log('Quest List being saved as:', questList);
+    // console.log('Quest List being saved as:', questList);
     Data.save({ questList });
   }
 
@@ -213,26 +213,58 @@ class App extends React.Component {
     );
   }
 
-  // componentDidMount () {
-  //   Data.load('profile')
-  //   // load profile
-  //   .then((profile) => {
-  //     this.setState({ profile })
-  //     // next: load quest list
-  //     Data.load('questList')
-  //     .then((questList) => {
-  //       this.setState({ questList });
-  //     })
-  //     .catch(() => {});
-  //   })
-  //   // create profile if there isn't one
-  //   // Note: there shouldn't be a questList if there is no profile
-  //   .catch(() => {
-  //     this.showInModal(<ProfileCreate save={this.saveProfile} />)
-  //   });
+  componentDidMount () {
+    Data.load('profile')
+    // load profile
+    .then((profile) => {
+      this.setState({ profile });
+      // next: load quest list
+      Data.load('questList')
+      .then((questList) => {
+        // questList is an obj of objects, where each key is the object's id
+        // create an array and populate it with all of the questList objects with parentQuest === null
+        let newState = []; 
+        Object.keys(questList).forEach((key) => {
+          if (questList[key].parentQuest === null) {
+            newState.push(Quest(questList[key]));
+          }
+        });
+        // newState has an array of quests with null parents and an array of ids for subQuests
+        
+        // recursively iterate through all subQuest lists, populating the array with Quest data structures
+        newState.forEach((quest) => {
+          if (quest.subQuests.length > 0) { 
+            quest.subQuests = createChildren(quest); 
+          }
+        });
+        
+        function createChildren (quest) {
+          let newSubQuestList = [];
+          quest.subQuests.forEach((subQ) => {
+            // subQ will be the id string            
+            let newSubQuest = Quest(questList[subQ]);
+            if (newSubQuest.subQuests.length > 0) {
+              newSubQuest.subQuests = createChildren(newSubQuest);
+            }
+            newSubQuest.parentQuest = quest;
+            newSubQuestList.push(newSubQuest);
+          });
+          return newSubQuestList
+        }
+
+        // assign rebuilt array to state.questList
+        this.setState({ questList: newState });
+      })
+      .catch(() => {});
+    })
+    // create profile if there isn't one
+    // Note: there shouldn't be a questList if there is no profile
+    .catch(() => {
+      this.showInModal(<ProfileCreate save={this.saveProfile} />)
+    });
 
 
-  // }
+  }
 }
 
 export default App;

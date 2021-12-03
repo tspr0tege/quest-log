@@ -1,17 +1,17 @@
 import { v4 as uuid } from 'uuid';
 
-export default function Quest(title) {
+export default function Quest(obj) {
   const quest = Object.create(questMethods);
 
-  quest.id = uuid();
-  quest.title = title;
-  quest.description = '';
-  quest.progress = 0;
-  quest.subQuests = [];
-  quest.parentQuest = null;
-  quest.contribution = 0;
+  quest.id = obj.id || uuid();
+  quest.title =  obj.title || '';
+  quest.description =  obj.description || '';
+  quest.progress =  obj.progress || 0;
+  quest.subQuests =  obj.subQuests || [];
+  quest.parentQuest =  obj.parentQuest || null;
+  quest.contribution =  obj.contribution || 0;
 
-  return quest;
+  return quest; //commment
 }
 
 const questMethods = {
