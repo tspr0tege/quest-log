@@ -11,7 +11,7 @@ export default function Quest(obj) {
   quest.parentQuest =  obj.parentQuest || null;
   quest.contribution =  obj.contribution || 0;
 
-  return quest; //commment
+  return quest;
 }
 
 const questMethods = {

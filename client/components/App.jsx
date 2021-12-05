@@ -167,17 +167,22 @@ class App extends React.Component {
     });
     // console.log(qArray);
     qArray.forEach((qObj) => {
-      questList[qObj.id] = qObj;
-      if (qObj.parentQuest !== null) {
-        questList[qObj.id].parentQuest = qObj.parentQuest.id;
+      let newObj = {
+        id: qObj.id,
+        title: qObj.title,
+        description: qObj.description,
+        progress: qObj.progress,
+        subquests: [],
+        parentQuest: (qObj.parentQuest) ? qObj.parentQuest.id : null,
+        contribution: qObj.contribution
       }
       if (qObj.subQuests.length > 0) {
-        questList[qObj.id].subQuests = qObj.subQuests.map((subQ) => {
+        newObj.subQuests = qObj.subQuests.map((subQ) => {
           return subQ.id;
         });
       }
+      questList[qObj.id] = newObj;
     });
-    // console.log('Quest List being saved as:', questList);
     Data.save({ questList });
   }
 
