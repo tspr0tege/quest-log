@@ -20,7 +20,7 @@ function nestedQuestList(questArray, depth = []) {
 export default ({ quests }) => {
 
   return (
-    <ul style={{ flexGrow: '1', overflowY: 'auto', maxHeight: '90%'}}>
+    <ul style={{overflowY: 'auto', maxHeight: '90%', margin: '0'}}>
       {nestedQuestList(quests)}
     </ul>
   );

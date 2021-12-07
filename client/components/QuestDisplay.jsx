@@ -16,7 +16,7 @@ export default ({ quest }) => {
       <div 
       onClick={() => {sendToFocus(quest)}} 
       style={{flexGrow: 1, maxWidth: 'calc(100% - 75px)'}}>
-        <h3>Quest: {quest.title} </h3>       
+        <h3>{quest.title} </h3>       
         <ProgressBar progress={quest.progress} />
       </div>
       <div className='quest-controls'>

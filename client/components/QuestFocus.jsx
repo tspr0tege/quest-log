@@ -9,27 +9,29 @@ export default ({ quest }) => {
     let { title, description, progress, subQuests, parentQuest, contribution } = quest;
 
     return(
-      <div className='quest-focus-container'>
-        <h3>Title: {title}</h3>
-        <div>
-          <h3>Description:</h3>
-          <p>{description}</p>
-        </div>
-        <div>
-          <h3>Progress: </h3>
-          <ProgressBar progress={progress} customStyles={{height: '20px'}}/>
-        </div>
-        <div style={{maxHeight: '50%', overflowY: 'auto'}}>
-          <h3>Sub-quests:</h3>
-          <QuestList quests={subQuests} />
-        </div>
-        <div>
-          <h3>Parent Quest Line:</h3>
-          <p>{(parentQuest) ? parentQuest.title : 'None'}</p>
-        </div>
-        <div>
-          <h3>Completion value to Quest Line:</h3>
-          <p>{contribution}</p>
+      <div>
+        <div className='quest-focus-container'>
+          <h3><span>Quest:</span> {title}</h3>
+          <div>
+            <h3>Description:</h3>
+            <p>{description}</p>
+          </div>
+          <div>
+            <h3>Progress: </h3>
+            <ProgressBar progress={progress} customStyles={{height: '20px'}}/>
+          </div>
+          <div id='quest-focus-sub-quests'>
+            <h3>Sub-quests:</h3>
+            <QuestList quests={subQuests} />
+          </div>
+          <div>
+            <h3>Parent Quest Line:</h3>
+            <p>{(parentQuest) ? parentQuest.title : 'None'}</p>
+          </div>
+          <div>
+            <h3>Completion value to Quest Line:</h3>
+            <p>{contribution}%</p>
+          </div>
         </div>
       </div>
     );
