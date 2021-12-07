@@ -11,10 +11,10 @@ export default ({ handleClick, sendToModal}) => {
   }
   
   return (
-    <form>
+    <form id="new-task-bar">
       <input type="text" name="text" placeholder="Enter a new task"/>
-      <button onClick={handleClick}>Create</button>
-      <button onClick={advance}>+Create</button>
+      <button id="create-btn" onClick={handleClick}>Create</button>
+      <button id="adv-create-btn" onClick={advance}>+Create</button>
     </form>
   );
 }
