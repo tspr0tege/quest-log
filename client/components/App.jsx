@@ -267,8 +267,6 @@ class App extends React.Component {
     .catch(() => {
       this.showInModal(<ProfileCreate save={this.saveProfile} />)
     });
-
-
   }
 }
 
