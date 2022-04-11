@@ -1,7 +1,7 @@
 {
   "name": "quest-log",
-  "version": "1.0.0",
-  "description": "Epic task management app, to gamify life.",
+  "version": "0.2.2",
+  "description": "Epic, gamified, task management app.",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
@@ -16,6 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.1.16",
     "babel-loader": "^8.2.3",
     "express": "^4.17.1",
+    "rc-tree": "^5.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",

@@ -85,7 +85,6 @@ class App extends React.Component {
   }
 
   editQuest (quest, options) {
-    // debugger;
     const { questList } = this.state;
     const change = Object.keys(options).filter((key) => {
       return quest[key] !== options[key]
@@ -136,7 +135,7 @@ class App extends React.Component {
     if (quest.parentQuest === null) { 
       stateChanges.questList = this.state.questList.filter((q) => {return q !== quest});
     }
-    quest.complete();    
+    //quest.complete();    
 
     // distribute contribution and check for parent completion
     let completeParent = false;
@@ -160,30 +159,8 @@ class App extends React.Component {
     this.setState({ profile });
   }
 
-  saveQuestList () {
-    let questList = {};
-    let qArray = this.state.questList.flatMap((q) => {
-      return q.linearMapAll((quest) => {return quest});
-    });
-    // console.log(qArray);
-    qArray.forEach((qObj) => {
-      let newObj = {
-        id: qObj.id,
-        title: qObj.title,
-        description: qObj.description,
-        progress: qObj.progress,
-        subquests: [],
-        parentQuest: (qObj.parentQuest) ? qObj.parentQuest.id : null,
-        contribution: qObj.contribution
-      }
-      if (qObj.subQuests.length > 0) {
-        newObj.subQuests = qObj.subQuests.map((subQ) => {
-          return subQ.id;
-        });
-      }
-      questList[qObj.id] = newObj;
-    });
-    Data.save({ questList });
+  saveQuestList () {    
+    Data.save({questList: this.state.questList});
   }
 
   render() {
@@ -196,6 +173,7 @@ class App extends React.Component {
         sendToFocus: this.sendToFocus,
         questList: this.state.questList
       }}>
+
         <Modal 
         style={modalStyle}
         isOpen={this.state.showModal}
@@ -203,6 +181,7 @@ class App extends React.Component {
         shouldCloseOnOverlayClick={true}>
           {this.state.modalContent}
         </Modal>
+
         <main>
           <div>
             <QuestCreate 
@@ -226,39 +205,8 @@ class App extends React.Component {
       // next: load quest list
       Data.load('questList')
       .then((questList) => {
-        // questList is an obj of objects, where each key is the object's id
-        // create an array and populate it with all of the questList objects with parentQuest === null
-        let newState = []; 
-        Object.keys(questList).forEach((key) => {
-          if (questList[key].parentQuest === null) {
-            newState.push(Quest(questList[key]));
-          }
-        });
-        // newState has an array of quests with null parents and an array of ids for subQuests
-        
-        // recursively iterate through all subQuest lists, populating the array with Quest data structures
-        newState.forEach((quest) => {
-          if (quest.subQuests.length > 0) { 
-            quest.subQuests = createChildren(quest); 
-          }
-        });
-        
-        function createChildren (quest) {
-          let newSubQuestList = [];
-          quest.subQuests.forEach((subQ) => {
-            // subQ will be the id string            
-            let newSubQuest = Quest(questList[subQ]);
-            if (newSubQuest.subQuests.length > 0) {
-              newSubQuest.subQuests = createChildren(newSubQuest);
-            }
-            newSubQuest.parentQuest = quest;
-            newSubQuestList.push(newSubQuest);
-          });
-          return newSubQuestList
-        }
 
-        // assign rebuilt array to state.questList
-        this.setState({ questList: newState });
+        this.setState({ questList });
       })
       .catch(() => {});
     })
