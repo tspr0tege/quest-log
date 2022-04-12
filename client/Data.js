@@ -13,6 +13,5 @@ export default {
         reject(localStorage.getItem(data));
       }
     });
-  },
-  //create: () => {}
+  }
 }
