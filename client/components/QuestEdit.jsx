@@ -1,36 +1,27 @@
 import React, { useContext, useState } from 'react';
 
-import QuestList from './QuestList.jsx';
+// import QuestList from './QuestList.jsx';
 import { Context } from './App.jsx';
+
+import QuestEditForm from './QuestEditForm.jsx';
 
 export default ({ quest }) => {
   const { editQuest, questList } = useContext(Context);
-  const [options, setOptions] = useState({
-    title: quest.title,
-    description: quest.description,
-    parentQuest: quest.parentQuest,
-    contribution: quest.contribution
-  });
+  // const [options, setOptions] = useState({
+  //   title: quest.title,
+  //   description: quest.description,
+  //   parentQuest: quest.parentQuest,
+  //   contribution: quest.contribution
+  // });
 
-  const submit = (e) => {
+  const processChanges = (e) => {
     e.preventDefault();
+    const { title, description } = e.target.form;
+    const options = { 
+      title: title.value, 
+      description: description.value
+    };
     editQuest(quest, options);
-  }
-
-  const updateTitle = (e) => {
-    e.persist();
-    setOptions({
-      ...options,
-      title: e.target.value
-    });
-  }
-
-  const updateDescription = (e) => {
-    e.persist();
-    setOptions({
-      ...options,
-      description: e.target.value
-    });
   }
 
   const updateParent = (e) => {
@@ -52,91 +43,7 @@ export default ({ quest }) => {
     });
   }
 
-  const updateContribution = (e) => {
-    e.persist();
-    setOptions({
-      ...options,
-      contribution: parseInt(e.target.value)
-    });
-  }
-
   return (
-    <form id='quest-edit-form'>
-      <div>
-        <h3>Title:</h3>
-        <input 
-          type='text' 
-          value={options.title} 
-          onChange={updateTitle}>          
-        </input>
-      </div>
-      <div>
-        <h3>Description:</h3>
-        <textarea 
-          value={options.description} 
-          onChange={updateDescription} 
-          placeholder='Enter a description...' 
-          rows='5' 
-          style={{width: '95%'}}>
-        </textarea>
-      </div>
-      <div>
-        <h3>Progress:</h3>
-        <p>{quest.progress}%</p>
-      </div>
-      <div>
-        <h3>Sub-quests:</h3>
-        <QuestList  quests={quest.subQuests} />
-      </div>
-      <div>
-        <h3>Parent Quest Line:</h3>
-        <select
-          id="parent-quest-dropdown" 
-          onChange={updateParent}
-          defaultValue={(options.parentQuest) ? options.parentQuest.id : null}>
-
-          <option value={null}>None</option>
-          {dropList(quest)}
-        </select>
-      </div>
-      {options.parentQuest && <div>
-        <h3>Contribution to Quest Line:</h3>
-        <div style={{display: 'flex'}}>
-          <input 
-            type='range' 
-            min='0' max='100' step='1' 
-            value={options.contribution} 
-            onChange={updateContribution}/>
-
-          <input 
-            type='number' 
-            min='0' max='100' 
-            value={options.contribution} 
-            onChange={updateContribution}/>
-
-        </div>
-      </div>}
-      <button onClick={submit} style={{marginTop: '20px'}}>Submit Changes</button>
-    </form>
+    <QuestEditForm quest={quest} submit={processChanges}/>
   );
-}
-
-const dropList = (targetQuest) => {
-  const { questList } = useContext(Context);
-
-  // List of quests (self and children) that would be invalid parents
-  let skipList = targetQuest.linearMapAll((quest) => {
-    return quest;
-  });
-
-  // Returns all quests that are not in skip list, from App.state object
-  const fullList = questList.map((quest, index) => {
-    return quest.linearMapAll((q, depth) => {      
-      let key = depth.join('-');
-        if(!skipList.includes(q)) {
-          return <option value={q.id} data-depth={key} key={key}>{q.title}</option>
-        }
-    }, [index]);
-  });
-  return fullList;
 }

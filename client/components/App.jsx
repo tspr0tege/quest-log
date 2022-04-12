@@ -84,21 +84,21 @@ class App extends React.Component {
     this.setState({focusOn: quest});
   }
 
-  editQuest (quest, options) {
+  editQuest (quest, newData) {
     const { questList } = this.state;
-    const change = Object.keys(options).filter((key) => {
-      return quest[key] !== options[key]
+    const change = Object.keys(newData).filter((key) => {
+      return quest[key] !== newData[key]
     });
     let stateChanges = {showModal: false};
 
-    change.forEach((option) => {
-      switch (option) {
+    change.forEach((prop) => {
+      switch (prop) {
         case 'title':
-          quest.title = options.title;
+          quest.title = newData.title;
         break;
 
         case 'description':
-          quest.description = options.description;
+          quest.description = newData.description;
         break;
 
         case 'parentQuest':
@@ -106,15 +106,15 @@ class App extends React.Component {
           if (questList.includes(quest)) {
             stateChanges.questList = questList.filter(q => {return q !== quest});
           }
-          quest.changeParent(options.parentQuest);
+          quest.changeParent(newData.parentQuest);
           // add to new
-          if (options.parentQuest === null) {
+          if (newData.parentQuest === null) {
             stateChanges.questList = [...questList, quest]
           } 
         break;
 
         case 'contribution':
-          quest.contribution = options.contribution;
+          quest.contribution = newData.contribution;
         break;
 
         default:
