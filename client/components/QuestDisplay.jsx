@@ -21,12 +21,12 @@ export default ({ quest }) => {
       </div>
       <div className='quest-controls'>
         <FontAwesomeIcon
-        icon={faCheck}
-        onClick={() => {completeQuest(quest)}} />
+        icon={faEdit}
+        onClick={() => {sendToModal(<QuestEdit quest={quest}/>)}} />  
 
         <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => {sendToModal(<QuestEdit quest={quest}/>)}} />        
+        icon={faCheck}
+        onClick={() => {completeQuest(quest)}} />
       </div>
     </div>
   );

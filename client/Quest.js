@@ -18,4 +18,9 @@ const questMethods = {
   addSubQuest: function(quest) {
     this.subQuests.push(quest.id)
   },
+  setParent: function(newParent) {
+    this.parentQuest = newParent.id;
+    newParent.addSubQuest(this);
+  },
+  getChildren: function() {} // This can work, with AJAX
 };

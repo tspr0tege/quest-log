@@ -9,6 +9,7 @@ import QuestList from './QuestList.jsx';
 import QuestFocus from './QuestFocus.jsx';
 import ProfileCreate from './ProfileCreate.jsx';
 
+Modal.setAppElement('#app');
 const modalStyle = {
   content: {
     top: '50%',
@@ -23,7 +24,6 @@ const modalStyle = {
   }
 };
 
-Modal.setAppElement('#app');
 const Context = React.createContext();
 
 class App extends React.Component {
@@ -103,14 +103,8 @@ class App extends React.Component {
 
         case 'parentQuest':
           // remove from current parent
-          if (questList.includes(quest)) {
-            stateChanges.questList = questList.filter(q => {return q !== quest});
-          }
-          quest.changeParent(newData.parentQuest);
-          // add to new
-          if (newData.parentQuest === null) {
-            stateChanges.questList = [...questList, quest]
-          } 
+          let newParentIdx = questList.findIndex(q => q.id === newData.parentQuest);
+          quest.setParent(questList[newParentIdx]);
         break;
 
         case 'contribution':
