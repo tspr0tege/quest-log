@@ -8,25 +8,27 @@ db.default({ userProfiles: {}, quests: {} })
 const app = express();
 const port = process.env.PORT || 3000;
 
-// app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 app.listen(port, () => {
   console.log(`Quest Log is live at PORT:${port}`)
 });
 
-app.post('/newquest', (req, res) => {
-  console.log('CREATE new quest')
+app.post('/quests/create', (req, res) => {
   let newQuest = Quest.create(req.body);
   db.get('quests').set(newQuest.id, newQuest).save();
 
   res.send(db.get('quests').get(newQuest.id).value());
 });
 
-app.post('/getquests', (req, res) => {
+app.put('/quests/edit', (req, res) => {
+  const { id } = req.body;
+  db.get('quests').get(id).set(req.body).save();
+  res.send(db.get('quests').get(id).value());
+});
+
+app.post('/quests/get', (req, res) => {
   const { questList } = req.body;
-  console.log('GET quest(s)');
-  console.log('req.body.questList: ' + questList);
   let response = {};
 
   // if no selections are made, return the full list
@@ -44,6 +46,16 @@ app.post('/getquests', (req, res) => {
       });
     }
     res.json(response);
+  }
+});
+
+app.delete('/quests/delete/:id', (req, res) => {
+  try {
+    db.get('quests').get(req.params.id).delete(true);
+    res.status(200).end()
+  } 
+  catch (err) {
+    res.status(500).send(err);
   }
 });
 

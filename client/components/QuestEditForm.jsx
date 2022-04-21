@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({quest: {title, description, parentQuest, contribution}, submit}) => {
+export default ({quest: { title, description }, submit}) => {
   return(
     <form id='quest-edit-form'>
       <div>

@@ -65,32 +65,18 @@ class App extends React.Component {
   }
 
   sumbitNewQuest (e) {
-    // return new Promise((resolve, reject) => {
-    //   e.preventDefault();
-    //   let { form } = e.target;  
-    //   let newQuest = Quest({title: form.text.value});
-    //   this.setStateAwait({
-    //     questList: [...this.state.questList, newQuest]
-    //   })
-    //   .then((newQuestlist) => {
-    //     form.text.value = '';
-    //     // this.saveQuestList();
-    //     resolve(newQuestlist)
-    //   });
-    // });
-    return new Promise (async (res, rej) => {
+    return new Promise (async (resolve, reject) => {
       e.preventDefault();
       try {
         const { form } = e.target;
-        console.log('sending new quest for creation')
         let newQuest = await Quest.create({
           title: form.title.value
         });
         this.setState({questList: [...this.state.questList, newQuest]});
-        res(newQuest);
+        resolve(newQuest);
       }
       catch(err) {
-        rej(err);
+        reject(err);
       }
     });
   }
@@ -100,76 +86,32 @@ class App extends React.Component {
   }
 
   editQuest (quest, newData) {
-    const { questList } = this.state;
-    const change = Object.keys(newData).filter((key) => {
-      return quest[key] !== newData[key]
+    let questListCopy = this.state.questList.slice();
+    const changeTarget = questListCopy.find(q => q.id === quest.id);
+    for (let prop in newData) {
+      quest[prop] = newData[prop];
+    }
+    Quest.edit(quest, (updatedQuest) => {
+      questListCopy[changeTarget] = updatedQuest;
+      this.setState({
+        showModal: false,
+        questList: questListCopy
+      })
     });
-    let stateChanges = {showModal: false};
-
-    change.forEach((prop) => {
-      switch (prop) {
-        case 'title':
-          quest.title = newData.title;
-        break;
-
-        case 'description':
-          quest.description = newData.description;
-        break;
-
-        case 'parentQuest':
-          // remove from current parent
-          let newParentIdx = questList.findIndex(q => q.id === newData.parentQuest);
-          quest.setParent(questList[newParentIdx]);
-        break;
-
-        case 'contribution':
-          quest.contribution = newData.contribution;
-        break;
-
-        default:
-          console.error('Invalid key received in App.editQuest: ' + option);
-      }
-    });
-
-    this.setState(stateChanges, this.saveQuestList);
   }
 
   completeQuest (quest) {
-    let stateChanges = {};
-    // Clear focus if completed quest is in it
-    if (this.state.focusOn === quest) {
-      stateChanges.focusOn = {};
-    }
-    // remove quest from parent, if it's state
-    if (quest.parentQuest === null) { 
-      stateChanges.questList = this.state.questList.filter((q) => {return q !== quest});
-    }
-    //quest.complete();    
-
-    // distribute contribution and check for parent completion
-    let completeParent = false;
-    if (quest.parentQuest){
-      let parent = quest.parentQuest;
-      if (quest.contribution + parent.progress < 100) {
-        parent.progress += quest.contribution;
-      } else {
-        parent.progress = 99;
-        if (window.confirm(`Completing this quest will raise the progress of the quest: ${parent.title} to 100%. Click "OK" to continue, or "Cancel" to set ${parent.title}'s progress to 99%`)) {
-          completeParent = true;
-        }
-      }
-    }
-    this.setState(stateChanges, this.saveQuestList);
-    if (completeParent) {this.completeQuest(quest.parentQuest)}
+    Quest.delete(quest.id);
+    let questList = this.state.questList.slice().filter((q) => q.id != quest.id);
+    this.setState({ questList });
   }
 
   saveProfile (profile) {
-    Data.save({ profile });
-    this.setState({ profile });
+
   }
 
-  saveQuestList () {    
-    Data.save({questList: this.state.questList});
+  saveQuestList () {
+    
   }
 
   render() {
@@ -207,23 +149,16 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    Data.load('profile')
-    // load profile
-    .then((profile) => {
-      this.setState({ profile });
-      // next: load quest list
-      Data.load('questList')
-      .then((questList) => {
+    // Load full quest list
+    (async () => {
+      const objectList = await Quest.get();
+      const questList = [];
+      for (let obj in objectList) {
+        questList.push(objectList[obj]);
+      }
+      this.setState({ questList });
+    })();
 
-        this.setState({ questList });
-      })
-      .catch(() => {});
-    })
-    // create profile if there isn't one
-    // Note: there shouldn't be a questList if there is no profile
-    .catch(() => {
-      this.showInModal(<ProfileCreate save={this.saveProfile} />)
-    });
   }
 }
 

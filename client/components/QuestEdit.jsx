@@ -5,7 +5,7 @@ import { Context } from './App.jsx';
 import QuestEditForm from './QuestEditForm.jsx';
 
 export default ({ quest }) => {
-  const { editQuest, questList } = useContext(Context);
+  const { editQuest } = useContext(Context);
 
   const processChanges = (e) => {
     e.preventDefault();
