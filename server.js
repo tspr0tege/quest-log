@@ -8,6 +8,7 @@ db.default({ userProfiles: {}, quests: {} })
 const app = express();
 const port = process.env.PORT || 3000;
 
+// app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 app.listen(port, () => {
@@ -15,8 +16,8 @@ app.listen(port, () => {
 });
 
 app.post('/newquest', (req, res) => {
-  console.log('CREATE new quest: ' + req.body)
-  let newQuest = Quest.create(req.body.quest);
+  console.log('CREATE new quest')
+  let newQuest = Quest.create(req.body);
   db.get('quests').set(newQuest.id, newQuest).save();
 
   res.send(db.get('quests').get(newQuest.id).value());
@@ -32,6 +33,7 @@ app.post('/getquests', (req, res) => {
   if (!questList || questList.length < 1) { 
     response = db.get('quests').value();
     res.json(response);
+
   // else: populate an object with the requested quests
   } else {
     if (typeof questList === 'string') {

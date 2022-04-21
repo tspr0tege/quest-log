@@ -65,18 +65,33 @@ class App extends React.Component {
   }
 
   sumbitNewQuest (e) {
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
+    //   e.preventDefault();
+    //   let { form } = e.target;  
+    //   let newQuest = Quest({title: form.text.value});
+    //   this.setStateAwait({
+    //     questList: [...this.state.questList, newQuest]
+    //   })
+    //   .then((newQuestlist) => {
+    //     form.text.value = '';
+    //     // this.saveQuestList();
+    //     resolve(newQuestlist)
+    //   });
+    // });
+    return new Promise (async (res, rej) => {
       e.preventDefault();
-      let { form } = e.target;  
-      let newQuest = Quest({title: form.text.value});
-      this.setStateAwait({
-        questList: [...this.state.questList, newQuest]
-      })
-      .then((newQuestlist) => {
-        form.text.value = '';
-        this.saveQuestList();
-        resolve(newQuestlist)
-      });
+      try {
+        const { form } = e.target;
+        console.log('sending new quest for creation')
+        let newQuest = await Quest.create({
+          title: form.title.value
+        });
+        this.setState({questList: [...this.state.questList, newQuest]});
+        res(newQuest);
+      }
+      catch(err) {
+        rej(err);
+      }
     });
   }
 

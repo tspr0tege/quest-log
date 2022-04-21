@@ -16,17 +16,26 @@ import Axios from 'axios';
   // }
 
   export default {
-    add: (details) => {
-      Axios.post('/newquest',
-      {
-        title: details.title,
-        description: details.description,
-      },
-      {
-        headers: {
-          contentType: 'Application/json'
-        }
+    get: (questList) => {
+      Axios.post('/getquests', 
+        {body: questList}, 
+        { headers })
+      .then(({ data }) => {
+        console.log(data);
       })
+      .catch(console.error);
+    },
+
+    create: async (details) => {
+      let newQuest = await Axios.post('/newquest', details)
+      .then(({ data }) => {
+        // console.log('received new quest' + JSON.stringify(data));
+        return data;
+      })
+      .catch(console.error);
+      // console.log('returning new quest')
+      // cb('logging new quest: ' + newQuest);
+      return newQuest;
     },
     edit: () => {},
     delete: () => {}
