@@ -3,10 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 
-import QuestEdit from './QuestEdit.jsx';
-import ProgressBar from './ProgressBar.jsx';
-import { Context } from './App.jsx';
+import QuestEdit from '../QuestEdit/QuestEdit.jsx';
+import ProgressBar from '../../progressbar/ProgressBar.jsx';
+import { Context } from '../../App.jsx';
 
+import './QuestTile.css';
 
 export default ({ quest }) => {
   const { sendToModal, completeQuest, sendToFocus } = useContext(Context);

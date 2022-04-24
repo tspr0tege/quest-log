@@ -17,11 +17,20 @@
 
 body {
   background-color: #fff;
+  font-family: Helvetica, sans-serif;
 }
 
 ul {
   padding-inline-start: 10px;
   list-style: none;
+}
+
+li {
+  background-color: #eee;
+  margin: 10px 5px;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
 }
 
 p, h3 {
@@ -60,146 +69,3 @@ main > * {
   border-radius: 10px;
 }
 
-#new-task-bar {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px;
-}
-
-#new-task-bar button {
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.5);
-}
-
-#create-btn {
-  background: linear-gradient(0deg, #333, #eee 45%, #ddd);
-}
-
-#adv-create-btn {
-  color: white;
-  background: linear-gradient(0deg, #ab0000 22%, #e00, #4b2b2b);
-}
-
-#new-task-bar input {
-  height: 2rem;
-  font-size: 1rem;
-  flex-grow: 1;
-  padding-left: 10px;
-  border-radius: 1rem;
-}
-
-.quest-list-item {
-  /* width: 100%; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px;
-}
-
-.quest-list-item h3 {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  margin-bottom: 5px;
-}
-
-.progress-bar {
-  position: relative;
-  border-radius: 50px;
-  height: 10px;
-  width: 100%;
-  overflow: hidden;
-  border: silver 3px inset;
-}
-
-.progress-bar::before {
-  content: '';
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.progress-bar > div {
-  height: 100%;
-  background-color: #0a0;
-  position: relative;
-  border-right: outset 3px #0ae20a;
-}
-
-.progress-bar > div::after {
-  content: '';
-  position: absolute;
-  top: 0px;
-  height: 0px;
-  width: 75%;
-  margin-left: 10%;
-  border: solid white;
-  border-radius: 50%;
-  opacity: 65%;
-}
-
-.quest-controls {
-  min-width: 61px;
-  height: 31px;
-  box-sizing: content-box;
-  align-self: flex-start;
-}
-
-.quest-controls > * {
-  cursor: pointer;
-  padding: 5px;
-  font-size: larger;
-  border-radius: 50%;
-}
-
-.quest-controls > *:hover {
-  color: white;
-  background-color: rgb(11, 138, 0);
-  box-shadow: 0 0 1px 3px rgba(11, 138, 0, 0.25);
-}
-
-li {
-  background-color: #eee;
-  margin: 10px 5px;
-  padding: 5px;
-  border-radius: 10px;
-  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
-}
-
-.quest-focus-container {
-  overflow-y: auto;
-  height: 100%;
-  padding: 10px;
-  padding-right: 5px;
-  box-sizing: border-box;
-}
-
-.quest-focus-container > * {
-  margin-bottom: 20px;
-  background-color: #eee;
-  padding: 10px;
-  border-radius: 10px;
-  border: inset #f2f2f2;
-  filter: blur(0);
-  /* Note: Chrome blurs Sub-quest box when it's scrollable. */
-}
-
-#quest-focus-sub-quests {
-  max-height: '50%'; 
-  display: 'flex'; 
-  flex-direction: 'column';
-  padding-bottom: 1px;
-  min-height: 30px;
-}
-
-#quest-edit-form > * {
-  margin-bottom: 10px;
-}

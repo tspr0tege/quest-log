@@ -1,7 +1,9 @@
 import React from 'react';
 
-import QuestList from './QuestList.jsx';
-import ProgressBar from './ProgressBar.jsx';
+import QuestList from '../QuestList/QuestList.jsx';
+import ProgressBar from '../../progressbar/ProgressBar.jsx';
+
+import "./QuestFocus.css"
 
 export default ({ quest }) => {
   let active = Object.keys(quest).length > 0;

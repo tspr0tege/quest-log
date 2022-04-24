@@ -1,6 +1,8 @@
 import React from 'react';
 
-import QuestEdit from './QuestEdit.jsx';
+import QuestEdit from '../QuestEdit/QuestEdit.jsx';
+
+import './QuestCreate.css'
 
 export default ({ handleClick, sendToModal}) => {
   

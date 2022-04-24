@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
 
-import { Context } from './App.jsx';
+import { Context } from '../../App.jsx';
 
 import QuestEditForm from './QuestEditForm.jsx';
+
+import './QuestEdit.css'
 
 export default ({ quest }) => {
   const { editQuest } = useContext(Context);

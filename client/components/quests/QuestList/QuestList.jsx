@@ -1,6 +1,8 @@
 import React from 'react';
 
-import QuestDisplay from './QuestDisplay.jsx';
+import QuestTile from '../QuestTile/QuestTile.jsx';
+
+import './QuestList.css'
 
 function nestedQuestList(questArray, depth = []) {
   return questArray.map((quest, index) => {
@@ -9,7 +11,7 @@ function nestedQuestList(questArray, depth = []) {
 
     return (
       <li key={newDepth.join('-')}>
-        <QuestDisplay quest={quest} />
+        <QuestTile quest={quest} />
         {subQuests.length > 0 && <ul>{nestedQuestList(subQuests, newDepth)}</ul>}
       </li>
     );

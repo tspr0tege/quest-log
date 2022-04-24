@@ -2,12 +2,12 @@ import React from 'react';
 import Modal from 'react-modal';
 
 import Quest from '../Quest.js';
-import Data from '../Data.js';
+// import Data from '../Data.js';
 
-import QuestCreate from './QuestCreate.jsx';
-import QuestList from './QuestList.jsx';
-import QuestFocus from './QuestFocus.jsx';
-import ProfileCreate from './ProfileCreate.jsx';
+import QuestCreate from './quests/QuestCreate/QuestCreate.jsx';
+import QuestList from './quests/QuestList/QuestList.jsx';
+import QuestFocus from './quests/QuestFocus/QuestFocus.jsx';
+// import ProfileCreate from './ProfileCreate.jsx';
 
 Modal.setAppElement('#app');
 const modalStyle = {
@@ -73,6 +73,7 @@ class App extends React.Component {
           title: form.title.value
         });
         this.setState({questList: [...this.state.questList, newQuest]});
+        e.target.form.title.value = '';
         resolve(newQuest);
       }
       catch(err) {

@@ -1,0 +1,25 @@
+.quest-focus-container {
+  overflow-y: auto;
+  height: 100%;
+  padding: 10px;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+
+.quest-focus-container > * {
+  margin-bottom: 20px;
+  background-color: #eee;
+  padding: 10px;
+  border-radius: 10px;
+  border: inset #f2f2f2;
+  filter: blur(0);
+  /* Note: Chrome blurs Sub-quest box when it's scrollable. */
+}
+
+#quest-focus-sub-quests {
+  max-height: '50%'; 
+  display: 'flex'; 
+  flex-direction: 'column';
+  padding-bottom: 1px;
+  min-height: 30px;
+}

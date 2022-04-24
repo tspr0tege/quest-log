@@ -1,0 +1,36 @@
+
+.progress-bar {
+  position: relative;
+  border-radius: 50px;
+  height: 10px;
+  width: 100%;
+  overflow: hidden;
+  border: silver 3px inset;
+}
+
+.progress-bar::before {
+  content: '';
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar > div {
+  height: 100%;
+  background-color: #0a0;
+  position: relative;
+  border-right: outset 3px #0ae20a;
+}
+
+.progress-bar > div::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  height: 0px;
+  width: 75%;
+  margin-left: 10%;
+  border: solid white;
+  border-radius: 50%;
+  opacity: 65%;
+}
