@@ -5,3 +5,5 @@ reference
 package-lock.json
 
 server/db.stormdb
+
+.env

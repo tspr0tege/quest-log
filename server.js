@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const Storm = require('stormdb');
 const Quest = require('./server/quest')
@@ -32,7 +33,7 @@ app.post('/quests/get', (req, res) => {
   let response = {};
 
   // if no selections are made, return the full list
-  if (!questList || questList.length < 1) { 
+  if (!questList?.length >= 1) { 
     response = db.get('quests').value();
     res.json(response);
 
@@ -53,6 +54,7 @@ app.delete('/quests/delete/:id', (req, res) => {
   try {
     console.log('Deleting quest: ' + req.params.id);
     db.get('quests').get(req.params.id).delete(true);
+    db.save();
     res.status(200).end()
   } 
   catch (err) {
@@ -61,3 +63,28 @@ app.delete('/quests/delete/:id', (req, res) => {
 });
 
 app.use(express.static('public'));
+
+
+
+const { auth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.AUTH_SECRET,
+  baseURL: 'http://localhost:3000',
+  clientID: process.env.CLIENT_ID,
+  issuerBaseURL: 'https://dev-6-2fm190.us.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/login', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+app.get('/dashboard', (req, res) => {
+  res.send('Auth0 authentication successful');
+});
