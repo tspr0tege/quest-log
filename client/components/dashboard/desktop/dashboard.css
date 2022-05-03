@@ -1,0 +1,25 @@
+#dtop-dashboard {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+#dtop-dashboard > * {
+  padding: 20px;
+}
+
+#hud {
+  background-color: cornflowerblue;
+  height: 100%;
+  width: 20%;
+}
+
+#main-display {
+  border-right: 1px #ddd solid;
+  width: 50%;
+  height: 100%;
+}
+
+#detail-display {
+  flex-grow: 1;
+}

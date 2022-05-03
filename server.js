@@ -51,6 +51,7 @@ app.post('/quests/get', (req, res) => {
 
 app.delete('/quests/delete/:id', (req, res) => {
   try {
+    console.log('Deleting quest: ' + req.params.id);
     db.get('quests').get(req.params.id).delete(true);
     res.status(200).end()
   } 

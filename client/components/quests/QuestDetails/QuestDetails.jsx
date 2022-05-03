@@ -3,7 +3,7 @@ import React from 'react';
 import QuestList from '../QuestList/QuestList.jsx';
 import ProgressBar from '../../progressbar/ProgressBar.jsx';
 
-import "./QuestFocus.css"
+import "./QuestDetails.css"
 
 export default ({ quest }) => {
   let active = Object.keys(quest).length > 0;
@@ -13,7 +13,7 @@ export default ({ quest }) => {
     return(
       <div>
         <div className='quest-focus-container'>
-          <h3><span>Quest:</span> {title}</h3>
+          <h3>{title}</h3>
           <div>
             <h3>Description:</h3>
             <p>{description}</p>

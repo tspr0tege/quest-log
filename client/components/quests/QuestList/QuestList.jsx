@@ -4,26 +4,17 @@ import QuestTile from '../QuestTile/QuestTile.jsx';
 
 import './QuestList.css'
 
-function nestedQuestList(questArray, depth = []) {
-  return questArray.map((quest, index) => {
-    let { subQuests } = quest;
-    let newDepth = [...depth, index];
-
-    return (
-      <li key={newDepth.join('-')}>
-        <QuestTile quest={quest} />
-        {subQuests.length > 0 && <ul>{nestedQuestList(subQuests, newDepth)}</ul>}
-      </li>
-    );
-
-  });
-}
-
-export default ({ quests }) => {
+export default ({ quests, handleClick, completeQuest }) => {
 
   return (
-    <ul style={{overflowY: 'auto', maxHeight: '90%', margin: '0'}}>
-      {nestedQuestList(quests)}
+    <ul>
+      {quests.map((quest, i) => {
+        return(
+          <li key={i}>
+            <QuestTile quest={quest} handleClick={handleClick} completeQuest={completeQuest}/>
+          </li>
+        );
+      })}
     </ul>
   );
 }
