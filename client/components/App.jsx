@@ -24,7 +24,7 @@ const Context = createContext();
 
 const App = () => {
   const [ modalContent, setModalContent ] = useState(null);
-  const [ showModal, setShowModal ] = useState(false);
+  const [ showModal, setShowModal ] = useState(false);  
 
   function toggleModal() {
     setShowModal(!showModal);

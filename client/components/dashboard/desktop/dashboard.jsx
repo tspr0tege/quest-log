@@ -7,6 +7,10 @@ import QuestDetails from '../../quests/QuestDetails/QuestDetails.jsx';
 import './dashboard.css';
 
 export default () => {
+  const c = document.cookie;
+  const cookieObj = JSON.parse(c.substring(c.indexOf('{'), c.indexOf('}')+1));
+  console.log(cookieObj);
+  
   const [ questList, setQuestList ] = useState(null);
   const [ detailView, setDetailView ] = useState({});
 
