@@ -9,7 +9,6 @@ import './dashboard.css';
 export default () => {
   const c = document.cookie;
   const cookieObj = JSON.parse(c.substring(c.indexOf('{'), c.indexOf('}')+1));
-  console.log(cookieObj);
   
   const [ questList, setQuestList ] = useState(null);
   const [ detailView, setDetailView ] = useState({});
@@ -48,7 +47,15 @@ export default () => {
   return (
     <div id='dtop-dashboard'>
       <div id='hud'>
-        <div>User Bar</div>
+        <div className='user-profile'>
+          <h3>User Profile</h3>
+          <img src={cookieObj.picture} alt="Profile picture" />
+          <div className="profile-details">
+            <p><span>Name:</span> {cookieObj.nickname}</p>
+            <p><span>Level:</span> 39</p>
+            <p><span>Next Level:</span></p>
+          </div>
+        </div>
         <div>Navigation</div>
       </div>
       <div id='main-display'>

@@ -96,6 +96,7 @@ app.get('/', requiresAuth(), (req, res) => {
     db.get('userProfiles').set(user.nickname, 
       {
         user: user.nickname,
+        name: user.nickname,
         dayFocus: [],
         weekFocus: [],
         level: 1,
