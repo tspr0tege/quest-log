@@ -1,23 +1,41 @@
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
-
+// const path = require('path');
+const { auth, requiresAuth } = require('express-openid-connect');
+// const Sequelize = require('sequelize')
+// const sequelize = require('./server/util/database.js');
 const Storm = require('stormdb');
+
+// Setup and initialize stormdb
 const engine = new Storm.localFileEngine('./server/db.stormdb');
 const db = new Storm(engine);
 db.default({ userProfiles: {}, quests: {} })
 
 const Quest = require('./server/quest')
 
+const {
+  URL,
+  AUTH0_SECRET,
+  AUTH0_CLIENT_ID,
+  AUTH0_URL,
+  DATABASE_URL
+} = process.env
 
+const auth_config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: AUTH0_SECRET,
+  baseURL: URL,
+  clientID: AUTH0_CLIENT_ID,
+  issuerBaseURL: AUTH0_URL
+};
+
+// Instantiate express server
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.use(express.json());
-
-app.listen(port, () => {
-  console.log(`Quest Log is live at PORT:${port}`)
-});
+app.use(auth(auth_config));
+// auth router attaches /login, /logout, and /callback routes to the baseURL
 
 app.post('/quests/create', (req, res) => {
   let newQuest = Quest.create(req.body.details);
@@ -39,16 +57,14 @@ app.post('/quests/get', (req, res) => {
 
   // if no selections are made, return the full list
   if (!questList?.length >= 1) {
-    // console.log('User: ' + user)
     const userQuestList = db.get('userProfiles').get(user).get('dayFocus').value();
-    // console.log('User Quest List: ' + JSON.stringify(userQuestList));
     userQuestList.forEach((qid) => {
       response[qid] = db.get('quests').get(qid).value();
     })
     res.json(response);
 
-  // else: populate an object with the requested quests
   } else {
+    // else: populate an object with the requested quests
     if (typeof questList === 'string') {
       response[questList] = db.get('quests').get(questList).value();
     } else {
@@ -61,9 +77,7 @@ app.post('/quests/get', (req, res) => {
 });
 
 app.delete('/quests/delete/:id', (req, res) => {
-  try {    
-    // console.log('Deleting quest: ' + req.params.id);
-    // console.log('User: ' + req.body.user);
+  try {
     db.get('quests').get(req.params.id).delete(true);
     db.get('userProfiles').get(req.body.user).get('dayFocus').filter(id => id != req.params.id);
     db.save();
@@ -75,22 +89,9 @@ app.delete('/quests/delete/:id', (req, res) => {
   }
 });
 
-const { auth, requiresAuth } = require('express-openid-connect');
-
-const auth_config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: process.env.AUTH_SECRET,
-  baseURL: 'http://localhost:3000',
-  clientID: process.env.CLIENT_ID,
-  issuerBaseURL: 'https://dev-6-2fm190.us.auth0.com'
-};
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(auth_config));
-
+// Get homepage and core application files
 app.get('/', requiresAuth(), (req, res) => {
-  // Handle new user creation here
+  // Handle new user creation here (temporarily)
   const { user } = req.oidc;
   if (!db.get('userProfiles').get(user.nickname)?.value()) {
     db.get('userProfiles').set(user.nickname, 
@@ -117,4 +118,9 @@ app.get('/:filename', (req, res) => {
 
 app.get('/build/:filename', (req, res) => {
   res.sendFile(__dirname + `/public/build/${req.params.filename}`);
+});
+
+// Initialize server
+app.listen(port, () => {
+  console.log(`Quest Log is live at PORT:${port}`)
 });
