@@ -9,7 +9,6 @@ import './dashboard.css';
 export default () => {
   const c = document.cookie;
   const cookieObj = JSON.parse(c.substring(c.indexOf('{'), c.indexOf('}')+1));
-  console.log(cookieObj);
   
   const [ questList, setQuestList ] = useState(null);
   const [ detailView, setDetailView ] = useState({});
@@ -20,6 +19,7 @@ export default () => {
     let newQuest = await Quest.create({
       title: form.title.value
     });
+    console.log(newQuest)
     form.title.value = '';
     setQuestList([...questList, newQuest]);    
   }
@@ -36,8 +36,8 @@ export default () => {
   });
 
   function completeQuest(quest) {
-    Quest.delete(quest.id);
-    let newList = questList.slice().filter((q) => q.id != quest.id);
+    Quest.delete(quest.quest_id);
+    let newList = questList.slice().filter((q) => q.quest_id != quest.quest_id);
     setQuestList(newList);
   }
 
@@ -48,7 +48,15 @@ export default () => {
   return (
     <div id='dtop-dashboard'>
       <div id='hud'>
-        <div>User Bar</div>
+        <div className='user-profile'>
+          <h3>User Profile</h3>
+          <img src={cookieObj['photo_url']} alt="Profile picture" />
+          <div className="profile-details">
+            <p><span>Name:</span> {cookieObj.name}</p>
+            <p><span>Level:</span> 39</p>
+            <p><span>Next Level:</span></p>
+          </div>
+        </div>
         <div>Navigation</div>
       </div>
       <div id='main-display'>

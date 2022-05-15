@@ -1,30 +1,58 @@
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
+const uuid = require('uuid').v4;
+const { auth, requiresAuth } = require('express-openid-connect');
+// const Sequelize = require('sequelize')
+const sequelize = require('./server/util/database.js');
+const { Profile, Quest } = require('./server/models');
 
 const Storm = require('stormdb');
+
+// Setup and initialize stormdb
 const engine = new Storm.localFileEngine('./server/db.stormdb');
 const db = new Storm(engine);
 db.default({ userProfiles: {}, quests: {} })
 
-const Quest = require('./server/quest')
+// const quest = require('./server/quest')
 
+const {
+  URL,
+  AUTH0_SECRET,
+  AUTH0_CLIENT_ID,
+  AUTH0_URL,
+  DATABASE_URL
+} = process.env
 
+const auth_config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: AUTH0_SECRET,
+  baseURL: URL,
+  clientID: AUTH0_CLIENT_ID,
+  issuerBaseURL: AUTH0_URL
+};
+
+// Instantiate express server
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.use(express.json());
+app.use(auth(auth_config));
+// auth router attaches /login, /logout, and /callback routes to the baseURL
 
-app.listen(port, () => {
-  console.log(`Quest Log is live at PORT:${port}`)
-});
+app.post('/quests/create', async (req, res) => {
+  let newQuest;
+  try {
+    newQuest = await Quest.create({
+      quest_id: uuid(),
+      title:  req.body.title || '',
+      notes:  req.body.notes || null,
+      owner_id: req.body.userId,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
-app.post('/quests/create', (req, res) => {
-  let newQuest = Quest.create(req.body.details);
-  db.get('quests').set(newQuest.id, newQuest).save();
-  db.get('userProfiles').get(req.body.user).get('dayFocus').push(newQuest.id).save();
-
-  res.send(db.get('quests').get(newQuest.id).value());
+  res.send(newQuest);
 });
 
 app.put('/quests/edit', (req, res) => {
@@ -33,22 +61,24 @@ app.put('/quests/edit', (req, res) => {
   res.send(db.get('quests').get(id).value());
 });
 
-app.post('/quests/get', (req, res) => {
+app.post('/quests/getout', async (req, res) => {
   const { user, questList } = req.body;
   let response = {};
 
   // if no selections are made, return the full list
   if (!questList?.length >= 1) {
-    // console.log('User: ' + user)
-    const userQuestList = db.get('userProfiles').get(user).get('dayFocus').value();
-    // console.log('User Quest List: ' + JSON.stringify(userQuestList));
+    const userQuestList = await Quest.findAll({
+      where: {
+        owner_id: user
+      }
+    })
     userQuestList.forEach((qid) => {
       response[qid] = db.get('quests').get(qid).value();
     })
     res.json(response);
 
-  // else: populate an object with the requested quests
   } else {
+    // else: populate an object with the requested quests
     if (typeof questList === 'string') {
       response[questList] = db.get('quests').get(questList).value();
     } else {
@@ -60,53 +90,58 @@ app.post('/quests/get', (req, res) => {
   }
 });
 
-app.delete('/quests/delete/:id', (req, res) => {
-  try {    
-    // console.log('Deleting quest: ' + req.params.id);
-    // console.log('User: ' + req.body.user);
-    db.get('quests').get(req.params.id).delete(true);
-    db.get('userProfiles').get(req.body.user).get('dayFocus').filter(id => id != req.params.id);
-    db.save();
-    res.status(200).end()
-  } 
-  catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-  }
+app.post('/quests/get', async (req, res) => {
+  const { user, questList } = req.body;
+  const userQuestList = await Quest.findAll({
+    where: {
+      owner_id: user
+    }
+  });
+    
+  res.json(userQuestList);
 });
 
-const { auth, requiresAuth } = require('express-openid-connect');
-
-const auth_config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: process.env.AUTH_SECRET,
-  baseURL: 'http://localhost:3000',
-  clientID: process.env.CLIENT_ID,
-  issuerBaseURL: 'https://dev-6-2fm190.us.auth0.com'
-};
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(auth_config));
-
-app.get('/', requiresAuth(), (req, res) => {
-  // Handle new user creation here
-  const { user } = req.oidc;
-  if (!db.get('userProfiles').get(user.nickname)?.value()) {
-    db.get('userProfiles').set(user.nickname, 
-      {
-        user: user.nickname,
-        dayFocus: [],
-        weekFocus: [],
-        level: 1,
-        exp: 0,
-        nextLevel: 100,
-        photo: user.picture
+app.delete('/quests/delete/:id', async (req, res) => {
+  // try {
+  //   db.get('quests').get(req.params.id).delete(true);
+  //   db.get('userProfiles').get(req.body.user).get('dayFocus').filter(id => id != req.params.id);
+  //   db.save();
+  //   res.status(200).end()
+  // } 
+  // catch (err) {
+  //   console.log(err);
+  //   res.status(500).send(err);
+  // }
+  try {
+    await Quest.destroy({
+      where: {
+        quest_id: req.params.id
       }
-    ).save();
+    })
+    res.status(200).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 
-  res.cookie('user', user, {maxAge: 60000*60*24, encode: String});
+});
+
+// Get homepage and core application files
+app.get('/', requiresAuth(), async (req, res) => {  
+  const { user } = req.oidc;
+  const profileId = user.sub.split('|')[1];
+
+  let profile = await Profile.findByPk(profileId);
+
+  if (!profile) {
+    profile = await Profile.create({
+      profile_id: profileId,
+      name: user.nickname,
+      photo_url: user.picture
+    })
+  }
+  
+  res.cookie('profile', profile, {maxAge: 60000*60*24, encode: String});
   res.sendFile(__dirname + '/public/index.html');
 });
 
@@ -116,4 +151,9 @@ app.get('/:filename', (req, res) => {
 
 app.get('/build/:filename', (req, res) => {
   res.sendFile(__dirname + `/public/build/${req.params.filename}`);
+});
+
+// Initialize server
+app.listen(port, () => {
+  console.log(`Quest Log is live at PORT:${port}`)
 });
