@@ -39,17 +39,23 @@ app.use(express.json());
 app.use(auth(auth_config));
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 
-app.post('/quests/create', (req, res) => {
-  let newQuest = {
-    id: uuid(),
-    title:  req.body.title || '',
-    notes:  req.body.notes || null,
-    ownerId: req.body.userId,
-  };
-  db.get('quests').set(newQuest.id, newQuest).save();
-  db.get('userProfiles').get(req.body.user).get('dayFocus').push(newQuest.id).save();
+app.post('/quests/create', async (req, res) => {  
+  // db.get('quests').set(newQuest.id, newQuest).save();
+  // db.get('userProfiles').get(req.body.user).get('dayFocus').push(newQuest.id).save();
+  let newQuest;
+  try {
+    newQuest = await Quest.create({
+      quest_id: uuid(),
+      title:  req.body.title || '',
+      notes:  req.body.notes || null,
+      owner_id: req.body.userId,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
-  res.send(db.get('quests').get(newQuest.id).value());
+
+  res.send(newQuest);
 });
 
 app.put('/quests/edit', (req, res) => {
@@ -58,13 +64,17 @@ app.put('/quests/edit', (req, res) => {
   res.send(db.get('quests').get(id).value());
 });
 
-app.post('/quests/get', (req, res) => {
+app.post('/quests/get', async (req, res) => {
   const { user, questList } = req.body;
   let response = {};
 
   // if no selections are made, return the full list
   if (!questList?.length >= 1) {
-    const userQuestList = db.get('userProfiles').get(user).get('dayFocus').value();
+    const userQuestList = await Quest.findAll({
+      where: {
+        owner_id: user
+      }
+    })
     userQuestList.forEach((qid) => {
       response[qid] = db.get('quests').get(qid).value();
     })

@@ -22,7 +22,7 @@ const Quest = sequelize.define('Quest',
       allowNull: true
     },
     owner_id: {
-      type: Sequelize.UUID,
+      type: Sequelize.STRING(50),
       allowNull: false
     },
     time_frame: {
