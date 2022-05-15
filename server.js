@@ -97,19 +97,23 @@ app.delete('/quests/delete/:id', (req, res) => {
 });
 
 // Get homepage and core application files
-app.get('/', requiresAuth(), async (req, res) => {
-  // Handle new user creation here (temporarily)
+app.get('/', requiresAuth(), async (req, res) => {  
   const { user } = req.oidc;
-  const profile = await Profile.findByPk(user.sub.split('|')[1]);
+  const profileId = user.sub.split('|')[1];
 
-  console.log(profile);
-  
-  res.send(user);
+  let profile = await Profile.findByPk(profileId);
+
+  if (!profile) {
+    profile = await Profile.create({
+      profile_id: profileId,
+      name: user.nickname,
+      photo_url: user.picture
+    })
   }
-
-//  res.cookie('user', user, {maxAge: 60000*60*24, encode: String});
-//  res.sendFile(__dirname + '/public/index.html');
-);
+  
+  res.cookie('profile', profile, {maxAge: 60000*60*24, encode: String});
+  res.sendFile(__dirname + '/public/index.html');
+});
 
 app.get('/:filename', (req, res) => {
   res.sendFile(__dirname + `/public/${req.params.filename}`);
