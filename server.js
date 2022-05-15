@@ -1,9 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-// const path = require('path');
+const uuid = require('uuid').v4;
 const { auth, requiresAuth } = require('express-openid-connect');
 // const Sequelize = require('sequelize')
-// const sequelize = require('./server/util/database.js');
+const sequelize = require('./server/util/database.js');
+const { Profile, Quest } = require('./server/models');
+
 const Storm = require('stormdb');
 
 // Setup and initialize stormdb
@@ -11,7 +13,7 @@ const engine = new Storm.localFileEngine('./server/db.stormdb');
 const db = new Storm(engine);
 db.default({ userProfiles: {}, quests: {} })
 
-const Quest = require('./server/quest')
+// const quest = require('./server/quest')
 
 const {
   URL,
@@ -38,7 +40,12 @@ app.use(auth(auth_config));
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 
 app.post('/quests/create', (req, res) => {
-  let newQuest = Quest.create(req.body.details);
+  let newQuest = {
+    id: uuid(),
+    title:  req.body.title || '',
+    notes:  req.body.notes || null,
+    ownerId: req.body.userId,
+  };
   db.get('quests').set(newQuest.id, newQuest).save();
   db.get('userProfiles').get(req.body.user).get('dayFocus').push(newQuest.id).save();
 
@@ -90,27 +97,19 @@ app.delete('/quests/delete/:id', (req, res) => {
 });
 
 // Get homepage and core application files
-app.get('/', requiresAuth(), (req, res) => {
+app.get('/', requiresAuth(), async (req, res) => {
   // Handle new user creation here (temporarily)
   const { user } = req.oidc;
-  if (!db.get('userProfiles').get(user.nickname)?.value()) {
-    db.get('userProfiles').set(user.nickname, 
-      {
-        user: user.nickname,
-        name: user.nickname,
-        dayFocus: [],
-        weekFocus: [],
-        level: 1,
-        exp: 0,
-        nextLevel: 100,
-        photo: user.picture
-      }
-    ).save();
+  const profile = await Profile.findByPk(user.sub.split('|')[1]);
+
+  console.log(profile);
+  
+  res.send(user);
   }
 
-  res.cookie('user', user, {maxAge: 60000*60*24, encode: String});
-  res.sendFile(__dirname + '/public/index.html');
-});
+//  res.cookie('user', user, {maxAge: 60000*60*24, encode: String});
+//  res.sendFile(__dirname + '/public/index.html');
+);
 
 app.get('/:filename', (req, res) => {
   res.sendFile(__dirname + `/public/${req.params.filename}`);

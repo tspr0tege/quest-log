@@ -7,14 +7,4 @@ const Quest = require('./quest');
 // const List = require('./list');
 // const ListItem = require('./listItem');
 
-Profile.hasMany(Quest, {
-  foreignKey: 'profile_quest_owner',
-  targetKey: 'owner_id'
-});
-Quest.belongsTo(Profile);
-
-sequelize.sync({alter: true})
-  .then(console.log)
-  .catch(console.log);
-
-// module.exports = {Profile, Quest};
+module.exports = {Profile, Quest};

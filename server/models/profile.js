@@ -3,7 +3,7 @@ const sequelize = require('../util/database.js');
 
 const Profile = sequelize.define('Profile', {
   profile_id: {
-    type: Sequelize.UUID,
+    type: Sequelize.STRING(50),
     allowNull: false,
     unique: true,
     primaryKey: true
