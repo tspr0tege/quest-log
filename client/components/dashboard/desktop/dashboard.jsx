@@ -19,6 +19,7 @@ export default () => {
     let newQuest = await Quest.create({
       title: form.title.value
     });
+    console.log(newQuest)
     form.title.value = '';
     setQuestList([...questList, newQuest]);    
   }
@@ -35,8 +36,8 @@ export default () => {
   });
 
   function completeQuest(quest) {
-    Quest.delete(quest.id);
-    let newList = questList.slice().filter((q) => q.id != quest.id);
+    Quest.delete(quest.quest_id);
+    let newList = questList.slice().filter((q) => q.quest_id != quest.quest_id);
     setQuestList(newList);
   }
 

@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 const c = document.cookie;
 const cookieObj = JSON.parse(c.substring(c.indexOf('{'), c.indexOf('}')+1));
-const user = cookieObj.nickname;
+const user = cookieObj.profile_id;
 console.log(user);
 
 export default {
@@ -14,9 +14,10 @@ export default {
   },
 
   create: async (details) => {
-    let newQuest = await Axios.post('/quests/create', { details, user })
-    .then(({ data }) => data )
+    let newQuest = await Axios.post('/quests/create', { ...details, userId: user })
+    .then((data) => data.data)
     .catch(console.error);
+    console.log(newQuest);
     return newQuest;
   },
 
