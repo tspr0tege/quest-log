@@ -55,10 +55,29 @@ app.post('/quests/create', async (req, res) => {
   res.send(newQuest);
 });
 
-app.put('/quests/edit', (req, res) => {
-  const { id } = req.body;
-  db.get('quests').get(id).set(req.body).save();
-  res.send(db.get('quests').get(id).value());
+app.put('/quests/edit', async (req, res) => {
+  
+  try {
+    const changeProps = JSON.parse(JSON.stringify(req.body));
+    delete changeProps.quest_id;
+
+    console.log('changeProps: ' + JSON.stringify(changeProps));
+    console.log('req.body.quest_id: ' + JSON.stringify(req.body.quest_id));
+    
+    await Quest.update(changeProps, {
+      where: {quest_id: req.body.quest_id}
+    });
+    
+    const updatedQuest = await Quest.findByPk(req.body.quest_id);
+
+    res.status(200).json(updatedQuest);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+
+
 });
 
 app.post('/quests/getout', async (req, res) => {
@@ -102,16 +121,6 @@ app.post('/quests/get', async (req, res) => {
 });
 
 app.delete('/quests/delete/:id', async (req, res) => {
-  // try {
-  //   db.get('quests').get(req.params.id).delete(true);
-  //   db.get('userProfiles').get(req.body.user).get('dayFocus').filter(id => id != req.params.id);
-  //   db.save();
-  //   res.status(200).end()
-  // } 
-  // catch (err) {
-  //   console.log(err);
-  //   res.status(500).send(err);
-  // }
   try {
     await Quest.destroy({
       where: {
