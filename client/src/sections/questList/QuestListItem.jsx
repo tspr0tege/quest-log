@@ -4,10 +4,10 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 // import { faEdit } from '@fortawesome/free-regular-svg-icons';
 
 // import QuestEdit from '../QuestEdit/QuestEdit.jsx';
-import ProgressBar from '../../progressbar/ProgressBar.jsx';
+// import ProgressBar from '../../progressbar/ProgressBar.jsx';
 // import { Context } from '../../App.jsx';
 
-import './QuestTile.css';
+import './QuestListItem.css';
 
 export default ({ quest, handleClick=()=>{}, completeQuest }) => {
   // const { sendToModal, completeQuest, sendToFocus } = useContext(Context);

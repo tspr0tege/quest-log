@@ -1,6 +1,6 @@
 import React from 'react';
 
-import QuestTile from '../QuestTile/QuestTile.jsx';
+import QuestListItem from './QuestListItem.jsx';
 
 import './QuestList.css'
 
@@ -11,7 +11,7 @@ export default ({ quests, handleClick, completeQuest }) => {
       {quests.map((quest, i) => {
         return(
           <li key={i}>
-            <QuestTile quest={quest} handleClick={handleClick} completeQuest={completeQuest}/>
+            <QuestListItem quest={quest} handleClick={handleClick} completeQuest={completeQuest}/>
           </li>
         );
       })}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Quest from '../../../AJAX/Quests.js';
-import QuestCreate from '../../quests/QuestCreate/QuestCreate.jsx';
-import QuestList from '../../quests/QuestList/QuestList.jsx';
-import QuestDetails from '../../quests/QuestDetails/QuestDetails.jsx';
+import Quest from '../API/quests.js';
+import QuestCreate from './sections/questList/QuestCreate.jsx';
+import QuestList from './sections/questList/QuestList.jsx';
+import QuestDetails from './sections/questDetails/QuestDetails.jsx';
 
-import './dashboard.css';
+import './Dashboard.css';
 
 export default () => {
   const c = document.cookie;

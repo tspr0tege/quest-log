@@ -1,8 +1,12 @@
 .quest-focus-container {
   overflow-y: auto;
-  height: 100%;
+  height: 200px;
   padding: 10px;
   padding-right: 5px;
   box-sizing: border-box;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 

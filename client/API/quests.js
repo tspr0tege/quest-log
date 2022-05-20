@@ -14,22 +14,20 @@ export default {
   },
 
   create: async (details) => {
-    let newQuest = await Axios.post('/quests/create', { ...details, userId: user })
+    let newQuest = await Axios.post('/quests', { ...details, userId: user })
     .then((data) => data.data)
     .catch(console.error);
     console.log(newQuest);
     return newQuest;
   },
 
-  edit: async (newData, callback = ()=>{}) => {
-    await Axios.put('/quests/edit', newData)
-    .then(({ data }) => {
-      callback(data);
-    })
+  edit: async (editData) => {
+    return await Axios.put('/quests', editData)
+    .then(({ data }) => data)
     .catch(console.error);
   },
   delete: (id) => {
-    Axios.delete(`quests/delete/${id}`, { data: {user} })
+    Axios.delete(`quests/${id}`, { data: {user} })
     .then(() => {console.log('Delete successful')})
     .catch(console.error);
   }
