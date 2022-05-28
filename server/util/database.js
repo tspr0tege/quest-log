@@ -11,10 +11,6 @@ const {
 } = process.env;
 
 // const sequelize = new Sequelize(database, username, password, options);
-const sequelize = new Sequelize(DATABASE_NAME, PG_USER, PG_PASS, {
-  host: DATABASE_URL,
-  port: DATABASE_PORT,
-  dialect: 'postgres'
-});
+const sequelize = new Sequelize(DATABASE_URL);
 
 module.exports = sequelize;
