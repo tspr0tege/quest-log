@@ -11,6 +11,14 @@ const {
 } = process.env;
 
 // const sequelize = new Sequelize(database, username, password, options);
-const sequelize = new Sequelize(DATABASE_URL);
+const sequelize = new Sequelize(DATABASE_URL, {
+  dialect: 'postgresql',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
+});
 
 module.exports = sequelize;
