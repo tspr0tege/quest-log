@@ -20,13 +20,13 @@
   position: absolute;
   right: 0;
   top: 0;
-  font-size: 1.8em;
+  font-size: 1.5em;
   cursor: pointer;
   display: none;
 }
 
 .editable:hover {
-  background: linear-gradient(to right, #11111100, #000);
+  background: linear-gradient(to right, #11111100 50%, #000000cc);
 }
 
 .editable:hover .white-icon {

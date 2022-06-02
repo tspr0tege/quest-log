@@ -1,4 +1,9 @@
-li {
+.quest-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.quest-list li {
   border-left: cornflowerblue solid 8px;
   margin: 10px 5px;
   padding: 5px;

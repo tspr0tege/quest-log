@@ -18,6 +18,9 @@
   border-right: 1px #ddd solid;
   width: 50%;
   height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 #detail-display {
