@@ -1,7 +1,9 @@
 #dashboard {
   height: 100%;
   width: 100%;
-  display: flex;
+  /* display: flex; */
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr) minmax(0, 1fr);
 }
 
 #dashboard > * {
@@ -9,26 +11,13 @@
 }
 
 #hud {
-  background-color: cornflowerblue;
-  height: 100%;
-  width: 20%;
-}
-
-#main-display {
-  border-right: 1px #ddd solid;
-  width: 50%;
-  height: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-#detail-display {
-  flex-grow: 1;
+  background-color: #7bbaff;
+  /* height: 100%;
+  width: 320px; */
 }
 
 .user-profile {
-  background-color: #eeeeee66;
+  background-color: #abd3ff;
   margin: -20px -20px 10px -20px;
   padding: 20px;
   display: flex;
@@ -64,4 +53,125 @@
   width: 100px;
   font-weight: 700;
   text-align: end;
+}
+
+.nav-icons {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  gap: 10px;
+  /* background-color: #00000033; */
+  padding: 10px;
+  /* border-radius: 20px; */
+  margin: auto;
+}
+
+.nav-icons > * {
+  text-decoration: none;
+  color: #00336d;
+  background-color: #ffffffee;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: solid 3px #abd3ff;
+  padding: 0.5em 1.5em;
+}
+
+.nav-icons p {
+  color: #00336d66;
+}
+
+.nav-icons span {
+  margin-left: 3px;
+}
+
+#main-display {
+  border-right: 1px #ddd solid;
+  /* width: 50%;
+  height: 100%; */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+#detail-display {
+  /* flex-grow: 1; */
+}
+
+@media screen and (max-width: 1050px) {
+  #dashboard {
+    grid-template-columns: 80px repeat(2, minmax(0, 1fr));
+  }
+
+  #hud {
+    padding: 0;
+  }
+
+  .user-profile {
+    margin: 0;
+    padding: 0;
+  }
+
+  .user-profile img {
+    margin: 3px auto;
+  }
+  
+  .user-profile > h3, .profile-details {
+    display: none;
+  }
+
+  .nav-icons > * {
+    padding: 0.5em;
+  }
+
+  .nav-icons span {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  #dashboard {
+   grid-template-columns: minmax(0, 1fr) 0px;
+   grid-template-rows: minmax(0, 1fr) minmax(0, 60px); 
+  }
+
+  #dashboard > * {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  #main-display > *, #detail-display > * {
+    margin: 10px;
+  }
+
+  #hud {
+    grid-area: 2 / 1 / last-line / last-line;
+    background-color: #abd3ff;
+  }
+
+  .user-profile {
+    display: none;
+  }
+
+  .nav-icons {
+    flex-direction: row;
+    height: 100%;
+    width: auto;
+    justify-content: space-around;
+  }
+
+  .nav-icons > * {
+    padding: 0;
+    font-size: 40px;
+    background: none;
+    border: none;
+    line-height: 50%;
+  }
+
+  #main-display {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  #detail-display {
+    grid-area: 1 / 2 / 2 / 3;
+  }
 }

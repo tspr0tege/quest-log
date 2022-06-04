@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faListAlt as listIcon } from '@fortawesome/free-regular-svg-icons';
+import { faHouseUser as homeIcon, faBook as bookIcon } from '@fortawesome/free-solid-svg-icons';
 
 import Quest from '../API/quests.js';
 
@@ -73,7 +76,6 @@ const App = () => {
     const editingIndex = newList.findIndex(q => q.quest_id === newInfo.quest_id);
 
     const updatedQuest = await Quest.edit(newInfo);
-    // console.log(updatedQuest);
     newList[editingIndex] = updatedQuest;
     setQuestList(newList);    
   }
@@ -114,10 +116,23 @@ const App = () => {
               <p><span>Next Level:</span></p>
             </div>
           </div>
-          <div>Navigation</div>
+          <div className="nav-icons">
+            <a href="#">
+              <FontAwesomeIcon icon={homeIcon} />
+              <span>Dashboard</span> 
+            </a>
+            <p>
+              <FontAwesomeIcon icon={bookIcon} /> 
+              <span>Quest Log</span>
+            </p>
+            <p>
+              <FontAwesomeIcon icon={listIcon} /> 
+              <span>Lists</span>
+            </p>
+          </div>
         </div>
         <div id='main-display'>
-          <h2>Quest List</h2>
+          <h2>Quest Log</h2>
           <QuestCreate handleClick={createQuest}/>
           {questList && 
             <QuestList 
