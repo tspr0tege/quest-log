@@ -2,7 +2,11 @@ import React, { createContext, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListAlt as listIcon } from '@fortawesome/free-regular-svg-icons';
-import { faHouseUser as homeIcon, faBook as bookIcon } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faHouseUser as homeIcon, 
+  faBook as bookIcon, 
+  faArrowLeft as backIcon 
+} from '@fortawesome/free-solid-svg-icons';
 
 import Quest from '../API/quests.js';
 
@@ -28,6 +32,9 @@ const modalStyle = {
 };
 
 const Context = createContext();
+function checkWindow() {
+  return window.innerWidth < 750;
+}
 
 // const screenWidth = window.screen.width * window.devicePixelRatio;
 
@@ -39,6 +46,7 @@ const App = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ questList, setQuestList ] = useState(null);
   const [ detailView, setDetailView ] = useState(null);
+  const [ smolScreen, setSmolScreen ] = useState(checkWindow());
 
   function toggleModal() {
     setShowModal(!showModal);
@@ -59,6 +67,21 @@ const App = () => {
       setQuestList(newList);
     }
   });
+
+  
+  useEffect(() => {
+    const onResize = () => {
+      if (checkWindow() !== smolScreen) {
+        setSmolScreen(b => !b);
+      }
+    }
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
+  }, [smolScreen]);
 
   async function createQuest(e) {
     e.preventDefault();
@@ -93,10 +116,19 @@ const App = () => {
     const focusIndex = questList.findIndex(q => q.quest_id === quest.quest_id);
     console.log(focusIndex)
     setDetailView(focusIndex);
+    if (smolScreen) {
+      // document.getElementById('dashboard').style.gridTemplateColumns = '0px minmax(0, 1fr)';
+      document.documentElement.style.setProperty('--mobile-columns-value', '0px minmax(0, 1fr)');
+    }
+  }
+
+  function detailsBackBtn() {
+    // document.getElementById('dashboard').style.gridTemplateColumns = 'minmax(0, 1fr) 0px';
+    document.documentElement.style.setProperty('--mobile-columns-value', 'minmax(0, 1fr) 0px');
   }
 
   return (
-    <Context.Provider value={{ showInModal, editQuest }}>
+    <Context.Provider value={{ showInModal, editQuest, smolScreen }}>
       <Modal
         style={modalStyle}
         isOpen={showModal}
@@ -142,7 +174,15 @@ const App = () => {
             />}
         </div>
         <div id='detail-display'>
-          <h2>Quest Details</h2>
+          <h2>
+            {smolScreen && 
+            <FontAwesomeIcon 
+              icon={backIcon}
+              onClick={detailsBackBtn}
+              style={{marginRight: '6px'}}
+            />}
+            Quest Details
+          </h2>
           <QuestDetails quest={detailView} questList={questList}/>
         </div>
       </div>

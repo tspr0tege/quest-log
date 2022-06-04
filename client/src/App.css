@@ -1,9 +1,14 @@
+:root {
+  --mobile-columns-value: minmax(0, 1fr) 0px;
+}
+
 #dashboard {
   height: 100%;
   width: 100%;
   /* display: flex; */
   display: grid;
   grid-template-columns: 350px minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: 100%;
 }
 
 #dashboard > * {
@@ -128,9 +133,9 @@
   }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 750px) and (orientation: portrait) {
   #dashboard {
-   grid-template-columns: minmax(0, 1fr) 0px;
+   grid-template-columns: var(--mobile-columns-value);
    grid-template-rows: minmax(0, 1fr) minmax(0, 60px); 
   }
 
