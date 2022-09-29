@@ -1,9 +1,8 @@
 .quest-list-item {
-  /* width: 100%; */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px;
+  flex-grow: 1;
 }
 
 .quest-list-item h3 {

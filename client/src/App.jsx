@@ -13,6 +13,7 @@ import Quest from '../API/quests.js';
 import QuestCreate from './sections/questList/QuestCreate.jsx';
 import QuestList from './sections/questList/QuestList.jsx';
 import QuestDetails from './sections/questDetails/QuestDetails.jsx';
+import SectionWrapper from './components/SectionWrapper.jsx';
 
 import './App.css';
 
@@ -117,13 +118,11 @@ const App = () => {
     console.log(focusIndex)
     setDetailView(focusIndex);
     if (smolScreen) {
-      // document.getElementById('dashboard').style.gridTemplateColumns = '0px minmax(0, 1fr)';
       document.documentElement.style.setProperty('--mobile-columns-value', '0px minmax(0, 1fr)');
     }
   }
 
   function detailsBackBtn() {
-    // document.getElementById('dashboard').style.gridTemplateColumns = 'minmax(0, 1fr) 0px';
     document.documentElement.style.setProperty('--mobile-columns-value', 'minmax(0, 1fr) 0px');
   }
 
@@ -148,23 +147,11 @@ const App = () => {
               <p><span>Next Level:</span></p>
             </div>
           </div>
-          <div className="nav-icons">
-            <a href="#">
-              <FontAwesomeIcon icon={homeIcon} />
-              <span>Dashboard</span> 
-            </a>
-            <p>
-              <FontAwesomeIcon icon={bookIcon} /> 
-              <span>Quest Log</span>
-            </p>
-            <p>
-              <FontAwesomeIcon icon={listIcon} /> 
-              <span>Lists</span>
-            </p>
-          </div>
         </div>
-        <div id='main-display'>
-          <h2>Quest Log</h2>
+        <SectionWrapper 
+          title="Quest Log" 
+          id="quest-log"
+        >
           <QuestCreate handleClick={createQuest}/>
           {questList && 
             <QuestList 
@@ -172,19 +159,16 @@ const App = () => {
               completeQuest= {completeQuest}
               quests={questList}
             />}
-        </div>
-        <div id='detail-display'>
-          <h2>
-            {smolScreen && 
-            <FontAwesomeIcon 
-              icon={backIcon}
-              onClick={detailsBackBtn}
-              style={{marginRight: '6px'}}
-            />}
-            Quest Details
-          </h2>
+        </SectionWrapper>
+
+        <SectionWrapper 
+          title="Quest Details" 
+          attrs={{
+            id: "detail-display"
+          }}
+        >
           <QuestDetails quest={detailView} questList={questList}/>
-        </div>
+        </SectionWrapper>
       </div>
 
     </Context.Provider>
