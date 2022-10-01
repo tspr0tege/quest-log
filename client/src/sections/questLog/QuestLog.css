@@ -1,0 +1,22 @@
+#quest-log .section-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  grid-auto-flow: column;
+  grid-template-rows: min-content 1fr min-content;
+}
+
+#quest-log input[type=text].gold-frame {
+  flex-grow: 1;
+}
+
+#quest-log #quest-details {
+  grid-row-end: span 2;
+}
+
+#quest-details-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: none;
+}

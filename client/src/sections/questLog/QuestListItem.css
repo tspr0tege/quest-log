@@ -13,13 +13,6 @@
   margin-bottom: 5px;
 }
 
-.quest-controls {
-  min-width: 61px;
-  height: 31px;
-  box-sizing: content-box;
-  align-self: flex-start;
-}
-
 .quest-controls > * {
   cursor: pointer;
   padding: 5px;

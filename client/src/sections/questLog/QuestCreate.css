@@ -1,0 +1,22 @@
+
+#new-task-bar {
+  display: flex;
+  /* margin: 10px; */
+  flex-grow: 0;
+  gap: 6px;
+  background: none;
+}
+
+#new-task-bar button {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#adv-create-btn {
+  color: white;
+  background: linear-gradient(0deg, #ab0000 22%, #e00, #4b2b2b);
+}
+
+input[type=text] {
+  padding-left: 10px;
+}

@@ -36,9 +36,6 @@
   position: relative;
   z-index: 0;
   padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .section-body::before {

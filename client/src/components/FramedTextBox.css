@@ -1,0 +1,12 @@
+input[type=text].gold-frame {
+  background-color: #030303;
+  border-width: 4px;
+  border-radius: 4px;
+  height: 100%;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+input[type=text].gold-frame::placeholder {
+  color: #666
+}

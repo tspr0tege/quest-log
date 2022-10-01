@@ -1,19 +1,15 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt as listIcon } from '@fortawesome/free-regular-svg-icons';
-import { 
-  faHouseUser as homeIcon, 
-  faBook as bookIcon, 
-  faArrowLeft as backIcon 
-} from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faListAlt as listIcon } from '@fortawesome/free-regular-svg-icons';
+// import { 
+//   faHouseUser as homeIcon, 
+//   faBook as bookIcon, 
+//   faArrowLeft as backIcon 
+// } from '@fortawesome/free-solid-svg-icons';
 
-import Quest from '../API/quests.js';
-
-import QuestCreate from './sections/questList/QuestCreate.jsx';
-import QuestList from './sections/questList/QuestList.jsx';
-import QuestDetails from './sections/questDetails/QuestDetails.jsx';
 import SectionWrapper from './components/SectionWrapper.jsx';
+import QuestLog from './sections/questLog/QuestLog.jsx';
 
 import './App.css';
 
@@ -33,6 +29,7 @@ const modalStyle = {
 };
 
 const Context = createContext();
+
 function checkWindow() {
   return window.innerWidth < 750;
 }
@@ -45,8 +42,6 @@ const App = () => {
 
   const [ modalContent, setModalContent ] = useState(null);
   const [ showModal, setShowModal ] = useState(false);
-  const [ questList, setQuestList ] = useState(null);
-  const [ detailView, setDetailView ] = useState(null);
   const [ smolScreen, setSmolScreen ] = useState(checkWindow());
 
   function toggleModal() {
@@ -57,18 +52,6 @@ const App = () => {
     setModalContent(content);
     toggleModal();
   }
-  
-  // Retrieve questlist on first load
-  useEffect(async () => {
-    if (questList === null) {
-      const newList = [], getList = await Quest.get();
-      for (let obj in getList) {
-        newList.push(getList[obj]);
-      }
-      setQuestList(newList);
-    }
-  });
-
   
   useEffect(() => {
     const onResize = () => {
@@ -84,50 +67,16 @@ const App = () => {
     }
   }, [smolScreen]);
 
-  async function createQuest(e) {
-    e.preventDefault();
-    const { form } = e.target;
-    let newQuest = await Quest.create({
-      title: form.title.value
-    });
-    console.log(newQuest)
-    form.title.value = '';
-    setQuestList([...questList, newQuest]);
-  }
-
-  async function editQuest(newInfo) {
-    const newList = [...questList];
-    const editingIndex = newList.findIndex(q => q.quest_id === newInfo.quest_id);
-
-    const updatedQuest = await Quest.edit(newInfo);
-    newList[editingIndex] = updatedQuest;
-    setQuestList(newList);    
-  }
   
-  function completeQuest(quest) {
-    if (questList.indexOf(quest) === detailView) {
-      setDetailView(null);
-    }
-    Quest.delete(quest.quest_id);
-    let newList = questList.slice().filter((q) => q.quest_id != quest.quest_id);
-    setQuestList(newList);
-  }
 
-  function showDetails(quest) {
-    const focusIndex = questList.findIndex(q => q.quest_id === quest.quest_id);
-    console.log(focusIndex)
-    setDetailView(focusIndex);
-    if (smolScreen) {
-      document.documentElement.style.setProperty('--mobile-columns-value', '0px minmax(0, 1fr)');
-    }
-  }
+  
 
-  function detailsBackBtn() {
-    document.documentElement.style.setProperty('--mobile-columns-value', 'minmax(0, 1fr) 0px');
-  }
+  // function detailsBackBtn() {
+  //   document.documentElement.style.setProperty('--mobile-columns-value', 'minmax(0, 1fr) 0px');
+  // }
 
   return (
-    <Context.Provider value={{ showInModal, editQuest, smolScreen }}>
+    <Context.Provider value={{ showInModal, smolScreen }}>
       <Modal
         style={modalStyle}
         isOpen={showModal}
@@ -137,7 +86,7 @@ const App = () => {
       </Modal>
       
       <div id='dashboard'>
-        <div id='hud'>
+        {/* <div id='hud'>
           <div className='user-profile'>
             <h3>User Profile</h3>
             <img src={cookieObj['photo_url']} alt="Profile picture" />
@@ -147,28 +96,23 @@ const App = () => {
               <p><span>Next Level:</span></p>
             </div>
           </div>
-        </div>
+        </div> */}
         <SectionWrapper 
           title="Quest Log" 
           id="quest-log"
         >
-          <QuestCreate handleClick={createQuest}/>
-          {questList && 
-            <QuestList 
-              handleClick={showDetails}
-              completeQuest= {completeQuest}
-              quests={questList}
-            />}
+          <QuestLog />
+        
         </SectionWrapper>
 
-        <SectionWrapper 
+        {/* <SectionWrapper 
           title="Quest Details" 
           attrs={{
             id: "detail-display"
           }}
         >
           <QuestDetails quest={detailView} questList={questList}/>
-        </SectionWrapper>
+        </SectionWrapper> */}
       </div>
 
     </Context.Provider>

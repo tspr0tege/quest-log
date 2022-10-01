@@ -39,38 +39,38 @@ router.route('/')
     }
   });
 
-  router.delete('/:id', async (req, res) => {
-    try {
-      await Quest.destroy({
-        where: {
-          quest_id: req.params.id
-        }
-      })
-      res.status(200).send();
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
-  
-  });
+router.delete('/:id', async (req, res) => {
+  try {
+    await Quest.destroy({
+      where: {
+        quest_id: req.params.id
+      }
+    })
+    res.status(200).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 
-  router.post('/get', async (req, res) => {
-    const { user, questList } = req.body;
+});
 
-    // default get when request body is empty
-    try {
-      const userQuestList = await Quest.findAll({
-        where: {
-          owner_id: user
-        }
-      });        
-      res.json(userQuestList);
-    }
-    catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
-  });
+router.post('/get', async (req, res) => {
+  const { user, questList } = req.body;
+
+  // default get when request body is empty
+  try {
+    const userQuestList = await Quest.findAll({
+      where: {
+        owner_id: user
+      }
+    });        
+    res.json(userQuestList);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 
 /* **OLD GET ENDPOINT**

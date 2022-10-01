@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5 {
 
 .gold-frame, .gold-rim {
   /* margin: 10px 5px; */
-  border: outset 2px var(--palegold);
+  border: outset 2px var(--gold);
   background-color: var(--gold);  
 }
 
@@ -108,10 +108,9 @@ h1, h2, h3, h4, h5 {
   box-sizing: border-box;
   display: flex;
   flex-direction: column; */
-}
-
-#detail-display {
-  /* flex-grow: 1; */
+  width: 1000px;
+  margin-left: 50vw;
+  transform: translateX(-50%);
 }
 
 @media screen and (max-width: 1050px) {
