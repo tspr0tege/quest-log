@@ -1,11 +1,22 @@
 .quest-focus-container {
   overflow-y: auto;
-  height: 200px;
   padding: 10px;
   padding-right: 5px;
   box-sizing: border-box;
-  margin-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.quest-focus-container h3 {
+  color: var(--gold);
+}
+
+.quest-focus-container p {
+  color: #fff;
+}
+
+.quest-focus-container > *:nth-child(even) {
+  margin: 1rem;
+  margin-bottom: 2rem;
 }

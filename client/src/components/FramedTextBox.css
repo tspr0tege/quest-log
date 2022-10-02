@@ -8,5 +8,6 @@ input[type=text].gold-frame {
 }
 
 input[type=text].gold-frame::placeholder {
-  color: #666
+  color: #666;
+  font-size: 1rem;
 }

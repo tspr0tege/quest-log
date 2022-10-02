@@ -1,3 +1,11 @@
+#quest-log {
+  width: 1000px;
+  height: 100%;
+  box-sizing: border-box;
+  margin-left: 50vw;
+  transform: translateX(-50%);
+}
+
 #quest-log .section-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -16,7 +24,7 @@
 
 #quest-details-controls {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: 6px;
   background: none;
 }

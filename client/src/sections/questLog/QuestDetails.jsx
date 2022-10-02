@@ -1,27 +1,54 @@
-import React, { useContext, useState } from 'react';
-import { Context } from '../../App.jsx';
+import React, { useEffect, useState } from 'react';
 
-import GemButton from '../../components/GemButton.jsx';
+import GemButton from '@src/components/GemButton.jsx';
 
 import './QuestDetails.css';
 
-export default ({ questIdx, questList }) => {
+export default ({ quest, qIndex, editQuest, completeQuest }) => {
 
-  const quest = (!!questIdx) ? questList[questIdx] : null;
+  const questData = {};
 
-  const { editQuest } = useContext(Context);
   const [ editing, setEditing ] = useState(false);
-  
-  function handleFormSubmit(e) {
-    const { value, dataset:{ questProp } } = e.target['form-field'];
-    const editInfo = {quest_id: quest.quest_id};
-    editInfo[questProp] = value;
-    console.log('Submitting form with: ' + JSON.stringify(editInfo));
-    editQuest(editInfo);
-  }
+  questData.title = useState();
+  questData.notes = useState();
 
+  useEffect(() => {
+    if (quest !== null) {
+      questData.title[1](quest.title);
+      questData.notes[1](quest.notes);
+    } else {
+      questData.title[1](null);
+      questData.notes[1](null);
+    }
+  }, [quest]);
+  
+  function handleChange(e, prop) {
+    questData[prop][1](e.target.value);
+  }  
+  
   function toggleEditing() {
     setEditing(!editing);
+  }
+  
+  function cancelEdit() {
+    for(let key in questData) {
+      questData[key][1](quest[key]);
+    }
+    toggleEditing();
+  }
+  
+  function sendEdit() {
+    const editInfo = {
+      quest_id: quest.quest_id,
+      title: questData.title[0],
+      notes: questData.notes[0],
+    };
+    editQuest(editInfo);
+    toggleEditing();
+  }
+  
+  function complete() {
+    completeQuest(qIndex);
   }
 
   return(
@@ -29,33 +56,40 @@ export default ({ questIdx, questList }) => {
       <div id="quest-details">
         <div className='quest-focus-container'>
           <h3>Quest:</h3>
-          {quest !== null &&
-            ((editing) ? 
-              <input type='text'></input> 
+          {(editing) ? 
+              <input 
+                type='text'
+                value={questData.title[0]}
+                onChange={(e) => handleChange(e, 'title')}
+              />
             :
-              <p>{quest.title}</p>
-            )
-          }
+              <p>{questData.title[0]}</p>
+           }
           
           <h3>Notes:</h3>
-          {quest !== null &&
-            ((editing) ? 
-              <input type='text'></input> 
+          {(editing) ? 
+              <textarea
+                onChange={(e) => handleChange(e, 'notes')}
+                value={questData.notes[0]}
+              /> 
             :
-              <p>{quest.notes}</p>
-            )
+              <p>{questData.notes[0]}</p>
           }
           
         </div>
       </div>
       <div id="quest-details-controls">
         <GemButton 
-          onClick={toggleEditing}
+          onClick={editing ? sendEdit : toggleEditing}
           disabled={quest === null}
           face={editing ? 'Save' : 'Edit'}
         />
-        <button disabled>Delete</button>
-        <button disabled={quest === null}>Complete</button>
+        {!editing && <button disabled>Delete</button>}
+        <GemButton 
+          onClick={editing ? cancelEdit : complete}
+          disabled={quest === null}
+          face={editing ? 'Cancel' : 'Complete'}
+        />        
       </div>
     </>
   );

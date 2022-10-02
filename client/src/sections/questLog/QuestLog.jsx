@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Quest from '../../../API/quests';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+import Quest from '@API/quests';
 
 import QuestCreate from './QuestCreate.jsx';
-import QuestList from './QuestList.jsx';
+import QuestList from '@src/components/QuestList/QuestList';
 import QuestDetails from './QuestDetails.jsx';
 
 import './QuestLog.css';
 
 export default () => {
+  const [ focusIndex, setFocusIndex ] = useState(null);
   const [ questList, setQuestList ] = useState(null);
-  const [ detailView, setDetailView ] = useState(null);
 
   useEffect(async () => {
     if (questList === null) {
@@ -37,40 +40,41 @@ export default () => {
 
     const updatedQuest = await Quest.edit(newInfo);
     newList[editingIndex] = updatedQuest;
-    setQuestList(newList);    
-  }
-
-  function completeQuest(quest) {
-    if (questList.indexOf(quest) === detailView) {
-      setDetailView(null);
-    }
-    Quest.delete(quest.quest_id);
-    let newList = questList.slice().filter((q) => q.quest_id != quest.quest_id);
     setQuestList(newList);
   }
 
-  function showDetails(quest) {
-    const focusIndex = questList.findIndex(q => q.quest_id === quest.quest_id);
-    // console.log(focusIndex)
-    setDetailView(focusIndex);
-    // if (smolScreen) {
-    //   document.documentElement.style.setProperty('--mobile-columns-value', '0px minmax(0, 1fr)');
-    // }
+  function completeQuest(index) {
+    setFocusIndex(null);
+    Quest.delete(questList[index].quest_id);
+    const newList = [...questList];
+    newList.splice(index, 1);
+    setQuestList(newList);
+  }
+
+  function showDetails(e) {
+    const { index } = e.target.closest('.quest-list-item').dataset;
+    setFocusIndex(index);
   }
 
   return (
     <>
       <QuestCreate handleClick={createQuest}/>
       <div style={{gridRowEnd: 'span 2'}}>
-        {questList && 
-          <QuestList 
-            handleClick={showDetails}
-            completeQuest= {completeQuest}
-            quests={questList}
-          />
-        }
+        <QuestList 
+          questList={questList}
+          controls={
+            <FontAwesomeIcon 
+              icon={faArrowRight}
+              onClick={showDetails}
+            />
+          }
+        />
       </div>
-      <QuestDetails questIdx={detailView} questList={questList}/>
+      <QuestDetails 
+        quest={focusIndex !== null ? questList[focusIndex] : null}
+        qIndex={focusIndex}
+        editQuest={editQuest} 
+        completeQuest={completeQuest} />
     </>
   )
 }

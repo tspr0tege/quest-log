@@ -28,5 +28,17 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      '@src': '/client/src',
+      '@API': '/client/API'
+    }
+  },
+  watch: true,
+  watchOptions: {
+    poll: true,
+    ignored: /node_modules/
   }
 }
