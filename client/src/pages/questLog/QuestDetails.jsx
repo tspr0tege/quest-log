@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import GemButton from '@src/components/GemButton.jsx';
+import Button from '@src/components/Button.jsx';
 
 import './QuestDetails.css';
 
@@ -75,21 +75,32 @@ export default ({ quest, qIndex, editQuest, completeQuest }) => {
             :
               <p>{questData.notes[0]}</p>
           }
-          
+
+          <h3>Progress:</h3>
+          <p></p>
+
+          <h3>Due by:</h3>
+          <p></p>
+
+          <h3>Assigned to Quest:</h3>
+          <p>Parent or List</p>
+
         </div>
       </div>
       <div id="quest-details-controls">
-        <GemButton 
+        <Button 
           onClick={editing ? sendEdit : toggleEditing}
           disabled={quest === null}
-          face={editing ? 'Save' : 'Edit'}
-        />
+        >
+          {editing ? 'Save' : 'Edit'}
+        </Button>
         {!editing && <button disabled>Delete</button>}
-        <GemButton 
+        <Button 
           onClick={editing ? cancelEdit : complete}
           disabled={quest === null}
-          face={editing ? 'Cancel' : 'Complete'}
-        />        
+        >
+          {editing ? 'Cancel' : 'Complete'}
+        </Button>        
       </div>
     </>
   );

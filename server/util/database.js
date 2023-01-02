@@ -8,13 +8,7 @@ const {
 
 // const sequelize = new Sequelize(database, username, password, options);
 const sequelize = new Sequelize(DATABASE_URL, {
-  dialect: 'postgresql',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  }
+  dialect: 'postgresql'
 });
 
 module.exports = sequelize;

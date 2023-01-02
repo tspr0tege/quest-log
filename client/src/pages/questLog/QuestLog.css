@@ -2,8 +2,7 @@
   width: 1000px;
   height: 100%;
   box-sizing: border-box;
-  margin-left: 50vw;
-  transform: translateX(-50%);
+  margin: auto;
 }
 
 #quest-log .section-body {
