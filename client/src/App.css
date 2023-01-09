@@ -93,6 +93,12 @@ button:disabled:hover {
   box-shadow: none;
 }
 
+#main-app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr 3fr;
+}
+
 .gold-frame, .gold-rim {
   /* margin: 10px 5px; */
   border: outset 2px var(--gold);

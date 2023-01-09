@@ -1,16 +1,13 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import React, { createContext, useState } from 'react';
 import Modal from 'react-modal';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faListAlt as listIcon } from '@fortawesome/free-regular-svg-icons';
-// import { faHouseUser, faBook, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-// import SectionWrapper from './components/SectionWrapper.jsx';
 import QuestLog from './pages/questLog/QuestLog.jsx';
 import Welcome from './pages/Welcome.jsx';
 
 import './App.css';
 import Nav from './components/nav/Nav.jsx';
+import ProfileSidebar from './components/ProfileSidebar.jsx';
 
 Modal.setAppElement('#app');
 const modalStyle = {
@@ -58,12 +55,11 @@ const Startup = () => {
   if (isLoading) return <p>Loading...</p>
 
   // Logged in
-    return (
-      <>
-        {isAuthenticated && <MainApp user={user} />}
-        {!isAuthenticated && <Welcome />}
-      </>
-    )
+  return (
+    <>
+      {isAuthenticated ? <MainApp user={user} /> : <Welcome />}
+    </>
+  )
 }
 
 const MainApp = ({ user }) => (
@@ -74,7 +70,10 @@ const MainApp = ({ user }) => (
     }}
   >        
     <Nav />
-    <QuestLog />
+    <div id="main-app">
+      <ProfileSidebar />
+      <QuestLog />
+    </div>
   </Context.Provider>
 )
 

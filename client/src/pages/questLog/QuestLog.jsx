@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Modal from 'react-modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+import InspectIcon from '@src/icons/right-to-bracket-solid.svg';
+import CompleteIcon from '@src/icons/square-check-regular.svg';
 
 import Quest from '@API/quests';
 import { Context } from '@src/App';
@@ -12,13 +13,11 @@ import QuestDetails from './QuestDetails.jsx';
 
 import './QuestLog.css';
 
-// Modal.setAppElement('#app');
-
 export default () => {
+  const { user, modalStyle } = useContext(Context);
   const [ focusIndex, setFocusIndex ] = useState(null);
   const [ questList, setQuestList ] = useState(null);
   const [ showModal, setShowModal ] = useState(false);
-  const { user, modalStyle } = useContext(Context);
 
   function openModal() {
     setShowModal(true);
@@ -57,8 +56,10 @@ export default () => {
     setQuestList(newList);
   }
 
-  function completeQuest(index) {
+  function completeQuest(e, index) {
+    index = index || e.target.closest('.quest-list-item').dataset.index;
     setFocusIndex(null);
+    closeModal();
     Quest.delete(questList[index].quest_id, user);
     const newList = [...questList];
     newList.splice(index, 1);
@@ -78,10 +79,10 @@ export default () => {
         <QuestList 
           questList={questList}
           controls={
-            <FontAwesomeIcon 
-              icon={faArrowRight}
-              onClick={showDetails}
-            />
+            <>
+              <CompleteIcon onClick={completeQuest}/>
+              <InspectIcon onClick={showDetails} />
+            </>
           }
         />
       </div>

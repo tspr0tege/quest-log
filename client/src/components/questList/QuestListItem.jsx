@@ -6,11 +6,9 @@ export default ({ quest, qIndex, controls }) => {
 
   return (
     <div className='quest-list-item' data-index={qIndex}>
-      <div 
-      onClick={() => {}} 
-      style={{flexGrow: 1, maxWidth: 'calc(100% - 75px)'}}>
+      {/* <div> */}
         <h3>{quest.title}</h3>
-      </div>
+      {/* </div> */}
       <div className='quest-controls'>
         {controls}
       </div>

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const uuid = require('uuid').v4;
 const questsRoute = require('./server/routes/quests');
+const profileRoute = require('./server/routes/profile');
 const { Profile, Quest } = require('./server/models');
 
 // Instantiate express server
@@ -9,8 +10,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/quests', questsRoute);
+app.use('/profile', profileRoute);
 
 app.use(express.static('public'));
+app.use('/profile_pics', express.static('profile_pics'));
 
 // Initialize server
 app.listen(port, () => {

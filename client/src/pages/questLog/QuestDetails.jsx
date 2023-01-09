@@ -48,7 +48,7 @@ export default ({ quest, qIndex, editQuest, completeQuest }) => {
   }
   
   function complete() {
-    completeQuest(qIndex);
+    completeQuest(null, qIndex);
   }
 
   return(
@@ -70,7 +70,7 @@ export default ({ quest, qIndex, editQuest, completeQuest }) => {
           {(editing) ? 
               <textarea
                 onChange={(e) => handleChange(e, 'notes')}
-                value={questData.notes[0]}
+                value={questData.notes[0] || ""}
               /> 
             :
               <p>{questData.notes[0]}</p>

@@ -1,8 +1,7 @@
 .quest-list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .quest-list-item h3 {
@@ -11,6 +10,26 @@
   text-overflow: ellipsis;
   max-width: 100%;
   margin-bottom: 5px;
+}
+
+.quest-controls {
+  height: 0px;
+  opacity: 0;
+  width: fit-content;
+  color: #333;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
+  padding: 0;
+  overflow: hidden;
+  transition: all 150ms ease-in-out;
+}
+
+.quest-list-item:hover .quest-controls {
+  height: 100%;
+  opacity: 1;
+  padding: 0 5px 0 50px;
 }
 
 .quest-controls > * {
