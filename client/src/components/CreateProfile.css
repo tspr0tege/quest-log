@@ -1,0 +1,6 @@
+#create-account form {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 10px;
+  gap: 12px;
+}

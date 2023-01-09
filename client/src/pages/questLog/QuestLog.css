@@ -1,9 +1,8 @@
 #quest-log {
-  width: 1000px;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
-  margin-left: 50vw;
-  transform: translateX(-50%);
+  margin: auto;
 }
 
 #quest-log .section-body {

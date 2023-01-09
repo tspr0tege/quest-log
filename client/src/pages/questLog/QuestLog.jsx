@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect, useContext } from 'react';
+import Modal from 'react-modal';
+
+import InspectIcon from '@src/icons/right-to-bracket-solid.svg';
+import CompleteIcon from '@src/icons/square-check-regular.svg';
 
 import Quest from '@API/quests';
+import { Context } from '@src/App';
 
 import QuestCreate from './QuestCreate.jsx';
 import QuestList from '@src/components/QuestList/QuestList';
@@ -11,12 +14,22 @@ import QuestDetails from './QuestDetails.jsx';
 import './QuestLog.css';
 
 export default () => {
+  const { user, modalStyle } = useContext(Context);
   const [ focusIndex, setFocusIndex ] = useState(null);
   const [ questList, setQuestList ] = useState(null);
+  const [ showModal, setShowModal ] = useState(false);
+
+  function openModal() {
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
 
   useEffect(async () => {
     if (questList === null) {
-      const newList = [], getList = await Quest.get();
+      const newList = [], getList = await Quest.get(null, user);
       for (let obj in getList) {
         newList.push(getList[obj]);
       }
@@ -29,7 +42,7 @@ export default () => {
     const { form } = e.target;
     let newQuest = await Quest.create({
       title: form.title.value
-    });
+    }, user);
     form.title.value = '';
     setQuestList([...questList, newQuest]);
   }
@@ -43,9 +56,11 @@ export default () => {
     setQuestList(newList);
   }
 
-  function completeQuest(index) {
+  function completeQuest(e, index) {
+    index = index || e.target.closest('.quest-list-item').dataset.index;
     setFocusIndex(null);
-    Quest.delete(questList[index].quest_id);
+    closeModal();
+    Quest.delete(questList[index].quest_id, user);
     const newList = [...questList];
     newList.splice(index, 1);
     setQuestList(newList);
@@ -54,28 +69,37 @@ export default () => {
   function showDetails(e) {
     const { index } = e.target.closest('.quest-list-item').dataset;
     setFocusIndex(index);
+    openModal();
   }
 
   return (
-    <>
+    <div id="quest-log">
       <QuestCreate handleClick={createQuest}/>
       <div style={{gridRowEnd: 'span 2'}}>
         <QuestList 
           questList={questList}
           controls={
-            <FontAwesomeIcon 
-              icon={faArrowRight}
-              onClick={showDetails}
-            />
+            <>
+              <CompleteIcon onClick={completeQuest}/>
+              <InspectIcon onClick={showDetails} />
+            </>
           }
         />
       </div>
-      <QuestDetails 
-        quest={focusIndex !== null ? questList[focusIndex] : null}
-        qIndex={focusIndex}
-        editQuest={editQuest} 
-        completeQuest={completeQuest} />
-    </>
+      <Modal
+        style={modalStyle}
+        isOpen={showModal}
+        onRequestClose={closeModal}
+        shouldCloseOnOverlayClick={true}
+      >
+        <QuestDetails 
+          quest={focusIndex !== null ? questList[focusIndex] : null}
+          qIndex={focusIndex}
+          editQuest={editQuest} 
+          completeQuest={completeQuest} 
+        />
+      </Modal>
+    </div>
   )
 }
 
