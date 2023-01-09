@@ -7,3 +7,5 @@ package-lock.json
 server/db.stormdb
 
 .env
+
+profile_pics
