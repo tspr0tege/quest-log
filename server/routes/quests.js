@@ -19,11 +19,10 @@ router.route('/')
     } catch (err) {
       console.log(err);
     }
-
     res.send(newQuest);
   })
-  .put(async (req, res) => {
-  
+
+  .put(async (req, res) => {  
     try {
       const changeProps = JSON.parse(JSON.stringify(req.body));
       delete changeProps.quest_id;
@@ -38,21 +37,20 @@ router.route('/')
       res.status(500).send(err);
     }
   });
-
-router.delete('/:id', async (req, res) => {
-  try {
-    await Quest.destroy({
-      where: {
-        quest_id: req.params.id
-      }
-    })
-    res.status(200).send();
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-
-});
+  
+  router.post('/delete', async (req, res) => {
+    try {
+      await Quest.destroy({
+        where: {
+          quest_id: req.body.questId
+        }
+      })
+      res.status(200).send();
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  });
 
 router.post('/get', async (req, res) => {
   const { user, questList } = req.body;

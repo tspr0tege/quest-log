@@ -56,11 +56,31 @@ export default () => {
     setQuestList(newList);
   }
 
-  function completeQuest(e, index) {
+  async function deleteQuest(index) {
+    console.log('Sending Quest Index number: ' + questList[index].quest_id);
+    const { quest_id } = questList[index];
+    Quest.delete(quest_id);
+    setFocusIndex(null);
+    closeModal();
+    removeFromQuestlist(index);
+  }
+
+  async function completeQuest(e, index) {
     index = index || e.target.closest('.quest-list-item').dataset.index;
     setFocusIndex(null);
     closeModal();
-    Quest.delete(questList[index].quest_id, user);
+    // get exp values (if any)
+    // give exp to parent quest and user profile
+
+    const response = Quest.complete(questList[index].quest_id, user);
+    // Return updated userinfo
+    // removeFromQuestlist(index);
+    console.log(response);
+
+    // Original delete statement
+  }
+
+  function removeFromQuestlist(index) {
     const newList = [...questList];
     newList.splice(index, 1);
     setQuestList(newList);
@@ -96,7 +116,8 @@ export default () => {
           quest={focusIndex !== null ? questList[focusIndex] : null}
           qIndex={focusIndex}
           editQuest={editQuest} 
-          completeQuest={completeQuest} 
+          completeQuest={completeQuest}
+          deleteQuest={deleteQuest} 
         />
       </Modal>
     </div>

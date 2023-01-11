@@ -4,8 +4,9 @@ import Button from '@src/components/Button.jsx';
 
 import './QuestDetails.css';
 
-export default ({ quest, qIndex, editQuest, completeQuest }) => {
+const deleteWarning = 'This will permanently delete this quest from the database. Are you sure?';
 
+export default ({ quest, qIndex, editQuest, completeQuest, deleteQuest }) => {
   const questData = {};
 
   const [ editing, setEditing ] = useState(false);
@@ -51,6 +52,12 @@ export default ({ quest, qIndex, editQuest, completeQuest }) => {
     completeQuest(null, qIndex);
   }
 
+  function handleDelete() {    
+    if(confirm(deleteWarning)) {
+      deleteQuest(qIndex);
+    }
+  }
+
   return(
     <>
       <div id="quest-details">
@@ -94,7 +101,7 @@ export default ({ quest, qIndex, editQuest, completeQuest }) => {
         >
           {editing ? 'Save' : 'Edit'}
         </Button>
-        {!editing && <button disabled>Delete</button>}
+        {!editing && <button onClick={handleDelete}>Delete</button>}
         <Button 
           onClick={editing ? cancelEdit : complete}
           disabled={quest === null}

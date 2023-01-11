@@ -7,3 +7,7 @@
   width: 160px;
   object-fit: cover;
 }
+
+#profile-sidebar p {
+  margin-left: 2rem;
+}
