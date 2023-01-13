@@ -32,6 +32,10 @@ const Quest = sequelize.define('Quest',
     progress: {
       type: Sequelize.REAL,
       defaultValue: 0
+    },
+    completed: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   },
   {indexes: [

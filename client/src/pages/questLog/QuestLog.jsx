@@ -57,7 +57,7 @@ export default () => {
   }
 
   async function deleteQuest(index) {
-    console.log('Sending Quest Index number: ' + questList[index].quest_id);
+    // console.log('Sending Quest Index number: ' + questList[index].quest_id);
     const { quest_id } = questList[index];
     Quest.delete(quest_id);
     setFocusIndex(null);
@@ -67,17 +67,18 @@ export default () => {
 
   async function completeQuest(e, index) {
     index = index || e.target.closest('.quest-list-item').dataset.index;
-    setFocusIndex(null);
-    closeModal();
-    // get exp values (if any)
-    // give exp to parent quest and user profile
-
-    const response = Quest.complete(questList[index].quest_id, user);
-    // Return updated userinfo
-    // removeFromQuestlist(index);
+    
+    const response = await Quest.complete(questList[index].quest_id, user);
+    // move profile state to main app
+    // create function in App to send new profile data
+    // response object will contain profile fields that have been updated
     console.log(response);
-
-    // Original delete statement
+    // removeFromQuestlist(index);
+    // if (response === "Success") {
+    //   setFocusIndex(null);
+    //   closeModal();      
+    // }
+    
   }
 
   function removeFromQuestlist(index) {

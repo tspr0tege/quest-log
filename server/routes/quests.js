@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const uuid = require('uuid').v4;
-const { Quest } = require('../models');
+const { Quest, Profile } = require('../models');
 
 router.use(express.json());
 
@@ -21,7 +21,6 @@ router.route('/')
     }
     res.send(newQuest);
   })
-
   .put(async (req, res) => {  
     try {
       const changeProps = JSON.parse(JSON.stringify(req.body));
@@ -37,20 +36,52 @@ router.route('/')
       res.status(500).send(err);
     }
   });
-  
-  router.post('/delete', async (req, res) => {
-    try {
-      await Quest.destroy({
-        where: {
-          quest_id: req.body.questId
-        }
-      })
-      res.status(200).send();
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+
+router.put('/complete', async (req, res) => {
+  // req.body.questId
+  const { user } = req.body;
+  try {
+    await Quest.update({completed: true}, {
+      where: {quest_id: req.body.questId}
+    });
+    // await Profile.update({exp}, 
+    //   {where: {profile_id: req.body.user}}
+    // );
+    const targetProfile = await Profile.findByPk(user);
+    const nextLevel = Math.floor(100 * Math.pow(1.1, targetProfile.level - 1));
+    const profileUpdate = {};
+
+    if ((targetProfile.exp += 10) > nextLevel) {
+      profileUpdate.level = ++targetProfile.level;
     }
-  });
+    profileUpdate.exp = (targetProfile.level === profileUpdate.level) 
+      ? targetProfile.exp - nextLevel 
+      : targetProfile.exp;
+    Profile.update(profileUpdate, {
+      where: {profile_id: user}
+    });
+
+    res.status(200).send(profileUpdate);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
+  
+router.post('/delete', async (req, res) => {
+  try {
+    await Quest.destroy({
+      where: {
+        quest_id: req.body.questId
+      }
+    })
+    res.status(200).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 router.post('/get', async (req, res) => {
   const { user, questList } = req.body;
@@ -59,7 +90,8 @@ router.post('/get', async (req, res) => {
   try {
     const userQuestList = await Quest.findAll({
       where: {
-        owner_id: user
+        owner_id: user,
+        completed: false
       }
     });        
     res.json(userQuestList);
@@ -69,42 +101,5 @@ router.post('/get', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-
-/* **OLD GET ENDPOINT**
-
-  router.post('/quests/getout', async (req, res) => {
-  const { user, questList } = req.body;
-  let response = {};
-
-  // if no selections are made, return the full list
-  if (!questList?.length >= 1) {
-    const userQuestList = await Quest.findAll({
-      where: {
-        owner_id: user
-      }
-    })
-    userQuestList.forEach((qid) => {
-      response[qid] = db.get('quests').get(qid).value();
-    })
-    res.json(response);
-
-  } else {
-    // else: populate an object with the requested quests
-    if (typeof questList === 'string') {
-      response[questList] = db.get('quests').get(questList).value();
-    } else {
-      questList.forEach((qid) => {
-        response[qid] = db.get('quests').get(item).value();
-      });
-    }
-    res.json(response);
-  }
-});
-*/
-
-
-
-
 
 module.exports = router;
