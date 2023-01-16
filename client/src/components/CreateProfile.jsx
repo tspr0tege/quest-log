@@ -1,6 +1,6 @@
 import React, { useRef, useContext } from 'react';
 
-import { Context } from '@src/App';
+import { Context } from '@src/pages/Dashboard';
 
 import Profile from '@API/profile';
 

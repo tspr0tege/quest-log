@@ -5,7 +5,7 @@ import InspectIcon from '@src/icons/right-to-bracket-solid.svg';
 import CompleteIcon from '@src/icons/square-check-regular.svg';
 
 import Quest from '@API/quests';
-import { Context } from '@src/App';
+import { Context } from '@src/pages/Dashboard';
 
 import QuestCreate from './QuestCreate.jsx';
 import QuestList from '@src/components/QuestList/QuestList';
@@ -13,7 +13,7 @@ import QuestDetails from './QuestDetails.jsx';
 
 import './QuestLog.css';
 
-export default () => {
+export default ({ updateProfile }) => {
   const { user, modalStyle } = useContext(Context);
   const [ focusIndex, setFocusIndex ] = useState(null);
   const [ questList, setQuestList ] = useState(null);
@@ -50,14 +50,25 @@ export default () => {
   async function editQuest(newInfo) {
     const newList = [...questList];
     const editingIndex = newList.findIndex(q => q.quest_id === newInfo.quest_id);
+    for (const [key, value] of Object.entries(newInfo)) {
+      if (key !== 'quest_id' && questList[editingIndex][key] === value) {
+        delete newInfo[key];
+      }
+    }
 
-    const updatedQuest = await Quest.edit(newInfo);
-    newList[editingIndex] = updatedQuest;
+    const updatedQuestList = await Quest.edit(newInfo);
+    // Changing parent will affect more than one quest
+    // so response object is an array
+    updatedQuestList.forEach((quest) => {
+      let index = newList.find((q) => q.title == quest.title);
+      newList[index] = quest;
+    });
+
     setQuestList(newList);
+    closeModal();
   }
 
   async function deleteQuest(index) {
-    // console.log('Sending Quest Index number: ' + questList[index].quest_id);
     const { quest_id } = questList[index];
     Quest.delete(quest_id);
     setFocusIndex(null);
@@ -69,16 +80,14 @@ export default () => {
     index = index || e.target.closest('.quest-list-item').dataset.index;
     
     const response = await Quest.complete(questList[index].quest_id, user);
-    // move profile state to main app
-    // create function in App to send new profile data
+
     // response object will contain profile fields that have been updated
-    console.log(response);
-    // removeFromQuestlist(index);
-    // if (response === "Success") {
-    //   setFocusIndex(null);
-    //   closeModal();      
-    // }
-    
+    if (!!response?.exp) {
+      removeFromQuestlist(index);
+      updateProfile(response);
+      setFocusIndex(null);
+      closeModal();      
+    }    
   }
 
   function removeFromQuestlist(index) {
@@ -114,11 +123,12 @@ export default () => {
         shouldCloseOnOverlayClick={true}
       >
         <QuestDetails 
-          quest={focusIndex !== null ? questList[focusIndex] : null}
+          // quest={focusIndex !== null ? questList[focusIndex] : null}
+          questList={questList}
           qIndex={focusIndex}
           editQuest={editQuest} 
           completeQuest={completeQuest}
-          deleteQuest={deleteQuest} 
+          deleteQuest={deleteQuest}
         />
       </Modal>
     </div>
