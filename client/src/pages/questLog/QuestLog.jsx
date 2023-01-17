@@ -68,6 +68,8 @@ export default ({ updateProfile }) => {
     closeModal();
   }
 
+  // IMPORTANT: delete needs to check for children 
+  // and cancel operation or delete everything
   async function deleteQuest(index) {
     const { quest_id } = questList[index];
     Quest.delete(quest_id);
@@ -77,7 +79,11 @@ export default ({ updateProfile }) => {
   }
 
   async function completeQuest(e, index) {
-    index = index || e.target.closest('.quest-list-item').dataset.index;
+    if (!index) {
+      const { questid } = e.target.closest('.quest-list-item').dataset;
+      const targetQuest = questList.find((q) => q.quest_id === questid);
+      index = questList.indexOf(targetQuest);
+    }
     
     const response = await Quest.complete(questList[index].quest_id, user);
 
@@ -97,8 +103,9 @@ export default ({ updateProfile }) => {
   }
 
   function showDetails(e) {
-    const { index } = e.target.closest('.quest-list-item').dataset;
-    setFocusIndex(index);
+    const { questid } = e.target.closest('.quest-list-item').dataset;
+    const targetQuest = questList.find((q) => q.quest_id === questid);
+    setFocusIndex(questList.indexOf(targetQuest));
     openModal();
   }
 
@@ -106,7 +113,7 @@ export default ({ updateProfile }) => {
     <div id="quest-log">
       <QuestCreate handleClick={createQuest}/>
       <div style={{gridRowEnd: 'span 2'}}>
-        <QuestList 
+        {questList && <QuestList 
           questList={questList}
           controls={
             <>
@@ -114,7 +121,7 @@ export default ({ updateProfile }) => {
               <InspectIcon onClick={showDetails} />
             </>
           }
-        />
+        />}
       </div>
       <Modal
         style={modalStyle}

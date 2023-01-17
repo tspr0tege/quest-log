@@ -53,7 +53,7 @@ export default ({ questList, qIndex, editQuest, completeQuest, deleteQuest }) =>
       questData.notes[1](null);
       questData.parent[1](null);
     }
-  }, [quest]);
+  }, [qIndex]);
   
   function handleChange(e, prop) {
     questData[prop][1](e.target.value);
@@ -71,6 +71,7 @@ export default ({ questList, qIndex, editQuest, completeQuest, deleteQuest }) =>
   }
   
   function sendEdit() {
+    debugger;
     const editInfo = {
       quest_id: quest.quest_id,
       title: questData.title[0],
@@ -125,7 +126,13 @@ export default ({ questList, qIndex, editQuest, completeQuest, deleteQuest }) =>
           <h3>Assigned to Quest:</h3>
           {(editing) ? 
               <select
-                onChange={(e) => handleChange(e, 'parent')}
+                onChange={(e) => {
+                  const targetQuest = questList.find((q) => {
+                    return q.quest_id === e.target.value;
+                  });
+                  let obj = {target: {value: targetQuest}};
+                  handleChange(obj, 'parent')
+                }}
                 value={questData.parent[0]?.quest_id || ''}
               >
                 <option value=''>Unassigned</option>
