@@ -8,7 +8,7 @@ import Quest from '@API/quests';
 import { Context } from '@src/pages/Dashboard';
 
 import QuestCreate from './QuestCreate.jsx';
-import QuestList from '@src/components/QuestList/QuestList';
+import QuestList from '@src/components/questList/QuestList';
 import QuestDetails from './QuestDetails.jsx';
 
 import './QuestLog.css';
