@@ -1,46 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import React from 'react';
 
-import Profile from '@API/profile';
 import { Context } from '@src/App';
-
-import CreateProfile from './CreateProfile';
 
 import './ProfileSidebar.css';
 
-export default () => {
-  const { user, modalStyle } = useContext(Context);
-  const [ showModal, setShowModal ] = useState(false);
-  const [ userProfile, setUserProfile ] = useState(null);
-
-  function openModal() {setShowModal(true);}
-  function closeModal() {setShowModal(false);}
-
-  useEffect(async () => {
-    if (userProfile === null && !showModal) {
-      const profileInfo = await Profile.get(user);
-      if(!!profileInfo) {
-        // console.log(profileInfo);
-        setUserProfile(profileInfo)
-      } else {
-        console.error('profileInfo is null. No user found in the database');
-        // Execute user creation in Modal
-        openModal();
-      }
-    }
-  });
+export default ({ userProfile }) => {
 
   return (
     <div id="profile-sidebar">
-      <Modal
-        style={modalStyle}
-        isOpen={showModal}
-        onRequestClose={closeModal}
-        shouldCloseOnOverlayClick={false}
-      >
-        <CreateProfile close={closeModal}/>
-      </Modal>
-
       {!!userProfile &&
         <>
           <h3>Name</h3>

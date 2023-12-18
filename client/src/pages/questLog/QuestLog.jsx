@@ -5,15 +5,15 @@ import InspectIcon from '@src/icons/right-to-bracket-solid.svg';
 import CompleteIcon from '@src/icons/square-check-regular.svg';
 
 import Quest from '@API/quests';
-import { Context } from '@src/App';
+import { Context } from '@src/pages/Dashboard';
 
 import QuestCreate from './QuestCreate.jsx';
-import QuestList from '@src/components/QuestList/QuestList';
+import QuestList from '@src/components/questList/QuestList';
 import QuestDetails from './QuestDetails.jsx';
 
 import './QuestLog.css';
 
-export default () => {
+export default ({ updateProfile }) => {
   const { user, modalStyle } = useContext(Context);
   const [ focusIndex, setFocusIndex ] = useState(null);
   const [ questList, setQuestList ] = useState(null);
@@ -50,25 +50,62 @@ export default () => {
   async function editQuest(newInfo) {
     const newList = [...questList];
     const editingIndex = newList.findIndex(q => q.quest_id === newInfo.quest_id);
+    for (const [key, value] of Object.entries(newInfo)) {
+      if (key !== 'quest_id' && questList[editingIndex][key] === value) {
+        delete newInfo[key];
+      }
+    }
 
-    const updatedQuest = await Quest.edit(newInfo);
-    newList[editingIndex] = updatedQuest;
+    const updatedQuestList = await Quest.edit(newInfo);
+    // Changing parent will affect more than one quest
+    // so response object is an array
+    updatedQuestList.forEach((quest) => {
+      let index = newList.find((q) => q.title == quest.title);
+      newList[index] = quest;
+    });
+
     setQuestList(newList);
+    closeModal();
   }
 
-  function completeQuest(e, index) {
-    index = index || e.target.closest('.quest-list-item').dataset.index;
+  // IMPORTANT: delete needs to check for children 
+  // and cancel operation or delete everything
+  async function deleteQuest(index) {
+    const { quest_id } = questList[index];
+    Quest.delete(quest_id);
     setFocusIndex(null);
     closeModal();
-    Quest.delete(questList[index].quest_id, user);
+    removeFromQuestlist(index);
+  }
+
+  async function completeQuest(e, index) {
+    if (!index) {
+      const { questid } = e.target.closest('.quest-list-item').dataset;
+      const targetQuest = questList.find((q) => q.quest_id === questid);
+      index = questList.indexOf(targetQuest);
+    }
+    
+    const response = await Quest.complete(questList[index].quest_id, user);
+
+    // response object will contain profile fields that have been updated
+    if (!!response?.exp) {
+      removeFromQuestlist(index);
+      updateProfile(response);
+      setFocusIndex(null);
+      closeModal();      
+    }    
+  }
+
+  function removeFromQuestlist(index) {
     const newList = [...questList];
     newList.splice(index, 1);
     setQuestList(newList);
   }
 
   function showDetails(e) {
-    const { index } = e.target.closest('.quest-list-item').dataset;
-    setFocusIndex(index);
+    const { questid } = e.target.closest('.quest-list-item').dataset;
+    const targetQuest = questList.find((q) => q.quest_id === questid);
+    setFocusIndex(questList.indexOf(targetQuest));
     openModal();
   }
 
@@ -76,7 +113,7 @@ export default () => {
     <div id="quest-log">
       <QuestCreate handleClick={createQuest}/>
       <div style={{gridRowEnd: 'span 2'}}>
-        <QuestList 
+        {questList && <QuestList 
           questList={questList}
           controls={
             <>
@@ -84,7 +121,7 @@ export default () => {
               <InspectIcon onClick={showDetails} />
             </>
           }
-        />
+        />}
       </div>
       <Modal
         style={modalStyle}
@@ -93,10 +130,12 @@ export default () => {
         shouldCloseOnOverlayClick={true}
       >
         <QuestDetails 
-          quest={focusIndex !== null ? questList[focusIndex] : null}
+          // quest={focusIndex !== null ? questList[focusIndex] : null}
+          questList={questList}
           qIndex={focusIndex}
           editQuest={editQuest} 
-          completeQuest={completeQuest} 
+          completeQuest={completeQuest}
+          deleteQuest={deleteQuest}
         />
       </Modal>
     </div>

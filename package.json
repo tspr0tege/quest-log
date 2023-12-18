@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "pack": "./node_modules/.bin/webpack -w"
+    "pack": "npx webpack --config webpack.config.js"
   },
   "author": "Squall Leonhart",
   "license": "ISC",

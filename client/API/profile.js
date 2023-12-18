@@ -13,6 +13,12 @@ export default {
     .catch(console.error);
     return response;
   },
+  getXP: async (user, xpAmt) => { // May not be necessary
+    const response = await Axios.put('/profile/xp', postData)
+    .then(({ data }) => data)
+    .catch(console.error);
+    return response;
+  },
 
   // create: async (details, user) => {
   //   let newQuest = await Axios.post('/quests', { ...details, userId: user })
