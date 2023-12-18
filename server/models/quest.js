@@ -9,6 +9,10 @@ const Quest = sequelize.define('Quest',
       unique: true,
       primaryKey: true
     },
+    owner_id: {
+      type: Sequelize.STRING(50),
+      allowNull: false
+    },
     title: {
       type: Sequelize.STRING(250),
       allowNull: false
@@ -17,13 +21,13 @@ const Quest = sequelize.define('Quest',
       type: Sequelize.TEXT,
       allowNull: true
     },
-    quest_line_exp: {
-      type: Sequelize.INTEGER,
+    parent_id: {
+      type: Sequelize.UUID,
       allowNull: true
     },
-    owner_id: {
-      type: Sequelize.STRING(50),
-      allowNull: false
+    prog_to_parent: {
+      type: Sequelize.INTEGER,
+      allowNull: true
     },
     time_frame: {
       type: Sequelize.STRING(10),
@@ -32,10 +36,19 @@ const Quest = sequelize.define('Quest',
     progress: {
       type: Sequelize.REAL,
       defaultValue: 0
+    },
+    child_count: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    is_complete: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   },
   {indexes: [
-    {fields: ['owner_id']}
+    {fields: ['owner_id', 'parent_id']}
   ]}
 );
 
