@@ -1,7 +1,7 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
-import Welcome from './pages/Welcome.jsx';
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard.jsx';
 
 import './App.css';
@@ -32,7 +32,7 @@ const Router = () => {
   // Logged in
   return (
     <>
-      {isAuthenticated ? <Dashboard user={user} /> : <Welcome />}
+      {isAuthenticated ? <Dashboard user={user} /> : <LandingPage />}
     </>
   )
 }

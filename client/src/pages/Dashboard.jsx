@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Modal from 'react-modal';
 
-import Nav from '@src/components/nav/Nav.jsx';
+// import Nav from '@src/components/nav/Nav.jsx';
 import ProfileSidebar from '@src/components/ProfileSidebar.jsx';
 import CreateProfile from '@src/components/CreateProfile.jsx';
 import QuestLog from '@src/pages/questLog/QuestLog.jsx';
@@ -48,7 +48,7 @@ export default ({ user }) => {
   });
 
   function updateProfile(update) {
-    // FFU: check for update to level and execute animation
+    // TODO: check for update to level and execute animation
     setUserProfile({...userProfile, ...update});
   }
 
@@ -58,8 +58,7 @@ export default ({ user }) => {
         user, 
         modalStyle
       }}
-    >        
-      <Nav />
+    >
       <Modal
         style={modalStyle}
         isOpen={showModal}
