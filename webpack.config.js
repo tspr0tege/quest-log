@@ -1,5 +1,5 @@
 const path = require('path');
-const BUILD_DIR = path.resolve(__dirname, './public/build');
+const BUILD_DIR = path.resolve(__dirname, './public/build/');
 const APP_DIR = path.resolve(__dirname, './client');
 
 module.exports = {
