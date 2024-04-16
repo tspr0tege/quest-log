@@ -1,5 +1,7 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
+import { CssBaseline } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import LandingPage from './pages/LandingPage/LandingPage';
 import CreateProfile from './pages/CreateProfile/CreateProfile';
@@ -7,14 +9,19 @@ import MainApp from './pages/MainApp/MainApp';
 
 import Profile from '@API/profile';
 
-import './App.css';
+// import './App.css';
+
+const defaultTheme = createTheme();
 
 export default () => (
   <Auth0Provider
   domain="dev-6-2fm190.us.auth0.com"
   clientId="oyTxYOApnYlqIYSgDsOGbmdom0LvQ0Bo"
   redirectUri={window.location.origin}>
-    <LandingNavigation />
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <LandingNavigation />
+    </ThemeProvider>
   </Auth0Provider>
 )
 
@@ -46,4 +53,5 @@ const LandingNavigation = () => {
 
   // Logged in with profile
   return profileLoaded && <MainApp userProfile={userProfile} />
+
 }
