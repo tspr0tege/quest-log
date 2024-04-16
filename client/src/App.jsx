@@ -1,38 +1,49 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard.jsx';
+import LandingPage from './pages/LandingPage/LandingPage';
+import CreateProfile from './pages/CreateProfile/CreateProfile';
+import MainApp from './pages/MainApp/MainApp';
+
+import Profile from '@API/profile';
 
 import './App.css';
-
-// const checkWindow = () => window.innerWidth < 750;
-// const screenWidth = window.screen.width * window.devicePixelRatio;
 
 export default () => (
   <Auth0Provider
   domain="dev-6-2fm190.us.auth0.com"
   clientId="oyTxYOApnYlqIYSgDsOGbmdom0LvQ0Bo"
   redirectUri={window.location.origin}>
-    <Router />
+    <LandingNavigation />
   </Auth0Provider>
 )
 
-const Router = () => {
+const LandingNavigation = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  // const [ smolScreen, setSmolScreen ] = useState(checkWindow());
-  /* useEffect(() => {
-    const onResize = () => { if (checkWindow() !== smolScreen) {setSmolScreen(b => !b);} }
-    window.addEventListener('resize', onResize);
-    return () => { window.removeEventListener('resize', onResize) }
-  }, [smolScreen]); */
+  const [ userProfile, setUserProfile ] = useState(null);
+  const [ profileLoaded, setProfileLoaded ] = useState(false);
   
-  if (isLoading) return <p>Loading...</p>
+  useEffect(async () => {
+    if (user !== undefined && userProfile === null) {
+      const profileInfo = await Profile.get(user.sub.split('|')[1]);
+      setUserProfile(profileInfo);
+    }
+  });
 
-  // Logged in
-  return (
-    <>
-      {isAuthenticated ? <Dashboard user={user} /> : <LandingPage />}
-    </>
-  )
+  useEffect(() => {
+    if (userProfile !== null){
+      setProfileLoaded(true);
+    }
+  }, [userProfile]);
+  
+  if (isLoading) return <p>Loading...</p> // Replace with Loading page
+
+  // Not logged in
+  if (!isAuthenticated) return <LandingPage />
+
+  // Logged in, no profile
+  if (profileLoaded && !userProfile) return <CreateProfile />
+
+  // Logged in with profile
+  return profileLoaded && <MainApp userProfile={userProfile} />
 }

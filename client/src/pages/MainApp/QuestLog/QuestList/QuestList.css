@@ -1,0 +1,18 @@
+.quest-list {
+  margin: 0;
+  padding: 0;
+  /* border: 2px inset #222;
+  background: linear-gradient(120deg, var(--deepBrown), var(--nearblack) 80%); */
+}
+
+.quest-list li {
+  display: flex;
+  padding: 8px;
+  border-bottom-width: 1px;
+  border-image: linear-gradient(to left, transparent 5%, #666, transparent 95%) 1;
+  border-bottom-style: solid;
+}
+
+.quest-list li:hover {
+  background: linear-gradient(120deg, var(--deepBrown) 60%, var(--nearblack));
+}

@@ -1,10 +1,11 @@
 
 #new-task-bar {
   display: flex;
-  /* margin: 10px; */
-  flex-grow: 0;
-  gap: 6px;
-  background: none;
+  margin-bottom: 10px;
+  /* flex-grow: 0; */
+  gap: 20px;
+  background-color: var(--black4);
+  padding: 20px;
 }
 
 #new-task-bar button {

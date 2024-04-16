@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default ({ children, onClick=()=>{}, disabled, id }) => (
+export default ({ children, onClick=()=>{}, disabled=false, id=null }) => (
   <button
     // className="gem-btn"
     onClick={onClick}
-    disabled={disabled || false}
-    id={id || null}
+    disabled={disabled}
+    id={id}
   >
     {children}
   </button>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import QuestListItem from './QuestListItem.jsx';
+import QuestListItem from './QuestListItem/QuestListItem';
 
 import './QuestList.css'
 

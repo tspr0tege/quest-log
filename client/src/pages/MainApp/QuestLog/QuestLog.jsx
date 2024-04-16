@@ -5,11 +5,11 @@ import InspectIcon from '@src/icons/right-to-bracket-solid.svg';
 import CompleteIcon from '@src/icons/square-check-regular.svg';
 
 import Quest from '@API/quests';
-import { Context } from '@src/pages/Dashboard';
+import { Context } from '@src/pages/MainApp/MainApp';
 
-import QuestCreate from './QuestCreate.jsx';
-import QuestList from '@src/components/questList/QuestList';
-import QuestDetails from './QuestDetails.jsx';
+import QuestCreate from './QuestCreate/QuestCreate';
+import QuestList from './QuestList/QuestList';
+import QuestDetails from './QuestDetails/QuestDetails';
 
 import './QuestLog.css';
 
