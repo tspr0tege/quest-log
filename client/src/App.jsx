@@ -1,5 +1,5 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -11,7 +11,18 @@ import Profile from '@API/profile';
 
 // import './App.css';
 
-const defaultTheme = createTheme();
+const UserContext = createContext();
+
+const defaultTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#5f3f1e',
+      light: '#825b33',
+      dark: '#41280e'
+    }
+  }
+});
 
 export default () => (
   <Auth0Provider
@@ -20,12 +31,12 @@ export default () => (
   redirectUri={window.location.origin}>
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <LandingNavigation />
+      <Navigator />
     </ThemeProvider>
   </Auth0Provider>
 )
 
-const LandingNavigation = () => {
+const Navigator = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [ userProfile, setUserProfile ] = useState(null);
   const [ profileLoaded, setProfileLoaded ] = useState(false);
@@ -43,15 +54,28 @@ const LandingNavigation = () => {
     }
   }, [userProfile]);
   
-  if (isLoading) return <p>Loading...</p> // Replace with Loading page
+  if (isLoading) return <p>Loading...</p> // Replace with Loading page component
 
   // Not logged in
   if (!isAuthenticated) return <LandingPage />
 
   // Logged in, no profile
-  if (profileLoaded && !userProfile) return <CreateProfile />
+  if (profileLoaded && !userProfile) return (
+    <UserContext.Provider value={{
+      auth0UserID: user?.sub.split('|')[1] || ''
+    }}>
+      <CreateProfile />
+    </UserContext.Provider>
+  )
 
   // Logged in with profile
-  return profileLoaded && <MainApp userProfile={userProfile} />
-
+  return (
+    profileLoaded && <UserContext.Provider 
+      value={{ userProfile: userProfile }}
+    >
+      <MainApp />
+    </UserContext.Provider>
+  )
 }
+
+export { UserContext };

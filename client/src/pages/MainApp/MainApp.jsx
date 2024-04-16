@@ -1,29 +1,23 @@
-import React, { createContext } from 'react';
+import React, { useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+
+import { UserContext } from '@src/App';
 
 import ProfileSidebar from './ProfileSidebar/ProfileSidebar';
 import QuestLog from './QuestLog/QuestLog';
 
-const Context = createContext();
-
-export default ({ userProfile }) => {
+export default () => {
   const { logout } = useAuth0();
+  const { userProfile } = useContext(UserContext);
   
   function updateProfile() {}
 
   return (
-    <Context.Provider 
-      value={{ 
-        user: userProfile.profile_id,
-      }}
-    >
-      <div id="main-app">
-        <a onClick={logout}>Logout</a>
-        <QuestLog updateProfile={updateProfile} />
-        <ProfileSidebar userProfile={userProfile}/>
-      </div>
-    </Context.Provider>
+    <div id="main-app">
+      <a onClick={logout}>Logout</a>
+      {/* <QuestLog updateProfile={updateProfile} /> */}
+      <ProfileSidebar userProfile={userProfile}/>
+    </div>
   )
 }
 
-export { Context };

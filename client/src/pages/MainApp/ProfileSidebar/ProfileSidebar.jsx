@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { Context } from '@src/App';
+import { UserContext } from '@src/App';
 
 import './ProfileSidebar.css';
 
 export default ({ userProfile }) => {
+  // const 
 
   return (
     <div id="profile-sidebar">

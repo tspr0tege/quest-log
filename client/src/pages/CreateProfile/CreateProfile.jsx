@@ -1,48 +1,68 @@
 import React, { useRef, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 
-// import { Context } from '@src/pages/Dashboard/Dashboard';
+import { UserContext } from '@src/App';
 
-// import Profile from '@API/profile';
+import Profile from '@API/profile';
 
-import './CreateProfile.css';
+// import './CreateProfile.css';
 
 export default () => {
+  const fileInput = useRef();
   const { logout } = useAuth0();
+  const { auth0UserID } = useContext(UserContext);
+
+  async function processForm(e) {
+    e.preventDefault();
+    const profileFormData = new FormData(e.target);
+    profileFormData.append('profile_id', auth0UserID);
+
+    const createRes = await Profile.create(profileFormData);
+    // console.log({
+    //   username: profileFormData.get('username'),
+    //   profile_id: profileFormData.get('profile_id')
+    // });
+    console.log(createRes);
+  }
 
   // After submitted user data and getting an affirmative response
-  // use setProfileLoaded(false) and setUserProfile(null)
 
-  return <button onClick={logout}>LOGOUT</button>
+  return (
+    <Grid container sx={{height: '100vh', margin: 'auto'}}>
+      <Button onClick={logout} variant="contained" size="large">LOGOUT</Button>
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Typography component="h1" variant="h2">
+          Create Your Profile
+        </Typography>
+        <Box component="form" onSubmit={processForm} encType="multipart/form-data">
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Display Name"
+            name="username"
+            // autoComplete="email"
+            autoFocus
+          />
+
+          <label htmlFor="profilepic">Profile Picture:</label>
+          <input ref={fileInput} type="file" id="profilepic" name="profilepic"/>
+          
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Submit
+          </Button>
+        </Box>
+      </Grid>
+    </Grid>
+  )
 }
 
-// const ogCreateProfile = ({ close }) => {
-//   const { user } = useContext(Context);
-//   const fileInput = useRef();
-
-//   async function processForm(e) {
-//     e.preventDefault();
-//     const formData = new FormData(e.target);
-//     formData.append('profile_id', user);
-//     const createRes = await Profile.create(formData);
-//     console.log(createRes);
-//     close();
-//   }
-
-//   return (
-//     <div id="create-account">
-//       <h2>Create Your Profile</h2>
-//       <Form processForm={processForm} fileInput={fileInput}/>      
-//     </div>
-//   );
-// }
-
 // const Form = ({ processForm, fileInput }) => (
-//   <form onSubmit={processForm} encType="multipart/form-data">
-//     <label htmlFor="username">Display Name:</label>
-//     <input type="text" id="username" name="username" required/>
-//     <label htmlFor="profilepic">Profile Picture:</label>
-//     <input ref={fileInput} type="file" id="profilepic" name="profilepic"/>
-//     <button type="submit">Submit</button>
-//   </form>
 // )
