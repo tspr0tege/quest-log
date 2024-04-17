@@ -21,5 +21,8 @@ export const Dashboard = {
   },
   iconButton: {
     bgcolor:'primary.main'
+  },
+  optionsMenuBox: {
+    minWidth: '100px'
   }
 }

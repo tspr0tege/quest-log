@@ -3,7 +3,7 @@ import React, { useState, useEffect, createContext } from 'react';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import NavBar from '@src/components/nav/NavBar';
+import NavBar from '@src/components/NavBar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import CreateProfile from './pages/CreateProfile/CreateProfile';
 import MainApp from './pages/MainApp/MainApp';
@@ -53,10 +53,15 @@ const Navigator = () => {
   });
 
   useEffect(() => {
-    if (userProfile !== null){
+    if (userProfile !== null && profileLoaded === false){
       setProfileLoaded(true);
     }
   }, [userProfile]);
+
+  function updateProfile(update) {
+    // TODO: check for update to level and execute animation
+    setUserProfile({...userProfile, ...update});
+  }
   
   if (isLoading) return <p>Loading...</p> // Replace with Loading page component
 
@@ -76,7 +81,10 @@ const Navigator = () => {
   // Logged in with profile
   return (
     profileLoaded && <UserContext.Provider 
-      value={{ userProfile }}
+      value={{ 
+        userProfile,
+        updateProfile
+      }}
     >
       <NavBar />
       <MainApp />

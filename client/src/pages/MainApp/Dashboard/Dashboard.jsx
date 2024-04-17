@@ -1,9 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Box, Button, Container, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { createSvgIcon } from '@mui/material/utils';
+import { 
+  Box, 
+  Button, 
+  Container,
+  Divider,
+  Grid, 
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper, 
+  Typography 
+} from '@mui/material';
 
-import Quest from '@API/quests'
-import { UserContext } from '@src/App';
+// import { UserContext } from '@src/App';
+import { QuestContext } from '@src/components/QuestsData';
 import { Dashboard as styles } from '@src/styles';
 
 const AddIcon = createSvgIcon(
@@ -20,19 +31,46 @@ const AddIcon = createSvgIcon(
 );
 
 export default () => {
-  const { userProfile } = useContext(UserContext);
-  const [ questList, setQuestList ] = useState(null);
-  const [ targetIndex, setTargetIndex ] = useState(0)
+  // const { userProfile } = useContext(UserContext);
+  const { questList, completeQuest } = useContext(QuestContext);
+  const [ targetIndex, setTargetIndex ] = useState(0);
+  const [ showOptionsMenu, setShowOptionsMenu ] = useState(null);
+  const [ questsLoaded, setQuestsLoaded ] = useState(false);
 
-  useEffect(async () => {
-    if (questList === null) {
-      const newList = [], getList = await Quest.get(null, userProfile.profile_id);
-      for (let obj in getList) {
-        newList.push(getList[obj]);
-      }
-      setQuestList(newList);
+  useEffect(() => {
+    if (!questsLoaded && questList) {
+      setQuestsLoaded(true);
+    }    
+  }, [questList]);
+
+  function closeOptionsMenu() {
+    setShowOptionsMenu(null);
+  }
+
+  function openOptionsMenu(event) {
+    setShowOptionsMenu(event.currentTarget);
+  }
+
+  function handleOptionsSelection(event) {
+    switch(event.target.innerText) {
+      case 'Delete':
+        console.log("Delete!");
+        break;
+      case 'Stash':
+        console.log("Send task back to the vault.");
+        break;
+      case 'Skip':
+        if (targetIndex + 1 >= questList.length) {
+          setTargetIndex(0);
+        } else {
+          setTargetIndex(targetIndex + 1);
+        }
+        break;
+      default:
+        console.error("Input was detected in the options menu, but unable to indentify the option selected.");
     }
-  });
+    closeOptionsMenu();
+  }
   
   return (
     <Container sx={styles.container}>
@@ -71,13 +109,58 @@ export default () => {
 
           {/* Controls - Complete, Add, Options(Delete, Skip, Stash) */}
           <Box sx={styles.controlsBox}>
-            <Button variant="contained" size="medium">Complete</Button>
+            <Button 
+              variant="contained"
+              size="medium"
+              onClick={() => {
+                completeQuest(targetIndex);
+                if (targetIndex >= questList.length - 1) {
+                  setTargetIndex(0)
+                }
+              }}
+              disabled={!questsLoaded}
+            >
+              Complete
+            </Button>
             <IconButton size="large" sx={styles.iconButton}>
               <AddIcon />
             </IconButton>
-            <Button variant="outlined" size="medium">Options...</Button>
-            {/* TODO: Use MUI Drawer for Options menu */}
+            <Button
+              id="options-button"
+              variant="outlined" 
+              size="medium"
+              aria-controls={!!showOptionsMenu ? 'options-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={!!showOptionsMenu ? 'true' : undefined}
+              onClick={openOptionsMenu}
+            >
+              Options...
+            </Button>
+            <Menu 
+              id="options-menu"
+              anchorEl={showOptionsMenu}
+              open={!!showOptionsMenu} 
+              onClose={closeOptionsMenu}
+              MenuListProps={{
+                'aria-labelledby': 'options-button',
+              }}
+            >
+              <Box sx={styles.optionsMenuBox}>
+                <MenuItem onClick={handleOptionsSelection}>
+                  Skip
+                </MenuItem>
+                <Divider />
+                <MenuItem disabled onClick={handleOptionsSelection}>
+                  Stash
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleOptionsSelection}>
+                  Delete
+                </MenuItem>
+              </Box>
+            </Menu>
           </Box>
+
         </Grid>
       </Paper>
     </Container>
