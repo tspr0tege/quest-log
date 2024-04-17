@@ -1,26 +1,60 @@
 import React, { useContext } from 'react';
+import { Box, Typography } from '@mui/material';
 
 import { UserContext } from '@src/App';
 
-import './ProfileSidebar.css';
+// import './ProfileSidebar.css';
 
-export default ({ userProfile }) => {
-  // const 
+export default () => {
+  const { userProfile } = useContext(UserContext);
 
   return (
-    <div id="profile-sidebar">
+    <Box>
       {!!userProfile &&
         <>
-          <h3>Name</h3>
-          <p>{userProfile.name}</p>
-          <h3>Image</h3>
-          <img src={userProfile.photo_url} alt="Profile Picture" />
-          <h3>Level</h3>
-          <p>{userProfile.level}</p>
-          <h3>Next Level</h3>
-          <p>{userProfile.exp} / {Math.floor(100 * Math.pow(1.1, userProfile.level - 1))}</p>
+          <Typography component="h3">
+            Name
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ mb: { xs: 2, sm: 4 } }}
+          >
+            {userProfile.name}
+          </Typography>
+          <Typography component="h3">
+            Image
+          </Typography>
+          <img 
+            style={{
+              height: '160px',
+              width: '160px',
+              objectFit: 'cover'
+            }}
+            src={userProfile.photo_url} alt="Profile Picture" 
+          />
+          <Typography component="h3">
+            Level
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ mb: { xs: 2, sm: 4 } }}
+          >
+            {userProfile.level}
+          </Typography>
+          <Typography component="h3">
+            Next Level
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ mb: { xs: 2, sm: 4 } }}
+          >
+            {userProfile.exp} / {Math.floor(100 * Math.pow(1.1, userProfile.level - 1))}
+          </Typography>
         </>
       }
-    </div>
+    </Box>
   );
 }

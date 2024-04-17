@@ -113,9 +113,24 @@ export default ({ updateProfile }) => {
       <div style={{gridRowEnd: 'span 2'}}>
         {questList && <QuestList 
           questList={questList}
-          controls={<CompleteIcon onClick={completeQuest}/>}
+          controls={
+            <>
+              <CompleteIcon onClick={completeQuest}/>
+              <InspectIcon onClick={showDetails} />
+            </>
+          }
         />}
       </div>
+      <Modal showModal={showModal} modalControls={modalControls}>
+        <QuestDetails 
+          // quest={focusIndex !== null ? questList[focusIndex] : null}
+          questList={questList}
+          qIndex={focusIndex}
+          editQuest={editQuest} 
+          completeQuest={completeQuest}
+          deleteQuest={deleteQuest}
+        />
+      </Modal>
     </div>
   )
 }

@@ -26,8 +26,6 @@ export default () => {
     console.log(createRes);
   }
 
-  // After submitted user data and getting an affirmative response
-
   return (
     <Grid container sx={{height: '100vh', margin: 'auto'}}>
       <Button onClick={logout} variant="contained" size="large">LOGOUT</Button>
@@ -63,6 +61,3 @@ export default () => {
     </Grid>
   )
 }
-
-// const Form = ({ processForm, fileInput }) => (
-// )

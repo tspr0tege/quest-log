@@ -3,6 +3,7 @@ import React, { useState, useEffect, createContext } from 'react';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import NavBar from '@src/components/nav/NavBar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import CreateProfile from './pages/CreateProfile/CreateProfile';
 import MainApp from './pages/MainApp/MainApp';
@@ -14,6 +15,9 @@ import Profile from '@API/profile';
 const UserContext = createContext();
 
 const defaultTheme = createTheme({
+  fill: {
+    backgroundColor: 'primary'
+  },
   palette: {
     mode: 'dark',
     primary: {
@@ -64,6 +68,7 @@ const Navigator = () => {
     <UserContext.Provider value={{
       auth0UserID: user?.sub.split('|')[1] || ''
     }}>
+      <NavBar />
       <CreateProfile />
     </UserContext.Provider>
   )
@@ -71,8 +76,9 @@ const Navigator = () => {
   // Logged in with profile
   return (
     profileLoaded && <UserContext.Provider 
-      value={{ userProfile: userProfile }}
+      value={{ userProfile }}
     >
+      <NavBar />
       <MainApp />
     </UserContext.Provider>
   )
