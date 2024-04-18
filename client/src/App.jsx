@@ -1,6 +1,6 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -10,32 +10,19 @@ import CreateProfile from './pages/CreateProfile/CreateProfile';
 import MainApp from './pages/MainApp/MainApp';
 import Dashboard from './pages/MainApp/Dashboard/Dashboard';
 import QuestLog from './pages/MainApp/QuestLog/QuestLog';
+import { muiTheme } from '@src/styles'
 
 import Profile from '@API/profile';
 
-// import './App.css';
-
 const UserContext = createContext();
-
-const defaultTheme = createTheme({
-  fill: {
-    backgroundColor: 'primary'
-  },
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#5f3f1e',
-      light: '#825b33',
-      dark: '#41280e'
-    }
-  }
-});
+const defaultTheme = createTheme(muiTheme);
 
 export default () => (
   <Auth0Provider
-  domain="dev-6-2fm190.us.auth0.com"
-  clientId="oyTxYOApnYlqIYSgDsOGbmdom0LvQ0Bo"
-  redirectUri={window.location.origin}>
+    domain="dev-6-2fm190.us.auth0.com"
+    clientId="oyTxYOApnYlqIYSgDsOGbmdom0LvQ0Bo"
+    redirectUri={window.location.origin}
+  >
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Navigator />
@@ -97,7 +84,6 @@ const Navigator = () => {
           </Route>
         </Routes>
       </BrowserRouter>
-      {/* <MainApp /> */}
     </UserContext.Provider>
   )
 }

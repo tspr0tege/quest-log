@@ -1,23 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
-import CloudUploadIcon from '@src/icons/cloud-upload.svg';
+import { ImageUpload as styles } from '@src/styles';
 import SaveIcon from '@src/icons/save.svg';
 
-import './ImageUpload.css'
-
-function readDataXfer(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = (e) => {
-      resolve(e.target.result);
-    };
-    reader.onerror = (error) => {
-      reject(error);
-    };
-    reader.readAsArrayBuffer(file)
-  });
-}
+import './ImageUpload.css';
 
 export default ({ setImageToUpload }) => {
   const [dragging, setDragging] = useState(false);
@@ -42,8 +29,7 @@ export default ({ setImageToUpload }) => {
     setDragging(false);
     const file = e.dataTransfer.files[0]
 
-    console.log(file);
-    
+    // console.log(file);    
     setImageToUpload(file);
     updatePreview(file);
   }
@@ -69,19 +55,7 @@ export default ({ setImageToUpload }) => {
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      sx={{
-        width: '100%',
-        minHeight: '200px',
-        border: '2px dashed #090',
-        borderRadius: '15px',
-        bgcolor: '#00dd0021',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        gap: '5px',
-        padding: '20px'
-      }}
+      sx={styles.ContainerBox}
     >
       <input 
         id="profilepic"
@@ -98,7 +72,7 @@ export default ({ setImageToUpload }) => {
       <Button 
         variant="contained"
         color="success"
-        sx={{width: '80%', color: '#fff', bgcolor: '#293'}}
+        sx={UploadButton}
         startIcon={<SaveIcon/>}
         onClick={() => document.getElementById('profilepic').click()}
       >

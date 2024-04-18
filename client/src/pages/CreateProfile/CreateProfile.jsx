@@ -1,17 +1,13 @@
-import React, { useRef, useContext, useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useContext, useState } from 'react';
 import { Button, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 
+import { CreateProfile as styles } from '@src/styles';
 import { UserContext } from '@src/App';
 
 import Profile from '@API/profile';
 import ImageUpload from './ImageUpload';
 
-// import './CreateProfile.css';
-
 export default () => {
-  // const fileInput = useRef();
-  const { logout } = useAuth0();
   const { auth0UserID } = useContext(UserContext);
   const [ newFormData, setNewFormData ] = useState(null);
 
@@ -26,35 +22,34 @@ export default () => {
     const profileFormData = newFormData;
     profileFormData.append('username', e.target.username.value);
     profileFormData.append('profile_id', auth0UserID);
-    // profileFormData.append('profilepic', imageToUpload);
-    // console.log(imageToUpload);
 
-    for (const [ key, value ] of profileFormData.entries()) {
-      console.log(key, value);
-    }
-    // console.log({
-    //   username: profileFormData.get('username'),
-    //   profile_id: profileFormData.get('profile_id'),
-    //   profilepic: profileFormData.profilepic
-    // });
+    // for (const [ key, value ] of profileFormData.entries()) {
+    //   console.log(key, value);
+    // }
 
     const createRes = await Profile.create(profileFormData);
-    console.log(createRes);
+    // console.log(createRes);
   }
 
   return (
-    <Grid container sx={{height: '100vh', pt: '48px'}}>
-      {/* <Button onClick={logout} variant="contained" size="large">LOGOUT</Button> */}
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square
-        sx={{
-          margin: 'auto',
-          padding: '40px',
-        }}
+    <Grid container sx={styles.GridContainer}>
+      <Grid 
+        item
+        square
+        elevation={6}
+        component={Paper}
+        xs={12} sm={8} md={5}
+        sx={styles.InnerGrid}
       >
         <Typography component="h2" variant="h3" sx={{mb: '40px'}}>
           Create Your Profile
         </Typography>
-        <Box component="form" onSubmit={processForm} encType="multipart/form-data" sx={{display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center'}}>
+        <Box 
+          component="form"
+          onSubmit={processForm}
+          encType="multipart/form-data"
+          sx={styles.ProfileForm}
+        >
           <TextField
             margin="normal"
             required
@@ -65,9 +60,7 @@ export default () => {
             // autoComplete="email"
             autoFocus
           />
-
           <ImageUpload setImageToUpload={setImageToUpload} />
-          
           <Button
             type="submit"
             fullWidth

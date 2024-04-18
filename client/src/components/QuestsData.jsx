@@ -38,9 +38,9 @@ export default ({ children }) => {
         updateProfile(response);    
       }    
     },
-    // IMPORTANT: delete needs to check for children and 
-    // cancel operation or delete everything
     deleteQuest: function (index) {
+      // IMPORTANT: delete needs to check for children and 
+      // cancel operation or delete everything
       Quest.delete(questList[index].quest_id);
       removeFromQuestlist(index);
     }

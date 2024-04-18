@@ -1,9 +1,8 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-import { Alert, Box, Button, Grid, Paper, Typography } from '@mui/material';
-
-// import './LandingPage.css';
+import { LandingPage as styles } from '@src/styles';
+import { Alert, Box, Button, Grid, Typography } from '@mui/material';
 
 export default () => {
   const { loginWithRedirect } = useAuth0();
@@ -15,29 +14,10 @@ export default () => {
         xs={false}
         sm={4}
         md={7}
-        sx={{
-          background: 'radial-gradient(transparent, #212121 70%), url(https://i.ibb.co/VgHTkTg/bg-dark-torch.jpg)',
-          backgroundRepeat: 'no-repeat',
-          backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
+        sx={styles.Herobg}
       />
-      <Grid item xs={12} sm={8} md={5} sx={{background: 'linear-gradient(to left, #000, #212121)'}}>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            width: '75%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            marginTop: '50%',
-            transform: 'translateY(-50%)',
-            gap: '2em'
-          }}
-        >
+      <Grid item xs={12} sm={8} md={5} sx={styles.WelcomeGrid}>
+        <Box sx={styles.WelcomeGridBox}>
           <Typography component="h1" variant="h2">
             Quest Log
           </Typography>
