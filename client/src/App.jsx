@@ -1,5 +1,6 @@
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect, createContext } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -7,6 +8,8 @@ import NavBar from '@src/components/NavBar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import CreateProfile from './pages/CreateProfile/CreateProfile';
 import MainApp from './pages/MainApp/MainApp';
+import Dashboard from './pages/MainApp/Dashboard/Dashboard';
+import QuestLog from './pages/MainApp/QuestLog/QuestLog';
 
 import Profile from '@API/profile';
 
@@ -73,7 +76,7 @@ const Navigator = () => {
     <UserContext.Provider value={{
       auth0UserID: user?.sub.split('|')[1] || ''
     }}>
-      <NavBar />
+      <NavBar navMenu={false} />
       <CreateProfile />
     </UserContext.Provider>
   )
@@ -86,8 +89,15 @@ const Navigator = () => {
         updateProfile
       }}
     >
-      <NavBar />
-      <MainApp />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainApp />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/quest-log" element={<QuestLog />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      {/* <MainApp /> */}
     </UserContext.Provider>
   )
 }

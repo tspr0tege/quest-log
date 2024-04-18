@@ -9,32 +9,24 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Paper, 
+  Paper,
+  Stack,
+  TextField,
   Typography 
 } from '@mui/material';
 
 // import { UserContext } from '@src/App';
 import { QuestContext } from '@src/components/QuestsData';
 import { Dashboard as styles } from '@src/styles';
+import OptionsButton from './OptionsButton';
+import NewQuestButton from './NewQuestButton';
 
-const AddIcon = createSvgIcon(
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={2}
-    stroke="currentColor"
-  >
-    <path d="M12 4.5v15m7.5-7.5h-15" />
-  </svg>,
-  'Add'
-);
+
 
 export default () => {
   // const { userProfile } = useContext(UserContext);
-  const { questList, completeQuest } = useContext(QuestContext);
+  const { questList, controller } = useContext(QuestContext);
   const [ targetIndex, setTargetIndex ] = useState(0);
-  const [ showOptionsMenu, setShowOptionsMenu ] = useState(null);
   const [ questsLoaded, setQuestsLoaded ] = useState(false);
 
   useEffect(() => {
@@ -43,18 +35,13 @@ export default () => {
     }    
   }, [questList]);
 
-  function closeOptionsMenu() {
-    setShowOptionsMenu(null);
-  }
-
-  function openOptionsMenu(event) {
-    setShowOptionsMenu(event.currentTarget);
-  }
-
-  function handleOptionsSelection(event) {
-    switch(event.target.innerText) {
+  function handleOptionsSelection(optionSelection) {
+    switch(optionSelection) {
       case 'Delete':
-        console.log("Delete!");
+        controller.deleteQuest(targetIndex);
+        if (targetIndex >= questList.length -1) {
+          setTargetIndex(0);
+        }
         break;
       case 'Stash':
         console.log("Send task back to the vault.");
@@ -66,10 +53,11 @@ export default () => {
           setTargetIndex(targetIndex + 1);
         }
         break;
+      case 'Edit':
+        break;
       default:
         console.error("Input was detected in the options menu, but unable to indentify the option selected.");
     }
-    closeOptionsMenu();
   }
   
   return (
@@ -82,8 +70,8 @@ export default () => {
 
           {/* Title */}
           <Box>
-            <Typography variant="h6">              
-              Title
+            <Typography>              
+              Task ( {targetIndex + 1} / {questList?.length} )
             </Typography>
               {questList && 
                 <Typography variant="h6">
@@ -113,7 +101,7 @@ export default () => {
               variant="contained"
               size="medium"
               onClick={() => {
-                completeQuest(targetIndex);
+                controller.completeQuest(targetIndex);
                 if (targetIndex >= questList.length - 1) {
                   setTargetIndex(0)
                 }
@@ -122,43 +110,8 @@ export default () => {
             >
               Complete
             </Button>
-            <IconButton size="large" sx={styles.iconButton}>
-              <AddIcon />
-            </IconButton>
-            <Button
-              id="options-button"
-              variant="outlined" 
-              size="medium"
-              aria-controls={!!showOptionsMenu ? 'options-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={!!showOptionsMenu ? 'true' : undefined}
-              onClick={openOptionsMenu}
-            >
-              Options...
-            </Button>
-            <Menu 
-              id="options-menu"
-              anchorEl={showOptionsMenu}
-              open={!!showOptionsMenu} 
-              onClose={closeOptionsMenu}
-              MenuListProps={{
-                'aria-labelledby': 'options-button',
-              }}
-            >
-              <Box sx={styles.optionsMenuBox}>
-                <MenuItem onClick={handleOptionsSelection}>
-                  Skip
-                </MenuItem>
-                <Divider />
-                <MenuItem disabled onClick={handleOptionsSelection}>
-                  Stash
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleOptionsSelection}>
-                  Delete
-                </MenuItem>
-              </Box>
-            </Menu>
+            <NewQuestButton createQuest={controller.createQuest} />
+            <OptionsButton handleOptionsSelection={handleOptionsSelection}/>
           </Box>
 
         </Grid>

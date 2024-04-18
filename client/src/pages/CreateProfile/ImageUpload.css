@@ -1,0 +1,15 @@
+.file-upload {
+
+}
+
+.dragging {
+  border: 1px solid #090;
+  border-radius: 5px;
+  background-color: #00dd0011;
+}
+
+.preview-image {
+  height: 160px;
+  width: 160px;
+  object-fit: cover;
+}

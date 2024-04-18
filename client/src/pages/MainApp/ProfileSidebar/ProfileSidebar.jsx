@@ -9,7 +9,7 @@ export default () => {
   const { userProfile } = useContext(UserContext);
 
   return (
-    <Box>
+    <Box sx={{bgcolor: 'primary.main', p: '20px', pb: 0}}>
       {!!userProfile &&
         <>
           <Typography component="h3">
@@ -23,7 +23,7 @@ export default () => {
             {userProfile.name}
           </Typography>
           <Typography component="h3">
-            Image
+            Profile Photo
           </Typography>
           <img 
             style={{

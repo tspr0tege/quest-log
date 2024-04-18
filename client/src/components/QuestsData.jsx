@@ -19,15 +19,32 @@ export default ({ children }) => {
     }
   });
 
-  async function completeQuest(index) {    
-    const response = await Quest.complete(questList[index].quest_id, user);
-
-    // response object will contain profile fields that have been updated
-    if (!!response?.exp) {
+  const controller = {
+    createQuest: async function (e) {
+      e.preventDefault();
+      const { form } = e.target;
+      let newQuest = await Quest.create({
+        title: form.title.value
+      }, user);
+      form.title.value = '';
+      setQuestList([...questList, newQuest]);
+    },
+    completeQuest: async function (index) {    
+      const response = await Quest.complete(questList[index].quest_id, user);
+  
+      // response object will contain profile fields that have been updated
+      if (!!response?.exp) {
+        removeFromQuestlist(index);
+        updateProfile(response);    
+      }    
+    },
+    // IMPORTANT: delete needs to check for children and 
+    // cancel operation or delete everything
+    deleteQuest: function (index) {
+      Quest.delete(questList[index].quest_id);
       removeFromQuestlist(index);
-      updateProfile(response);    
-    }    
-  }
+    }
+  } 
 
   function removeFromQuestlist(index) {
     const newList = [...questList];
@@ -39,7 +56,7 @@ export default ({ children }) => {
     <QuestContext.Provider
       value={{ 
         questList,
-        completeQuest
+        controller
       }}
     >
       {children}

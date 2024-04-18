@@ -6,6 +6,7 @@ export const Dashboard = {
   },
   paper: {
     width: '50%',
+    padding: '20px',
     flexGrow: 1,
   },
   grid: {
