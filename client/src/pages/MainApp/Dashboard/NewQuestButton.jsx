@@ -50,7 +50,7 @@ export default ({ createQuest }) => {
           'aria-labelledby': 'new-task-button'
         }}
       >
-        <Box component="form" sx={{minWidth: '30vw'}}>
+        <Box component="form" sx={{minWidth: '30vw', padding: '20px'}}>
           <TextField 
             autoFocus
             required

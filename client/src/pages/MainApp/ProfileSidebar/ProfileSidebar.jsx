@@ -11,17 +11,20 @@ export default () => {
       {!!userProfile &&
         <>
           <Typography component="h3">
-            Name
+            Name:
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ mb: { xs: 2, sm: 4 } }}
+            sx={{ 
+              mb: { xs: 2, sm: 4 },
+              fontSize: '24px',
+            }}
           >
             {userProfile.name}
           </Typography>
           <Typography component="h3">
-            Profile Photo
+            Profile Photo:
           </Typography>
           <img 
             style={{
@@ -32,12 +35,16 @@ export default () => {
             src={userProfile.photo_url} alt="Profile Picture" 
           />
           <Typography component="h3">
-            Level
+            Level:
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ mb: { xs: 2, sm: 4 } }}
+            sx={{ 
+              mb: { xs: 2, sm: 4 },
+              fontSize: '64px',
+              textAlign: 'center'
+            }}
           >
             {userProfile.level}
           </Typography>
@@ -47,7 +54,11 @@ export default () => {
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ mb: { xs: 2, sm: 4 } }}
+            sx={{ 
+              mb: { xs: 2, sm: 4 },
+              fontSize: '24px',
+              textAlign: 'center'
+            }}
           >
             {userProfile.exp} / {Math.floor(100 * Math.pow(1.1, userProfile.level - 1))}
           </Typography>

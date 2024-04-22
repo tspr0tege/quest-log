@@ -36,7 +36,8 @@ export const Dashboard = {
   container: {
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   paper: {
     bgcolor: '#191919',
