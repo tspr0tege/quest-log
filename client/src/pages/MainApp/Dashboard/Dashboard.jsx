@@ -1,30 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { createSvgIcon } from '@mui/material/utils';
-import { 
-  Box, 
-  Button, 
-  Container,
-  Divider,
-  Grid, 
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Stack,
-  TextField,
-  Typography 
-} from '@mui/material';
+import { Box, Button, Container, Grid, Paper, Typography } from '@mui/material';
 
-// import { UserContext } from '@src/App';
 import { QuestContext } from '@src/components/QuestsData';
 import { Dashboard as styles } from '@src/styles';
 import OptionsButton from './OptionsButton';
-import NewQuestButton from './NewQuestButton';
+import NewQuestButton from '@src/components/NewQuestButton';
 
 
 
 export default () => {
-  // const { userProfile } = useContext(UserContext);
   const { questList, controller } = useContext(QuestContext);
   const [ targetIndex, setTargetIndex ] = useState(0);
   const [ questsLoaded, setQuestsLoaded ] = useState(false);

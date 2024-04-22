@@ -79,7 +79,7 @@ const Navigator = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainApp />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<QuestLog />} /> {/*Dashboard*/}
             <Route path="/quest-log" element={<QuestLog />} />
           </Route>
         </Routes>

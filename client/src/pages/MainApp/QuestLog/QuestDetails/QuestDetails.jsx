@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Button from '@src/components/Button.jsx';
 
-import './QuestDetails.css';
+// import './QuestDetails.css';
 
 const deleteWarning = 'This will permanently delete this quest from the database. Are you sure?';
 
