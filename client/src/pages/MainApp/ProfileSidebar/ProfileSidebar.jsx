@@ -3,8 +3,6 @@ import { Box, Typography } from '@mui/material';
 
 import { UserContext } from '@src/App';
 
-// import './ProfileSidebar.css';
-
 export default () => {
   const { userProfile } = useContext(UserContext);
 

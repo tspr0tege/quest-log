@@ -24,7 +24,7 @@ export default ({ handleOptionsSelection }) => {
       <Button
         id="options-button"
         variant="outlined" 
-        size="medium"
+        size="large"
         aria-controls={!!showOptionsMenu ? 'options-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={!!showOptionsMenu ? 'true' : undefined}

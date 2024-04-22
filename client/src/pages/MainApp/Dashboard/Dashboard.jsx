@@ -66,40 +66,52 @@ export default () => {
         Dashboard
       </Typography>
       <Paper sx={styles.paper}>
-        <Grid sx={styles.grid}>
+        <Grid sx={styles.paperGrid}>
 
           {/* Title */}
           <Box>
-            <Typography>              
-              Task ( {targetIndex + 1} / {questList?.length} )
-            </Typography>
-              {questList && 
-                <Typography variant="h6">
-                  {questList[targetIndex].title}
-                </Typography>
-              }
+            {questList && 
+              <Typography variant="h6" sx={{bgcolor: '#333', p: '15px'}}>
+                {questList[targetIndex].title}
+              </Typography>
+            }
           </Box>
 
           {/* Description */}
-          <Box>
+          <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
             <Typography variant="h6">
               Description
             </Typography>
-            <Typography></Typography>
+            <Typography sx={{flexGrow: 1, bgcolor: '#333', p: '15px'}}>
+
+            </Typography>
           </Box>
 
           {/* Rewards - Tally, Streak, XP, AZ reward */}
           <Box>
             <Typography variant="h6">
-              Rewards
+              Stats / Rewards
             </Typography>
+            <Grid sx={styles.rewardsGrid}>
+              <Box sx={styles.rewardsBox}>
+                <Typography>              
+                  Task ( {targetIndex + 1} / {questList?.length} )
+                </Typography>
+              </Box>
+              <Box sx={styles.rewardsBox}>
+                XP
+              </Box>
+              <Box sx={styles.rewardsBox}>
+                Bonus XP
+              </Box>
+            </Grid>
           </Box>
 
           {/* Controls - Complete, Add, Options(Delete, Skip, Stash) */}
           <Box sx={styles.controlsBox}>
             <Button 
               variant="contained"
-              size="medium"
+              size="large"
               onClick={() => {
                 controller.completeQuest(targetIndex);
                 if (targetIndex >= questList.length - 1) {

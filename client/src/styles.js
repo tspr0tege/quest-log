@@ -2,6 +2,20 @@ export const muiTheme = {
   fill: {
     backgroundColor: 'primary'
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        outlined: {
+          color: '#eee',
+          borderColor: '#eeeeee88',
+          '&:hover': {
+            borderColor: '#eeeeeedd',
+            backgroundColor: '#ffffff22',
+          },
+        },
+      },
+    },
+  },
   palette: {
     mode: 'dark',
     primary: {
@@ -10,7 +24,13 @@ export const muiTheme = {
       dark: '#41280e'
     }
   }
-}
+};
+
+// #424549;
+// #36393e;
+// #282b30;
+// #1e2124;
+// #0e1113;
 
 export const Dashboard = {
   container: {
@@ -19,23 +39,39 @@ export const Dashboard = {
     flexDirection: 'column'
   },
   paper: {
+    bgcolor: '#191919',
     width: '50%',
     padding: '20px',
-    flexGrow: 1,
+    pb: 0,
+    flexGrow: 1
   },
-  grid: {
+  paperGrid: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    gap: '20px'
   },
   controlsBox: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    padding: '10px'
   },
   iconButton: {
     bgcolor:'primary.main'
+  },
+  rewardsGrid: {
+    display: 'flex',
+    gap: '25px'
+  },
+  rewardsBox: {
+    height: '50px',
+    bgcolor: '#333',
+    width: '33%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   optionsMenuBox: {
     minWidth: '100px'
