@@ -1,35 +1,47 @@
-import React, { useEffect } from 'react';
-import Modal from 'react-modal';
+import React, { useState, createContext } from 'react';
+import { Modal, Paper } from '@mui/material';
 
-Modal.setAppElement('#app');
 const modalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    height: 'fit-content',
-    maxHeight: '85vh',
-    overflowY: 'auto',
-    backgroundColor: 'var(--brown)'
-  },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)'
-  }
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  height: 'fit-content',
+  maxHeight: '85vh',
+  overflowY: 'auto',
+  padding: '20px'
 };
 
-export default ({modalControls, showModal, children}) => {
-  // const [ showModal, setShowModal ] = useState(false);
+export const ModalContext = createContext();
 
-  // useEffect(() => {}, [showModal]);
+export default ({ children, resetTrigger = () => {} }) => {
+  const [ showModal, setShowModal ] = useState(true);
+
+  const modalControls = {
+    open: () => {
+      setShowModal(true)
+    },
+    close: () => {
+      resetTrigger();
+      setShowModal(false);
+    }
+  };
   
   return (
     <Modal
-      style={modalStyle}
-      isOpen={showModal}
-      onRequestClose={modalControls.close}
-      shouldCloseOnOverlayClick={true}
+      open={showModal}
+      onClose={modalControls.close}
     >
-      {children}
+      <ModalContext.Provider
+        value={{
+          modalControls,
+        }}      
+      >
+        <Paper sx={modalStyle}>
+
+          {children}
+        </Paper>
+      </ModalContext.Provider>
     </Modal>
   )
 }

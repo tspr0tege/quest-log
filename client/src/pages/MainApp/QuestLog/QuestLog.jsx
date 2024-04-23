@@ -1,14 +1,18 @@
-import React, { useContext } from 'react';
-import { Box, Container, Divider, Grid, IconButton, List, ListItemButton, Paper, Typography } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Box, Container, Divider, IconButton, List, ListItemButton, Paper, Typography } from '@mui/material';
 
+import Modal from '@src/components/Modal';
 import { QuestContext } from '@src/components/QuestsData';
 import NewQuestButton from '@src/components/NewQuestButton';
+import QuestEdit from './QuestEdit';
 // import { Dashboard as styles } from '@src/styles';
 import EditIcon from '@src/icons/highlighter.svg';
 import CompleteIcon from '@src/icons/check-mark.svg';
 
 export default () => {
   const { questList, controller } = useContext(QuestContext);
+
+  const [targetIndex, setTargetIndex] = useState(null);
 
   return (
     <Container sx={{height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -25,9 +29,16 @@ export default () => {
                     {quest.title}
                   </Typography>
                   <Box sx={{display: 'flex'}}>
-                    <IconButton aria-label="edit quest details" sx={{fontSize: '16px'}}>
+                    <IconButton 
+                      aria-label="edit quest details" 
+                      sx={{fontSize: '16px'}}
+                      onClick={() => {
+                        setTargetIndex(index)
+                      }}
+                    >
                       <EditIcon />
                     </IconButton>
+                    {/* TODO: ADD DELETE BUTTON */}
                     <IconButton 
                       aria-label="complete quest" 
                       sx={{fontSize: '16px'}} 
@@ -44,6 +55,11 @@ export default () => {
             )
           })}
         </List>}
+        {(targetIndex !== null) &&
+          <Modal resetTrigger={() => {setTargetIndex(null)}}>
+            <QuestEdit targetIndex={targetIndex} />
+          </Modal>
+        }
         <Box sx={{alignSelf: 'center'}}>
           <NewQuestButton  createQuest={controller.createQuest} />
         </Box>

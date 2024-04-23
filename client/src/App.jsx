@@ -14,7 +14,7 @@ import { muiTheme } from '@src/styles'
 
 import Profile from '@API/profile';
 
-const UserContext = createContext();
+export const UserContext = createContext();
 const defaultTheme = createTheme(muiTheme);
 
 export default () => (
@@ -88,4 +88,4 @@ const Navigator = () => {
   )
 }
 
-export { UserContext };
+// export { UserContext };
