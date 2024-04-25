@@ -11,10 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@auth0/auth0-react": "^1.11.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-regular-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.16",
     "axios": "^0.26.1",
     "babel-loader": "^9.1.0",
     "dotenv": "^16.0.0",
@@ -29,12 +25,14 @@
     "react-modal": "^3.14.4",
     "rpg-awesome": "^0.2.0",
     "sequelize": "^6.19.0",
-    "stormdb": "^0.5.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.15",
     "@svgr/webpack": "^6.5.1",
     "css-loader": "^6.7.1",
     "react-router-dom": "^6.3.0",
