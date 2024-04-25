@@ -20,6 +20,7 @@ export default ({ children }) => {
   });
 
   const controller = {
+
     createQuest: async function (e) {
       e.preventDefault();
       const { form } = e.target;
@@ -29,21 +30,30 @@ export default ({ children }) => {
       form.title.value = '';
       setQuestList([...questList, newQuest]);
     },
-    editQuest: function (index, editInfo) {
-      // const editInfo = {
-      //   quest_id: quest.quest_id,
-      //   title: questData.title[0],
-      //   notes: questData.notes[0],
-      //   parent_id: questData.parent[0].quest_id
-      // };
+
+    editQuest: async function (index, editInfo) {
       for (const [key, value] of Object.entries(editInfo)) {
         if (key === 'quest_id') continue;
-        
-        if (questList[index][key] === value) {
+        // Second condition below covers comparing null to ""
+        if ((questList[index][key] === value) || (!value && !questList[index][key])) {
           delete editInfo[key];
         }
       }
+      if (Object.keys(editInfo).length > 1) {
+        const listToLoad = [...questList];
+        const updatedQuests = await Quest.edit(editInfo);
+        updatedQuests.forEach((updatedQuest) => {
+          let indexOfExistingQuest = listToLoad.findIndex((quest) => {
+            return quest.quest_id === updatedQuest.quest_id;
+          });
+          listToLoad[indexOfExistingQuest] = updatedQuest;
+        });
+        setQuestList(listToLoad);
+      } else {
+        console.log('No changes made.');
+      }
     },
+
     completeQuest: async function (index) {    
       const response = await Quest.complete(questList[index].quest_id, user);
   
@@ -53,6 +63,7 @@ export default ({ children }) => {
         updateProfile(response);    
       }    
     },
+
     deleteQuest: function (index) {
       // IMPORTANT: delete needs to check for children and 
       // cancel operation or delete everything
