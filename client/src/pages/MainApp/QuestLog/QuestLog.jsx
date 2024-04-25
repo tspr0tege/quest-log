@@ -5,9 +5,10 @@ import Modal from '@src/components/Modal';
 import { QuestContext } from '@src/components/QuestsData';
 import NewQuestButton from '@src/components/NewQuestButton';
 import QuestEdit from './QuestEdit';
-// import { Dashboard as styles } from '@src/styles';
+
 import EditIcon from '@src/icons/highlighter.svg';
 import CompleteIcon from '@src/icons/check-mark.svg';
+import DeleteIcon from '@src/icons/trash-can.svg';
 
 export default () => {
   const { questList, controller } = useContext(QuestContext);
@@ -38,7 +39,15 @@ export default () => {
                     >
                       <EditIcon />
                     </IconButton>
-                    {/* TODO: ADD DELETE BUTTON */}
+                    <IconButton 
+                      aria-label="delete quest" 
+                      sx={{fontSize: '16px'}}
+                      onClick={() => {
+                        controller.deleteQuest(index)
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                     <IconButton 
                       aria-label="complete quest" 
                       sx={{fontSize: '16px'}} 

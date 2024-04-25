@@ -25,7 +25,7 @@ export default {
     const putData = { user, questId };
     return await Axios.put('/quests/complete', putData)
     // response object should include status message and updated user data
-    .then(({ data }) => {data})
+    .then(({ data }) => data)
     .catch(console.error);
   },
   delete: (questId) => {
