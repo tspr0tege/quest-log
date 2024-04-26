@@ -16,10 +16,11 @@ const storage = multer.diskStorage({
     cb(null, './profile_pics');
   },
   filename: function (req, file, cb) {
+    // console.log(file.originalname, file)
     const time = '' + Date.now();
     const rando = Math.floor(Math.random() * 50000);
     const ext = file.mimetype.split('/')[1];
-    console.log("Multer file name: " + file.filename);
+    // console.log("Multer file name: " + file.filename);
     cb(null, `${time}_${rando}.${ext}`);
   }
 });
@@ -52,26 +53,26 @@ router.route('/:user')
     }
   });
   
-  router.route('/')
-    .post(upload.single('profilepic'), async (req, res, next) => {
-      console.log('Profile POST received.')
-      const responseObj = {};
-      if (fileSaved) { //  success
-        responseObj.photo_url = '/profile_pics/' + req.file.filename;
-        responseObj.profile_id = req.body.profile_id;
-        responseObj.name = req.body.username;
-        try {
-          responseObj.dbResponse = await Profile.create({...responseObj});
-        } catch (err) {
-          console.log(err);
-        }
-
-        res.status(200).send(responseObj);
-      } else {  //  error
-        responseObj.error = "Unable to save file. Please upload: jpg, jpeg, or png format.";
-        res.status(500).send(responseObj);
+router.route('/')
+  .post(upload.single('profilepic'), async (req, res, next) => {
+    console.log('Profile POST received.')
+    const responseObj = {};
+    if (fileSaved) { //  success
+      responseObj.photo_url = '/profile_pics/' + req.file.filename;
+      responseObj.profile_id = req.body.profile_id;
+      responseObj.name = req.body.username;
+      try {
+        responseObj.dbResponse = await Profile.create({...responseObj});
+      } catch (err) {
+        console.log(err);
       }
-    });
+      res.status(200).send(responseObj);
+    } else {  //  error
+      console.log('ERROR:', error)
+      responseObj.error = "Unable to save file. Please upload: jpg, jpeg, or png format.";
+      res.status(500).send(responseObj);
+    }
+  });
   // .post(async (req, res) => {
   //   let newQuest;
   //   try {
