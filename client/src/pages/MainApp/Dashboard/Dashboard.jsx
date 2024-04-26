@@ -54,7 +54,7 @@ export default () => {
 
           {/* Title */}
           <Box>
-            {questList && 
+            {questList?.length > 0 && 
               <Typography variant="h6" sx={{bgcolor: '#333', p: '15px'}}>
                 {questList[targetIndex].title}
               </Typography>
@@ -64,11 +64,13 @@ export default () => {
           {/* Description */}
           <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
             <Typography variant="h6">
-              Description
+              Details
             </Typography>
-            <Typography sx={{flexGrow: 1, bgcolor: '#333', p: '15px'}}>
-
-            </Typography>
+            {questList?.length > 0 && 
+              <Typography sx={{flexGrow: 1, bgcolor: '#333', p: '15px'}}>
+                {questList[targetIndex].notes}
+              </Typography>
+            }
           </Box>
 
           {/* Rewards - Tally, Streak, XP, AZ reward */}
