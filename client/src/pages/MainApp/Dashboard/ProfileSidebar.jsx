@@ -7,7 +7,7 @@ export default () => {
   const { userProfile } = useContext(UserContext);
 
   return (
-    <Box sx={{bgcolor: 'primary.main', p: '20px', pb: 0}}>
+    <Box sx={{display: {xs: 'none', md: 'block'}, bgcolor: 'primary.main', p: '20px', pb: 0}}>
       {!!userProfile &&
         <>
           <Typography component="h3">
