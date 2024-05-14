@@ -20,7 +20,7 @@ export default () => {
       <Typography component="h3" variant='h4'>
         Quest Log
       </Typography>
-      <Paper sx={{bgcolor: '#191919', width: '50%', padding: '20px', flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
+      <Paper sx={{bgcolor: '#191919', minWidth: {xs: '100vw', sm: '500px'}, width: '50%', padding: '20px', flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
         {questList && <List sx={{flexGrow: 1}}>
           {questList.map((quest, index) => {
             return (

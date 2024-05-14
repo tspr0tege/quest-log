@@ -9,7 +9,7 @@ import ProfileSidebar from './Dashboard/ProfileSidebar';
 export default () => (
   <>
     <NavBar />
-    <Grid container sx={{height: '100%', pt: '48px'}}>
+    <Grid container sx={{height: '100%', pt: '48px', flexWrap: 'nowrap'}}>
       <ProfileSidebar />
       <QuestsData>
         <Outlet />          

@@ -41,6 +41,7 @@ export const Dashboard = {
   },
   paper: {
     bgcolor: '#191919',
+    minWidth: {xs: '100vw', sm: '500px'},
     width: '50%',
     padding: '20px',
     pb: 0,
