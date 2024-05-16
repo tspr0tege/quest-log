@@ -85,12 +85,24 @@ export const NavBar = {
     justifyContent: 'flex-end'
   },
   toolbarBox: {
-    display: 'flex', 
-    flexGrow: 1
+    standard: {
+      display: 'flex', 
+      flexGrow: 1
+    },
+    mobile: {
+      display: 'flex', 
+      flexGrow: 1
+    }
   },
-  menuItem: { 
-    py: '6px', 
-    px: '12px' 
+  menuItem: {
+    standard: {
+      py: '6px', 
+      px: '12px'
+    },
+    mobile: {
+      py: '6px', 
+      px: '12px'
+    }
   },
 };
 
