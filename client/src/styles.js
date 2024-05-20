@@ -91,7 +91,9 @@ export const NavBar = {
     },
     mobile: {
       display: 'flex', 
-      flexGrow: 1
+      flexGrow: 1,
+      minWidth: '200px',
+      flexDirection: 'column',
     }
   },
   menuItem: {
