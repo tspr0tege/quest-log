@@ -5,173 +5,80 @@ import App from './src/App.jsx';
 
 // render(<App />, document.getElementById('app'));
 
-import { useState, useRef, memo } from 'react';
-
-const ChildList = memo(({ children, dragOver }) => {
-  console.log("Rendering ChildList")
-  return (
-    <ol 
-        style={{ 
-          padding: '1em',
-          listStyle: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '4px'
-        }} 
-        onDragOver={dragOver}
-      >
-        {children}
-      </ol>
-  );
-})
-
-const DraggableList = ({ listItems }) => {
-  const dropIndicatorRef = useRef(null);
-  // const indicatorHome = useRef(null);
-
-  const [list, setList] = useState(listItems);
-  // const [draggedItemIndex, setDraggedItemIndex] = useState(null);
-  // const [dropIndex, setDropIndex] = useState(null);
-  const draggedItemIndex = useRef(null);
-  const dropIndex = useRef(null);
-
-  // onDrag, onDrop, onDragOver, onDragStart, onDragEnd, onDragEnter, onDragLeave
-
-  function pickupListItem(event, index) {
-    const olContainer = event.currentTarget.parentElement; // Create closure for element
-
-    console.log("picking up index: ", index)
-    dropIndex.current = index;
-    draggedItemIndex.current = index;
-    dropIndicatorRef.current.style.display = 'block';
-
-    setTimeout(() => { // handle DOM manipulation in setTimeout - this is a BUG in Chrome?
-      olContainer.style.gap = '1em';
-    }, 0);
+const testData = {
+  "410038db-8b88-4109-bb1c-de49506f4a10": {
+    "quest_id": "410038db-8b88-4109-bb1c-de49506f4a10",
+    "owner_id": "627174590b1479006f5e723d",
+    "title": "Turn Nginx notes into two blog articles",
+    "notes": null,
+    "parent_id": null,
+    "prog_to_parent": null,
+    "time_frame": null,
+    "progress": 0,
+    "is_complete": false,
+    "createdAt": "2023-12-20T06:03:23.720Z",
+    "updatedAt": "2023-12-20T06:03:23.720Z",
+    "child_ids": []
+  },
+  "66cd5f10-0f11-4f92-b378-5423413af22f": {
+    "quest_id": "66cd5f10-0f11-4f92-b378-5423413af22f",
+    "owner_id": "627174590b1479006f5e723d",
+    "title": "Purchase squall-leonhart.codes on namecheap",
+    "notes": null,
+    "parent_id": null,
+    "prog_to_parent": null,
+    "time_frame": null,
+    "progress": 0,
+    "is_complete": false,
+    "createdAt": "2024-09-09T19:02:00.118Z",
+    "updatedAt": "2024-09-09T19:02:00.118Z",
+    "child_ids": []
+  },
+  "01e522ba-066c-4792-8a83-d1e6852a7da6": {
+    "quest_id": "01e522ba-066c-4792-8a83-d1e6852a7da6",
+    "owner_id": "627174590b1479006f5e723d",
+    "title": "Call Kia about recalls",
+    "notes": null,
+    "parent_id": null,
+    "prog_to_parent": null,
+    "time_frame": null,
+    "progress": 0,
+    "is_complete": false,
+    "createdAt": "2024-10-22T03:17:29.921Z",
+    "updatedAt": "2024-10-22T03:17:29.921Z",
+    "child_ids": ["80d83c79-9d80-48f9-9efa-f36d26fba3ab"]
+  },
+  "80d83c79-9d80-48f9-9efa-f36d26fba3ab": {
+    "quest_id": "80d83c79-9d80-48f9-9efa-f36d26fba3ab",
+    "owner_id": "627174590b1479006f5e723d",
+    "title": "Do research on vehicles",
+    "notes": null,
+    "parent_id": "01e522ba-066c-4792-8a83-d1e6852a7da6",
+    "prog_to_parent": null,
+    "time_frame": null,
+    "progress": 0,
+    "is_complete": false,
+    "createdAt": "2024-10-22T03:17:48.360Z",
+    "updatedAt": "2024-10-22T03:17:48.360Z",
+    "child_ids": []
+  },
+  "9f097798-d47d-40ce-868e-685d7469a71c": {
+    "quest_id": "9f097798-d47d-40ce-868e-685d7469a71c",
+    "owner_id": "627174590b1479006f5e723d",
+    "title": "Look into legal structures to protect my income",
+    "notes": null,
+    "parent_id": null,
+    "prog_to_parent": null,
+    "time_frame": null,
+    "progress": 0,
+    "is_complete": false,
+    "createdAt": "2024-10-22T03:18:14.080Z",
+    "updatedAt": "2024-10-22T03:18:14.080Z",
+    "child_ids": []
   }
-
-  function dropListItem(event) {
-    console.log("dropping")
-
-    const newList = [...list];
-    console.log('Drop index: ', dropIndex.current);
-    // returnIndicator();
-    dropIndicatorRef.current.parentElement?.removeChild(dropIndicatorRef.current);
-    newList.splice(draggedItemIndex.current, 1);
-    newList.splice(dropIndex.current, 0, list[draggedItemIndex.current]);
-    draggedItemIndex.current = null;
-    dropIndex.current = null;
-    setList(newList);
-    event.currentTarget.parentElement.style.gap = '4px';
-  }
-
-  let lastMouseY = null;
-
-  function handleDraggingToPosition(e) { // process context is ol
-    e.preventDefault();
-    console.log("dragging")
-    const mouseY = e.clientY;
-    const targetList = e.currentTarget.querySelectorAll(':scope > li');
-
-    if (lastMouseY === null || Math.abs(lastMouseY - mouseY) > 5) {
-      lastMouseY = mouseY;
-      const targetIndex = findListPosition(mouseY, targetList);
-      // console.log(targetIndex);
-      dropIndex.current = targetIndex;
-    }
-  }
-
-  function returnIndicator() {
-    dropIndicatorRef.current.style.display = 'none';
-    indicatorHome.current.appendChild(dropIndicatorRef.current);
-  }
-
-  function findListPosition(mouseY, targetList) {
-    for (let i = 0; i < targetList.length; i++) {
-      const child = targetList[i];
-      const itemBox = child.getBoundingClientRect();
-
-      if (mouseY < itemBox.top) {
-        child.insertAdjacentElement('beforebegin', dropIndicatorRef.current);
-        return (draggedItemIndex.current < i) ? i - 1 : i;
-      }
-    }
-    targetList[targetList.length - 1].insertAdjacentElement('afterend', dropIndicatorRef.current);
-    return targetList.length - 1;
-  }
-
-  return (
-    <>
-      <ChildList dragOver={handleDraggingToPosition}>
-        {list.map((listItem, index) => (
-          <li
-            key={index}
-            draggable
-            style={{ border: '1px solid', padding: '8px' }}
-            onDragStart={(e) => { pickupListItem(e, index) }}
-            onDragEnd={(e) => { dropListItem(e) }}
-          >
-            {listItem.title}
-          </li>
-        ))}
-      </ChildList>
-      {/* <div ref={indicatorHome}> */}
-        <div
-          ref={dropIndicatorRef}
-          style={{
-            height: '2em',
-            backgroundColor: '#0003',
-            margin: '4px 0',
-            display: 'none',
-          }}
-        />
-      {/* </div> */}
-
-    </>
-  );
-}
+};
 
 
-const DragAndDropContainer = () => {
-  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-  const newItems = [
-    {
-      title: 'Item 1',
-      children: []
-    },
-    {
-      title: 'Item 2',
-      children: [
-        {
-          title: 'Item 7',
-          children: []
-        },
-      ]
-    },
-    {
-      title: 'Item 3',
-      children: []
-    },
-    {
-      title: 'Item 4',
-      children: [
-        {
-          title: 'Item 6',
-          children: []
-        },
-      ]
-    },
-    {
-      title: 'Item 5',
-      children: []
-    },
-    {
-      title: 'Item 8',
-      children: []
-    },
-  ];
+import DnDQuestTree from '@src/components/DnDQuestTree.jsx';
 
-  return <DraggableList listItems={newItems} />;  
-}
-
-render(<DragAndDropContainer/>, document.getElementById('app'));
+render(<DnDQuestTree data={testData}/>, document.getElementById('app'));

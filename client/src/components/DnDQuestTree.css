@@ -1,0 +1,22 @@
+#quest-tree ol {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  /* margin-top: .5em; */
+}
+
+#quest-tree ol.expanded {
+  gap: 2em;
+  padding: 2em 0;
+  border: 1px solid #666;
+}
+
+#quest-tree li {
+  background-color: #efefef;
+  padding: .75em 1em;
+  border-radius: .5em;
+  font-weight: 600;
+  box-shadow: 0 0 10px 0px #0007;
+}
