@@ -9,3 +9,5 @@ server/db.stormdb
 .env
 
 profile_pics
+
+package copy.json

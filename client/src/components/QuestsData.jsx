@@ -9,13 +9,21 @@ export default ({ children }) => {
   const { userProfile: { profile_id: user }, updateProfile } = useContext(UserContext);
   const [ questList, setQuestList ] = useState(null);
 
-  useEffect(async () => {
-    if (questList === null) {
-      const newList = [], getList = await Quest.get(null, user);
-      for (let obj in getList) {
-        newList.push(getList[obj]);
-      }
+  useEffect(() => {
+    async function getQuestData() {
+      const newList = {}, getList = await Quest.get(null, user);
+      // for (let obj in getList) {
+      //   // newList.push(getList[obj]);
+      //   console.log(JSON.stringify(obj))
+      // }
+      getList.forEach((obj) => {
+          newList[obj.quest_id] = obj
+      })
+      // console.log(`newList: ${JSON.stringify(newList)}`, `getList: ${JSON.stringify(getList)}`)
       setQuestList(newList);
+    }
+    if (questList === null) {
+      getQuestData();
     }
   });
 
@@ -28,10 +36,12 @@ export default ({ children }) => {
         title: form.title.value
       }, user);
       form.title.value = '';
-      setQuestList([...questList, newQuest]);
+      const newQuestList = {...questList}
+      newQuestList[newQuest.quest_id] = newQuest
+      setQuestList(newQuestList);
     },
 
-    editQuest: async function (index, editInfo) {
+    editQuest: async function (editInfo) {
       for (const [key, value] of Object.entries(editInfo)) {
         if (key === 'quest_id') continue;
         // Second condition below covers comparing null to ""
@@ -40,13 +50,10 @@ export default ({ children }) => {
         }
       }
       if (Object.keys(editInfo).length > 1) {
-        const listToLoad = [...questList];
+        const listToLoad = {...questList};
         const updatedQuests = await Quest.edit(editInfo);
         updatedQuests.forEach((updatedQuest) => {
-          let indexOfExistingQuest = listToLoad.findIndex((quest) => {
-            return quest.quest_id === updatedQuest.quest_id;
-          });
-          listToLoad[indexOfExistingQuest] = updatedQuest;
+          listToLoad[updatedQuest.quest_id] = updatedQuest;
         });
         setQuestList(listToLoad);
       } else {
@@ -54,27 +61,27 @@ export default ({ children }) => {
       }
     },
 
-    completeQuest: async function (index) {    
-      const response = await Quest.complete(questList[index].quest_id, user);
+    completeQuest: async function (quest_id) {    
+      const response = await Quest.complete(quest_id, user);
   
       // response object will contain profile fields that have been updated
       if (!!response?.exp) {
-        removeFromQuestlist(index);
+        removeFromQuestlist(quest_id);
         updateProfile(response);    
       }    
     },
 
-    deleteQuest: function (index) {
+    deleteQuest: function (quest_id) {
       // IMPORTANT: delete needs to check for children and 
       // cancel operation or delete everything
-      Quest.delete(questList[index].quest_id);
-      removeFromQuestlist(index);
+      Quest.delete(quest_id);
+      removeFromQuestlist(quest_id);
     }
   } 
 
-  function removeFromQuestlist(index) {
-    const newList = [...questList];
-    newList.splice(index, 1);
+  function removeFromQuestlist(quest_id) {
+    const newList = {...questList};
+    delete newList[quest_id]
     setQuestList(newList);
   }
 

@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Box, Button, Container, Grid, Paper, Typography } from '@mui/material';
 
 import { QuestContext } from '@src/components/QuestsData';
-import { Dashboard as styles } from '@src/styles';
 import OptionsButton from './OptionsButton';
 import NewQuestButton from '@src/components/NewQuestButton';
 
-
+import './Dashboard.css';
 
 export default () => {
   const { questList, controller } = useContext(QuestContext);
@@ -45,15 +43,13 @@ export default () => {
   }
   
   return (
-    <Container sx={styles.container}>
-      <Typography component="h3" variant='h4'>
-        Dashboard
-      </Typography>
-      <Paper sx={styles.paper}>
-        <Grid sx={styles.paperGrid}>
+    <div className='container'>
+      <h3>Dashboard</h3>
+      <div className='paper'>
+        <div className='paper-grid'>
 
           {/* Title */}
-          <Box>
+          {/* <Box>
             {questList?.length > 0 && 
               <Typography variant="h6" sx={{bgcolor: '#333', p: '15px'}}>
                 {questList[targetIndex].title}
@@ -61,7 +57,7 @@ export default () => {
             }
           </Box>
 
-          {/* Description */}
+          {/* Description 
           <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
             <Typography variant="h6">
               Details
@@ -73,7 +69,7 @@ export default () => {
             }
           </Box>
 
-          {/* Rewards - Tally, Streak, XP, AZ reward */}
+          {/* Rewards - Tally, Streak, XP, AZ reward 
           <Box>
             <Typography variant="h6">
               Stats / Rewards
@@ -91,13 +87,11 @@ export default () => {
                 Bonus XP
               </Box>
             </Grid>
-          </Box>
+          </Box> */}
 
           {/* Controls - Complete, Add, Options(Delete, Skip, Stash) */}
-          <Box sx={styles.controlsBox}>
-            <Button 
-              variant="contained"
-              size="large"
+          <div className='controls-box'>
+            <button 
               onClick={() => {
                 controller.completeQuest(targetIndex);
                 if (targetIndex >= questList.length - 1) {
@@ -107,13 +101,13 @@ export default () => {
               disabled={!questsLoaded}
             >
               Complete
-            </Button>
+            </button>
             <NewQuestButton createQuest={controller.createQuest} />
             <OptionsButton handleOptionsSelection={handleOptionsSelection}/>
-          </Box>
+          </div>
 
-        </Grid>
-      </Paper>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

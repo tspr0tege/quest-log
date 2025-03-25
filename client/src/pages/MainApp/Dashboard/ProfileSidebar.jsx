@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Box, Typography } from '@mui/material';
 
 import { UserContext } from '@src/App';
 

@@ -1,0 +1,54 @@
+
+.container {
+  height: '100%';
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+}
+
+.paper {
+  background-color: '#191919';
+  min-width: 500px;
+  /* {xs: '100vw', sm: '500px'}, */
+  width: '50%';
+  padding: '20px';
+  padding-bottom: 0;
+  flex-grow: 1
+}
+
+.paper-grid {
+  height: '100%';
+  display: 'flex';
+  flex-direction: 'column';
+  justify-content: 'space-between';
+  gap: '20px';
+}
+
+.controls-box {
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'space-evenly';
+  padding: '10px';
+}
+
+.options-menu-box {
+  min-width: '100px';
+} 
+
+/* 
+iconButton: {
+  bgcolor:'primary.main'
+},
+rewardsGrid: {
+  display: 'flex',
+  gap: '25px'
+},
+rewardsBox: {
+  height: '50px',
+  bgcolor: '#333',
+  width: '33%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+},
+  */

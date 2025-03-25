@@ -1,0 +1,30 @@
+
+.hero-bg {  
+  /* item
+  xs={false}
+  sm={4}
+  md={7}
+  sx={styles.Herobg} */
+  background: radial-gradient(transparent, #212121 70%), url(https://i.ibb.co/VgHTkTg/bg-dark-torch.jpg);
+  background-repeat: 'no-repeat';
+  /* background-color: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900], */
+  background-size: 'cover';
+  background-position: 'center';
+}
+
+.welcome-grid {
+  /* item xs={12} sm={8} md={5} */
+  background: linear-gradient(to left, #000, #212121);
+}
+
+.welcome-grid-box {
+  /* my: 8,
+  mx: 4, */
+  width: '75%';
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  margin-top: '50%';
+  transform: 'translateY(-50%)';
+  gap: '2em';
+}

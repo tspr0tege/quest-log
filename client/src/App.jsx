@@ -1,44 +1,57 @@
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CssBaseline } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createBrowserRouter, Navigate, RouterProvider, useNavigate } from 'react-router-dom';
+
+import QuestsData from '@src/components/QuestsData';
+import ProfileSidebar from '@src/pages/MainApp/Dashboard/ProfileSidebar';
+import { setNavigationService } from './NavigationTool.js';
 
 import NavBar from '@src/components/NavBar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import CreateProfile from './pages/CreateProfile/CreateProfile';
-import MainApp from './pages/MainApp/MainApp';
 import Dashboard from './pages/MainApp/Dashboard/Dashboard';
 import QuestLog from './pages/MainApp/QuestLog/QuestLog';
-import { muiTheme } from '@src/styles'
 
 import Profile from '@API/profile';
 
 export const UserContext = createContext();
-const defaultTheme = createTheme(muiTheme);
 
-export default () => (
-  <Auth0Provider
-    domain="dev-6-2fm190.us.auth0.com"
-    clientId="oyTxYOApnYlqIYSgDsOGbmdom0LvQ0Bo"
-    redirectUri={window.location.origin}
-  >
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
-      <Navigator />
-    </ThemeProvider>
-  </Auth0Provider>
-)
 
-const Navigator = () => {
+const NavigationService = () => {
+  // console.log("Rendering NavigationService");
+  const navObject = useNavigate();
+  setNavigationService(navObject);
+
+  return null;
+}
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Navigate to="/dashboard"/>
+  },
+  {
+    path: '/dashboard',
+    element: <><NavigationService/><Dashboard /></>
+  },
+  {
+    path: '/quest-log',
+    element: <><NavigationService/><QuestLog /></>
+  },
+]);
+
+export default () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [ userProfile, setUserProfile ] = useState(null);
   const [ profileLoaded, setProfileLoaded ] = useState(false);
   
-  useEffect(async () => {
-    if (user !== undefined && userProfile === null) {
+  useEffect(() => {
+    async function getProfile() {
       const profileInfo = await Profile.get(user.sub.split('|')[1]);
       setUserProfile(profileInfo);
+    }
+    if (user !== undefined && userProfile === null) {
+      getProfile()
     }
   });
 
@@ -76,16 +89,13 @@ const Navigator = () => {
         updateProfile
       }}
     >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainApp />}>
-            <Route index element={<Dashboard />} />
-            <Route path="/quest-log" element={<QuestLog />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <NavBar />
+      <div>
+        {/* <ProfileSidebar /> */}
+        <QuestsData>
+          <RouterProvider router={router}/>
+        </QuestsData>
+      </div>
     </UserContext.Provider>
   )
 }
-
-// export { UserContext };

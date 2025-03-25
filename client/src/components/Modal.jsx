@@ -1,5 +1,4 @@
 import React, { useState, createContext } from 'react';
-import { Modal, Paper } from '@mui/material';
 
 const modalStyle = {
   position: 'absolute',
@@ -28,20 +27,21 @@ export default ({ children, resetTrigger = () => {} }) => {
   };
   
   return (
-    <Modal
-      open={showModal}
-      onClose={modalControls.close}
-    >
-      <ModalContext.Provider
-        value={{
-          modalControls,
-        }}      
-      >
-        <Paper sx={modalStyle}>
+    <></>
+    // <Modal
+    //   open={showModal}
+    //   onClose={modalControls.close}
+    // >
+    //   <ModalContext.Provider
+    //     value={{
+    //       modalControls,
+    //     }}      
+    //   >
+    //     <Paper sx={modalStyle}>
 
-          {children}
-        </Paper>
-      </ModalContext.Provider>
-    </Modal>
+    //       {children}
+    //     </Paper>
+    //   </ModalContext.Provider>
+    // </Modal>
   )
 }

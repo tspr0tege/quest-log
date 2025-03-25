@@ -1,0 +1,23 @@
+
+.grid-container {
+  height: '100vh'; 
+  padding-top: '48px';
+}
+
+.inner-grid {
+  /* item
+  square
+  elevation={6}
+  component={Paper}
+  xs={12} sm={8} md={5}
+  sx={styles.InnerGrid} */
+  margin: 'auto';
+  padding: '40px';
+}
+
+.profile-form {
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  gap: '20px';
+}

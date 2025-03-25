@@ -17,6 +17,10 @@ app.use('/profile', profileRoute);
 app.use(express.static('public'));
 app.use('/profile_pics', express.static('profile_pics'));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+});
+
 // Initialize server
 app.listen(port, () => {
   console.log(`Quest Log is live at PORT:${port}`)

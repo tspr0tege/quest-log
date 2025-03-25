@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Divider, Menu, MenuItem } from '@mui/material';
 
-import { Dashboard as styles} from '@src/styles'
 
 export default ({ handleOptionsSelection }) => {
   const [ showOptionsMenu, setShowOptionsMenu ] = useState(null);
@@ -21,7 +19,7 @@ export default ({ handleOptionsSelection }) => {
 
   return(
     <>
-      <Button
+      <button
         id="options-button"
         variant="outlined" 
         size="large"
@@ -31,30 +29,24 @@ export default ({ handleOptionsSelection }) => {
         onClick={openOptionsMenu}
       >
         Options...
-      </Button>
-      <Menu 
+      </button>
+      <div 
         id="options-menu"
-        anchorEl={showOptionsMenu}
+        // anchorEl={showOptionsMenu}
         open={!!showOptionsMenu} 
         onClose={closeOptionsMenu}
-        MenuListProps={{
-          'aria-labelledby': 'options-button',
-        }}
+        // MenuListProps={{
+        //   'aria-labelledby': 'options-button',
+        // }}
       >
-        <Box sx={styles.optionsMenuBox}>
-          <MenuItem onClick={handleClick}>
-            Skip
-          </MenuItem>
-          <Divider />
-          <MenuItem disabled onClick={handleClick}>
-            Stash
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClick}>
-            Delete
-          </MenuItem>
-        </Box>
-      </Menu>
+        <div className='options-menu-box'>
+          <a onClick={handleClick}>Skip</a>
+          <hr/>
+          <a disabled onClick={handleClick}>Stash</a>
+          <hr/>
+          <a onClick={handleClick}>Delete</a>
+        </div>
+      </div>
     </>
   );
 }

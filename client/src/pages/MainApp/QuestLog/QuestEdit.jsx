@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Box, Button, TextField } from '@mui/material';
 
 import { QuestContext } from '@src/components/QuestsData';
 import { ModalContext } from '@src/components/Modal';
@@ -24,8 +23,9 @@ export default ({ targetIndex }) => {
   }
   
   return (
-    <Box component="form" onSubmit={processEdit}>
-      <TextField
+    <form onSubmit={processEdit}>
+      <input
+        type="text"
         margin="normal"
         required
         fullWidth
@@ -35,7 +35,8 @@ export default ({ targetIndex }) => {
         // autoComplete="email"
         defaultValue={questInEdit.title}
       />
-      <TextField
+      <input
+        type='text'
         margin="normal"
         fullWidth
         multiline
@@ -45,23 +46,23 @@ export default ({ targetIndex }) => {
         // autoComplete="email"
         defaultValue={questInEdit.notes}
       />
-      <Box sx={{display: 'flex', justifyContent: 'space-around', mt: '20px'}}>
-        <Button
+      <div style={{display: 'flex', justifyContent: 'space-around', marginTop: '20px'}}>
+        <button
           type="submit"
           variant="contained"
           size="large"
         >
           Submit
-        </Button>
-        <Button
+        </button>
+        <button
           // type="submit"
           onClick={modalControls.close}
           variant="outlined"
           size="large"
         >
           Cancel
-        </Button>
-      </Box>
-    </Box>
+        </button>
+      </div>
+    </form>
   );
 }

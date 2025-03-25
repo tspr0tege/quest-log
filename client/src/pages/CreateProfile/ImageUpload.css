@@ -9,3 +9,23 @@
   width: 160px;
   object-fit: cover;
 }
+
+.container-box {
+  width: '100%';
+  min-height: '200px';
+  border: '2px dashed #090';
+  border-radius: '15px';
+  background-color: '#00dd0021';
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  justify-content: 'flex-end';
+  gap: '5px';
+  padding: '20px';
+}
+
+.upload-button {
+  width: '80%'; 
+  color: '#fff'; 
+  background-color: '#293';
+}

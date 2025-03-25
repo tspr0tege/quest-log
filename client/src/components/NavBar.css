@@ -1,0 +1,30 @@
+nav {
+  position: fixed;
+  background-color: transparent;
+}
+
+.toolbar {
+  justify-content: 'flex-end';
+}
+
+.toolbar-box {  
+  display: 'flex';
+  flex-grow: 1;
+}
+  /* mobile: {
+    display: 'flex', 
+    flexGrow: 1,
+    minWidth: '200px',
+    flexDirection: 'column',
+  } */
+
+/* .menu-item {
+  standard: {
+    py: '6px', 
+    px: '12px'
+  },
+  mobile: {
+    py: '6px', 
+    px: '12px'
+  }
+} */

@@ -1,7 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { Button, Box, Grid, Paper, TextField, Typography } from '@mui/material';
-
-import { CreateProfile as styles } from '@src/styles';
 import { UserContext } from '@src/App';
 
 import Profile from '@API/profile';
@@ -32,25 +29,18 @@ export default () => {
   }
 
   return (
-    <Grid container sx={styles.GridContainer}>
-      <Grid 
-        item
-        square
-        elevation={6}
-        component={Paper}
-        xs={12} sm={8} md={5}
-        sx={styles.InnerGrid}
-      >
-        <Typography component="h2" variant="h3" sx={{mb: '40px'}}>
+    <div className="grid-container">
+      <div className='inner-grid' >
+        <h3 style={{marginBottom: '40px'}}>
           Create Your Profile
-        </Typography>
-        <Box 
-          component="form"
+        </h3>
+        <form
           onSubmit={processForm}
           encType="multipart/form-data"
-          sx={styles.ProfileForm}
+          className='profile-form'
         >
-          <TextField
+          <input
+            type="text"
             margin="normal"
             required
             fullWidth
@@ -61,7 +51,7 @@ export default () => {
             autoFocus
           />
           <ImageUpload setImageToUpload={setImageToUpload} />
-          <Button
+          <button
             type="submit"
             fullWidth
             variant="contained"
@@ -69,9 +59,9 @@ export default () => {
             sx={{ mt: 3, mb: 2 }}
           >
             Submit
-          </Button>
-        </Box>
-      </Grid>
-    </Grid>
+          </button>
+        </form>
+      </div>
+    </div>
   )
 }

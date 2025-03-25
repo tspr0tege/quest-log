@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Box, Container, Divider, IconButton, List, ListItemButton, Paper, Typography } from '@mui/material';
 
 import Modal from '@src/components/Modal';
 import { QuestContext } from '@src/components/QuestsData';
 import NewQuestButton from '@src/components/NewQuestButton';
 import QuestEdit from './QuestEdit';
+
+import QuestTree from '@src/components/DnDQuestTree';
 
 import EditIcon from '@src/icons/highlighter.svg';
 import CompleteIcon from '@src/icons/check-mark.svg';
@@ -13,15 +14,14 @@ import DeleteIcon from '@src/icons/trash-can.svg';
 export default () => {
   const { questList, controller } = useContext(QuestContext);
 
-  const [targetIndex, setTargetIndex] = useState(null);
+  const [questToEdit, setQuestToEdit] = useState(null);
 
   return (
-    <Container sx={{height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-      <Typography component="h3" variant='h4'>
-        Quest Log
-      </Typography>
-      <Paper sx={{bgcolor: '#191919', minWidth: {xs: '100vw', sm: '500px'}, width: '50%', padding: '20px', flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
-        {questList && <List sx={{flexGrow: 1}}>
+    <div style={{height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+      <h3>Quest Log</h3>
+      <div className='paper'>
+        {questList && <QuestTree data={questList} />}
+        {/* {questList && <List sx={{flexGrow: 1}}>
           {questList.map((quest, index) => {
             return (
               <>
@@ -34,7 +34,7 @@ export default () => {
                       aria-label="edit quest details" 
                       sx={{fontSize: '16px'}}
                       onClick={() => {
-                        setTargetIndex(index)
+                        setQuestToEdit(index)
                       }}
                     >
                       <EditIcon />
@@ -63,16 +63,16 @@ export default () => {
               </>
             )
           })}
-        </List>}
-        {(targetIndex !== null) &&
-          <Modal resetTrigger={() => {setTargetIndex(null)}}>
-            <QuestEdit targetIndex={targetIndex} />
+        </List>} */}
+        {(questToEdit !== null) &&
+          <Modal resetTrigger={() => {setQuestToEdit(null)}}>
+            <QuestEdit questToEdit={questToEdit} />
           </Modal>
         }
-        <Box sx={{alignSelf: 'center'}}>
+        <div style={{alignSelf: 'center'}}>
           <NewQuestButton  createQuest={controller.createQuest} />
-        </Box>
-      </Paper>
-    </Container> 
+        </div>
+      </div>
+    </div> 
   )
 }

@@ -1,42 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Typography } from '@mui/material';
+import { navigateTo } from '@src/NavigationTool';
 
 import FullScreenIcon from '@src/icons/expand.svg';
 
-import { NavBar as styles } from '@src/styles';
-
 export default ({ navMenu = true }) => {
-  const [ showMenu, setShowMenu ] = useState(false);
+  // const [ showMenu, setShowMenu ] = useState(false);
   
   return (
-    <AppBar position="fixed" sx={{backgroundColor: {xs: 'transparent', sm: ''}}}>
-      <Container sx={{display: {xs: 'none', sm: 'block'}}}>
-        <Toolbar variant="dense" sx={styles.toolbar}>
+    <nav>
+      <div className="container">
+        <div className='toolbar'>
           {navMenu && 
-          <Box sx={styles.toolbarBox.standard}>
-            <Link to="/">
-              <MenuItem sx={styles.menuItem.standard}>
-                <Typography variant="body2" color="text.primary">                
-                  Dashboard
-                </Typography>
-              </MenuItem>
-            </Link>
-            <Link to="/quest-log">
-              <MenuItem sx={styles.menuItem.standard}>
-                <Typography variant="body2" color="text.primary">
-                  Quest Log
-                </Typography>
-              </MenuItem>
-            </Link>
-          </Box>}
-          <Box>
+          <div>
+            <button onClick={() => {navigateTo('/')}}>
+              <p className='menu-item'>
+                Dashboard
+              </p>
+            </button>
+            <button onClick={() => {navigateTo('/quest-log')}}>
+              <p className='menu-item'>
+                Quest Log
+              </p>
+            </button>
+          </div>}
+          <div>
             <LogInOutButton />
-          </Box>
-        </Toolbar>
-      </Container>
-      <Button
+          </div>
+        </div>
+      </div >
+      {/* <Button
         variant="outlined"
         fullWidth={false}
         sx={{
@@ -80,8 +73,8 @@ export default ({ navMenu = true }) => {
         <Box sx={{alignSelf: 'center', padding: '20px'}}>
           <LogInOutButton />
         </Box>
-      </Drawer>
-    </AppBar>
+      </Drawer> */}
+    </nav>
   )
 }
 const LogInOutButton = () => {
@@ -89,23 +82,23 @@ const LogInOutButton = () => {
     
   if (isAuthenticated) {
     return (
-      <Button 
+      <button 
         variant="contained" 
         size="medium" 
         onClick={() => logout({returnTo: window.location.origin})}
       >
         Log Out
-      </Button>
+      </button>
     )
   } else {
     return (
-      <Button 
+      <button 
       variant="contained" 
       size="medium" 
       onClick={() => loginWithRedirect()}
       >
         Log In
-      </Button>
+      </button>
     );
   }
 }

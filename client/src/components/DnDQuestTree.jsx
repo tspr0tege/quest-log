@@ -5,10 +5,6 @@ import QuestListContext from '@src/components/QuestListContext';
 import './DnDQuestTree.css'
 
 export default ({ data }) => {
-  // const topLevelQuests = Object.keys(questList).filter((questID) => {
-  //   return questList[questID].parent_id === null;
-  // });
-  
   const timeoutRef = useRef(null);
   const insertBeforeID = useRef(null);
   const newParentID = useRef(null);

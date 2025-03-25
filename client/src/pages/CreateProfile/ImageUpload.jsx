@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
 
-import { ImageUpload as styles } from '@src/styles';
 import SaveIcon from '@src/icons/save.svg';
 
 import './ImageUpload.css';
@@ -49,13 +47,12 @@ export default ({ setImageToUpload }) => {
   }
 
   return (
-    <Box
-      className={dragging ? 'dragging' : ''}
+    <div
+      className={dragging ? 'dragging container-box' : 'container-box'}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      sx={styles.ContainerBox}
     >
       <input 
         id="profilepic"
@@ -66,18 +63,18 @@ export default ({ setImageToUpload }) => {
         style={{display: 'none'}}
       />
       {preview && <img className="preview-image" src={preview} alt={`Preview of ${preview.name}`} />}
-      <Typography>
+      <p>
         {preview ? 'Drop another image to change your selection, or click Submit to continue' : 'Drag and drop image here or click to select'}
-      </Typography>
-      <Button 
+      </p>
+      <button 
         variant="contained"
         color="success"
-        sx={UploadButton}
+        sx={styles.UploadButton}
         startIcon={<SaveIcon/>}
         onClick={() => document.getElementById('profilepic').click()}
       >
          Select Files
-      </Button>
-    </Box>
+      </button>
+    </div>
   );
 };
