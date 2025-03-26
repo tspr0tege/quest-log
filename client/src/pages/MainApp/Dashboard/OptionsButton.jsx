@@ -1,52 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
+import Popup from '@src/components/Popup';
 
 export default ({ handleOptionsSelection }) => {
-  const [ showOptionsMenu, setShowOptionsMenu ] = useState(null);
+  const buttonRef = useRef(null)
+  const [ showOptionsMenu, setShowOptionsMenu ] = useState(false);
 
-  function closeOptionsMenu() {
-    setShowOptionsMenu(null);
-  }
+  // function closeOptionsMenu() {
+  //   setShowOptionsMenu(null);
+  // }
 
-  function openOptionsMenu(event) {
-    setShowOptionsMenu(event.currentTarget);
-  }
+  // function openOptionsMenu(event) {
+  //   setShowOptionsMenu(event.currentTarget);
+  // }
 
   function handleClick(event) {
+    // console.log(event.target.innerText)
     handleOptionsSelection(event.target.innerText);
-    closeOptionsMenu();
+    setShowOptionsMenu(false);
   }
 
   return(
     <>
       <button
+        ref={buttonRef}
         id="options-button"
         variant="outlined" 
         size="large"
         aria-controls={!!showOptionsMenu ? 'options-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={!!showOptionsMenu ? 'true' : undefined}
-        onClick={openOptionsMenu}
+        onClick={() => {setShowOptionsMenu(!showOptionsMenu)}}
       >
         Options...
       </button>
-      <div 
+    
+      <Popup 
         id="options-menu"
-        // anchorEl={showOptionsMenu}
-        open={!!showOptionsMenu} 
-        onClose={closeOptionsMenu}
-        // MenuListProps={{
-        //   'aria-labelledby': 'options-button',
-        // }}
-      >
+        anchorRef={buttonRef} 
+        isOpen={showOptionsMenu} 
+        onClose={() => setShowOptionsMenu(false)}
+      >          
         <div className='options-menu-box'>
           <a onClick={handleClick}>Skip</a>
           <hr/>
-          <a disabled onClick={handleClick}>Stash</a>
-          <hr/>
+          {/* <a disabled onClick={handleClick}>Stash</a>
+          <hr/> */}
           <a onClick={handleClick}>Delete</a>
         </div>
-      </div>
+      </Popup>
     </>
   );
 }

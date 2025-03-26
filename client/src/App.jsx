@@ -13,6 +13,7 @@ import Dashboard from './pages/MainApp/Dashboard/Dashboard';
 import QuestLog from './pages/MainApp/QuestLog/QuestLog';
 
 import Profile from '@API/profile';
+import './App.css';
 
 export const UserContext = createContext();
 
@@ -90,12 +91,12 @@ export default () => {
       }}
     >
       <NavBar />
-      <div>
-        {/* <ProfileSidebar /> */}
+      <main>
+        <ProfileSidebar />
         <QuestsData>
           <RouterProvider router={router}/>
         </QuestsData>
-      </div>
+      </main>
     </UserContext.Provider>
   )
 }

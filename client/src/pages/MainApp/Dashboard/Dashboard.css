@@ -1,54 +1,60 @@
 
-.container {
-  height: '100%';
-  display: 'flex';
-  flex-direction: 'column';
-  align-items: 'center';
+#dashboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#dashboard button {
+  color: white;
+  background-color: var(--black1);
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 1em 2em;
+  border: none;
 }
 
 .paper {
-  background-color: '#191919';
+  background-color: #191919;
+  height: 100%;
+  width: 50%;
   min-width: 500px;
-  /* {xs: '100vw', sm: '500px'}, */
-  width: '50%';
-  padding: '20px';
-  padding-bottom: 0;
-  flex-grow: 1
-}
-
-.paper-grid {
-  height: '100%';
-  display: 'flex';
-  flex-direction: 'column';
-  justify-content: 'space-between';
-  gap: '20px';
+  /* {xs: 100vw, sm: 500px}, */
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .controls-box {
-  display: 'flex';
-  align-items: 'center';
-  justify-content: 'space-evenly';
-  padding: '10px';
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 10px;
 }
 
 .options-menu-box {
-  min-width: '100px';
+  min-width: 100px;
 } 
 
+.rewards-box {
+  height: 50px;
+  background-color: #333;
+  width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rewards-grid {
+  display: flex;
+  gap: 25px
+}
 /* 
 iconButton: {
-  bgcolor:'primary.main'
-},
-rewardsGrid: {
-  display: 'flex',
-  gap: '25px'
-},
-rewardsBox: {
-  height: '50px',
-  bgcolor: '#333',
-  width: '33%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center'
+  bgcolor:primary.main
 },
   */

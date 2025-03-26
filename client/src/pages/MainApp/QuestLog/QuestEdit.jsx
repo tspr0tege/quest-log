@@ -43,6 +43,11 @@ export default ({ targetIndex }) => {
         id="notes"
         name="notes"
         label="Details"
+        style={{
+          width: '100%',
+          fontSize: '1.2em',
+          padding: '.25em .5em',
+        }}
         // autoComplete="email"
         defaultValue={questInEdit.notes}
       />
@@ -51,6 +56,14 @@ export default ({ targetIndex }) => {
           type="submit"
           variant="contained"
           size="large"
+          style={{
+            backgroundColor: 'var(--brown1)',
+            color: 'white',
+            padding: '.5em 1em',
+            fontWeight: '600',
+            fontSize: '1em',
+            margin: '10px 0',
+          }}
         >
           Submit
         </button>

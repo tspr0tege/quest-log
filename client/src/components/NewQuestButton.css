@@ -1,0 +1,10 @@
+#new-task-button {
+  color: white;
+  background-color: var(--brown1);
+  font-size: 2em;
+  font-weight: 800;
+  border-radius: 50px;
+  height: 2em;
+  width: 2em;
+  border: none;
+}

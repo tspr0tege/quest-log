@@ -2,29 +2,19 @@ import React, { useContext } from 'react';
 
 import { UserContext } from '@src/App';
 
+import './ProfileSidebar.css'
+
 export default () => {
   const { userProfile } = useContext(UserContext);
 
   return (
-    <Box sx={{display: {xs: 'none', md: 'block'}, bgcolor: 'primary.main', p: '20px', pb: 0}}>
+    // style={{display: {xs: 'none', md: 'block'}, bgcolor: 'primary.main', p: '20px', pb: 0}}>
+    <div id="profile-sidebar">
       {!!userProfile &&
         <>
-          <Typography component="h3">
-            Name:
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ 
-              mb: { xs: 2, sm: 4 },
-              fontSize: '24px',
-            }}
-          >
-            {userProfile.name}
-          </Typography>
-          <Typography component="h3">
-            Profile Photo:
-          </Typography>
+          <h3>Name:</h3>
+          <p>{userProfile.name}</p>
+          <h3>Profile Photo:</h3>
           <img 
             style={{
               height: '160px',
@@ -33,36 +23,14 @@ export default () => {
             }}
             src={userProfile.photo_url} alt="Profile Picture" 
           />
-          <Typography component="h3">
-            Level:
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ 
-              mb: { xs: 2, sm: 4 },
-              fontSize: '64px',
-              textAlign: 'center'
-            }}
-          >
-            {userProfile.level}
-          </Typography>
-          <Typography component="h3">
-            Next Level
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ 
-              mb: { xs: 2, sm: 4 },
-              fontSize: '24px',
-              textAlign: 'center'
-            }}
-          >
+          <h3>Level:</h3>
+          <p>{userProfile.level}</p>
+          <h3>Next Level</h3>
+          <p>
             {userProfile.exp} / {Math.floor(100 * Math.pow(1.1, userProfile.level - 1))}
-          </Typography>
+          </p>
         </>
       }
-    </Box>
+    </div>
   );
 }

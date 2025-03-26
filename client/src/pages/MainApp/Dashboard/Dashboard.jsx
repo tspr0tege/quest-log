@@ -43,70 +43,64 @@ export default () => {
   }
   
   return (
-    <div className='container'>
+    <div id='dashboard'>
       <h3>Dashboard</h3>
       <div className='paper'>
-        <div className='paper-grid'>
-
-          {/* Title */}
-          {/* <Box>
-            {questList?.length > 0 && 
-              <Typography variant="h6" sx={{bgcolor: '#333', p: '15px'}}>
-                {questList[targetIndex].title}
-              </Typography>
-            }
-          </Box>
-
-          {/* Description 
-          <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
-            <Typography variant="h6">
-              Details
-            </Typography>
-            {questList?.length > 0 && 
-              <Typography sx={{flexGrow: 1, bgcolor: '#333', p: '15px'}}>
-                {questList[targetIndex].notes}
-              </Typography>
-            }
-          </Box>
-
-          {/* Rewards - Tally, Streak, XP, AZ reward 
-          <Box>
-            <Typography variant="h6">
-              Stats / Rewards
-            </Typography>
-            <Grid sx={styles.rewardsGrid}>
-              <Box sx={styles.rewardsBox}>
-                <Typography>              
-                  Task ( {targetIndex + 1} / {questList?.length} )
-                </Typography>
-              </Box>
-              <Box sx={styles.rewardsBox}>
-                XP
-              </Box>
-              <Box sx={styles.rewardsBox}>
-                Bonus XP
-              </Box>
-            </Grid>
-          </Box> */}
-
-          {/* Controls - Complete, Add, Options(Delete, Skip, Stash) */}
-          <div className='controls-box'>
-            <button 
-              onClick={() => {
-                controller.completeQuest(targetIndex);
-                if (targetIndex >= questList.length - 1) {
-                  setTargetIndex(0)
-                }
-              }}
-              disabled={!questsLoaded}
-            >
-              Complete
-            </button>
-            <NewQuestButton createQuest={controller.createQuest} />
-            <OptionsButton handleOptionsSelection={handleOptionsSelection}/>
-          </div>
-
+        {/* Title */}
+        <div>
+          {!!questList && Object.keys(questList)?.length > 0 && 
+            <h3 style={{backgroundColor: '#333', padding: '15px'}}>
+              {questList[Object.keys(questList)[targetIndex]].title}
+            </h3>
+          }
         </div>
+
+        {/* Description */}
+        <div style={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
+          <h3>Details</h3>
+          {!!questList && Object.keys(questList)?.length > 0 && 
+            <p style={{flexGrow: 1, backgroundColor: '#333', padding: '15px'}}>
+              {questList[Object.keys(questList)[targetIndex]].notes}
+            </p>
+          }
+        </div>
+
+        {/* Rewards - Tally, Streak, XP, AZ reward */}
+        <div>
+          <h3>Stats / Rewards</h3>
+          <div className="rewards-grid">
+            <div className="rewards-box">
+              <h3>
+                Task ( {targetIndex + 1} / {!!questList ? Object.keys(questList)?.length : 0} )
+              </h3>
+            </div>
+            <div className="rewards-box">
+              XP
+            </div>
+            <div className="rewards-box">
+              Bonus XP
+            </div>
+          </div>
+        </div>
+
+        {/* Controls - Complete, Add, Options(Delete, Skip, Stash) */}
+        <div className='controls-box'>
+          <button 
+            style={{backgroundColor: 'var(--brown1)'}}
+            onClick={() => {
+              controller.completeQuest(targetIndex);
+              if (!!questList && (targetIndex >= Object.keys(questList).length - 1)) {
+                setTargetIndex(0)
+              }
+            }}
+            disabled={!questsLoaded}
+          >
+            Complete
+          </button>
+          <NewQuestButton />
+          <OptionsButton handleOptionsSelection={handleOptionsSelection}/>
+        </div>
+
       </div>
     </div>
   );

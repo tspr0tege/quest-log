@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useState } from 'react';
+import React, { createContext, useRef, useState, useEffect } from 'react';
 
 import DnDQuestList from '@src/components/DnDQuestList';
 import QuestListContext from '@src/components/QuestListContext';
@@ -14,6 +14,15 @@ export default ({ data }) => {
       return questList[questID].parent_id === null;
     })
   );
+
+  useEffect(() => {
+    setQuestList(data);
+    setPageOne(
+      Object.keys(data).filter((questID) => {
+        return data[questID].parent_id === null;
+      })
+    );
+  }, [data]);
 
   const reparentQuest = (questToMoveID, newParentID) => {
 

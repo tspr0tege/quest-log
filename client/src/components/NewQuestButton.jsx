@@ -1,73 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import { QuestContext } from '@src/components/QuestsData';
+import Popup from '@src/components/Popup';
 
-// const AddIcon = createSvgIcon(
-//   <svg
-//     xmlns="http://www.w3.org/2000/svg"
-//     fill="none"
-//     viewBox="0 0 24 24"
-//     strokeWidth={2}
-//     stroke="currentColor"
-//   >
-//     <path d="M12 4.5v15m7.5-7.5h-15" />
-//   </svg>,
-//   'Add'
-// );
+import './NewQuestButton.css';
 
-export default ({ createQuest }) => {
-  const [ showNewTaskPopup, setShowNewTaskPopup ] = useState(null);
 
-  function closeNewTaskPopup() {
-    setShowNewTaskPopup(null);
-  }
+export default () => {
+  const buttonRef = useRef(null);
+  const [ showNewTaskPopup, setShowNewTaskPopup ] = useState(false);
+  const { controller } = useContext(QuestContext);
 
-  function openNewTaskPopup(event) {
-    setShowNewTaskPopup(event.currentTarget);
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const submittedForm = new FormData(e.target);
+    const formObject = Object.fromEntries(submittedForm);
+    // console.log(formObject);
+    controller.createQuest(formObject);
+    e.target.reset();
   }
 
   return (
     <>
       <button
         id="new-task-button"
-        size="large" 
-        // sx={styles.iconButton}
-        aria-controls={!!showNewTaskPopup ? 'new-task-popup' : undefined}
-        aria-haspopup="true"
-        aria-expanded={!!showNewTaskPopup ? 'true' : undefined}
-        onClick={openNewTaskPopup}
-      >
-        {/* <AddIcon /> */}
-      </button>
-      {/* <Menu
-        id="new-task-popup"
-        anchorEl={showNewTaskPopup}
-        open={!!showNewTaskPopup}
-        onClose={closeNewTaskPopup}
-        MenuListProps={{
-          'aria-labelledby': 'new-task-button'
+        ref={buttonRef}
+        style={{
+          color: 'white',
+          backgroundColor: 'var(--brown1)',
+          fontSize: '2em',
+          fontWeight: 800,
+          borderRadius: '50px',
+          height: '2em',
+          width: '2em',
+          border: 'none',
+          padding: 0
         }}
+        onClick={() => setShowNewTaskPopup(!showNewTaskPopup)}
       >
-        <form style={{minWidth: '30vw', padding: '20px'}}>
+        +
+      </button>
+      <Popup 
+        id="new-task-popup"
+        anchorRef={buttonRef} 
+        isOpen={showNewTaskPopup} 
+        onClose={() => setShowNewTaskPopup(false)}
+      >
+        <form 
+          style={{minWidth: '30vw', padding: '20px'}}
+          onSubmit={handleFormSubmit}
+        >
           <input
             type="text" 
             autoFocus
             required
-            fullWidth
-            margin="normal"
+            // fullWidth
+            // margin="normal"
             id="title"
             name="title"
+            style={{
+              width: '100%',
+              fontSize: '1.2em',
+              padding: '.25em .5em',
+            }}
             // label="Enter a new task" causing focus error and unable to type "e" in the field
           />
           <button
             type="submit"
-            size="large"
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={createQuest}
+            style={{
+              backgroundColor: 'var(--brown1)',
+              color: 'white',
+              padding: '.5em 1em',
+              fontWeight: '600',
+              fontSize: '1em',
+              margin: '10px 0',
+            }}
+            // size="large"
+            // variant="contained"
+            // sx={{ mt: 3, mb: 2 }}
+            // onClick={handleFormSubmit}
           >
             Add
           </button>
         </form>
-      </Menu> */}
+      </Popup>
     </>
   );
 }

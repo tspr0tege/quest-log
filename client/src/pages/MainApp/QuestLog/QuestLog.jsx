@@ -11,6 +11,8 @@ import EditIcon from '@src/icons/highlighter.svg';
 import CompleteIcon from '@src/icons/check-mark.svg';
 import DeleteIcon from '@src/icons/trash-can.svg';
 
+import './QuestLog.css';
+
 export default () => {
   const { questList, controller } = useContext(QuestContext);
 
@@ -70,7 +72,7 @@ export default () => {
           </Modal>
         }
         <div style={{alignSelf: 'center'}}>
-          <NewQuestButton  createQuest={controller.createQuest} />
+          <NewQuestButton />
         </div>
       </div>
     </div> 

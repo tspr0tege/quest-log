@@ -4,31 +4,26 @@ import { navigateTo } from '@src/NavigationTool';
 
 import FullScreenIcon from '@src/icons/expand.svg';
 
+import './NavBar.css';
+
 export default ({ navMenu = true }) => {
   // const [ showMenu, setShowMenu ] = useState(false);
   
   return (
     <nav>
-      <div className="container">
-        <div className='toolbar'>
-          {navMenu && 
-          <div>
-            <button onClick={() => {navigateTo('/')}}>
-              <p className='menu-item'>
-                Dashboard
-              </p>
-            </button>
-            <button onClick={() => {navigateTo('/quest-log')}}>
-              <p className='menu-item'>
-                Quest Log
-              </p>
-            </button>
-          </div>}
-          <div>
-            <LogInOutButton />
-          </div>
-        </div>
-      </div >
+      {/* <div className="container"> */}
+      {navMenu && 
+      <div className="app-navigation">
+        <button onClick={() => {navigateTo('/')}}>
+          Dashboard
+        </button>
+        <hr/>
+        <button onClick={() => {navigateTo('/quest-log')}}>
+          Quest Log
+        </button>
+      </div>}
+      <LogInOutButton />
+      {/* </div > */}
       {/* <Button
         variant="outlined"
         fullWidth={false}
@@ -82,9 +77,7 @@ const LogInOutButton = () => {
     
   if (isAuthenticated) {
     return (
-      <button 
-        variant="contained" 
-        size="medium" 
+      <button id="login-logout-button"
         onClick={() => logout({returnTo: window.location.origin})}
       >
         Log Out
@@ -92,10 +85,8 @@ const LogInOutButton = () => {
     )
   } else {
     return (
-      <button 
-      variant="contained" 
-      size="medium" 
-      onClick={() => loginWithRedirect()}
+      <button id="login-logout-button"
+        onClick={() => loginWithRedirect()}
       >
         Log In
       </button>

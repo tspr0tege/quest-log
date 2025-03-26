@@ -25,22 +25,9 @@ const Quest = sequelize.define('Quest',
       type: Sequelize.UUID,
       allowNull: true
     },
-    prog_to_parent: {
-      type: Sequelize.INTEGER,
-      allowNull: true
-    },
-    time_frame: {
-      type: Sequelize.STRING(10),
-      allowNull: true
-    },
-    progress: {
-      type: Sequelize.REAL,
-      defaultValue: 0
-    },
-    child_count: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 0
+    child_ids: {
+      type: Sequelize.ARRAY(Sequelize.TEXT),
+      defaultValue: []
     },
     is_complete: {
       type: Sequelize.BOOLEAN,

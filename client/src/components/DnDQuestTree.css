@@ -14,7 +14,7 @@
 }
 
 #quest-tree li {
-  background-color: #efefef;
+  background-color: var(--black1);
   padding: .75em 1em;
   border-radius: .5em;
   font-weight: 600;

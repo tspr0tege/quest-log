@@ -29,15 +29,14 @@ export default ({ children }) => {
 
   const controller = {
 
-    createQuest: async function (e) {
-      e.preventDefault();
-      const { form } = e.target;
-      let newQuest = await Quest.create({
-        title: form.title.value
-      }, user);
-      form.title.value = '';
-      const newQuestList = {...questList}
-      newQuestList[newQuest.quest_id] = newQuest
+    createQuest: async function (newQuestInfo) {
+      // e.preventDefault();
+      // const { form } = e.target;/
+      let newQuest = await Quest.create(newQuestInfo, user);
+      // form.title.value = '';
+      console.log(newQuest);
+      const newQuestList = {...questList};
+      newQuestList[newQuest.quest_id] = newQuest;
       setQuestList(newQuestList);
     },
 
